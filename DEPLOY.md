@@ -31,7 +31,7 @@ Nach Änderungen: `python tools/build_all.py`, Ergebnis committen und pushen. Cl
 Lokal ansehen: `python tools/serve.py`. Genau wie Cloudflare (mit `_headers` und `_redirects`): `npx wrangler pages dev site`.
 
 ## Vercel (Übergang)
-`vercel.json` zeigt nur noch Vorschauen von `site/` (immer `noindex`), bis die Seite auf Cloudflare läuft. Danach kann das Vercel-Projekt gelöscht werden.
+`vercel.json` zeigt nur noch Vorschauen von `site/` (immer `noindex`), bis die Seite auf Cloudflare läuft. Danach kann das Vercel-Projekt gelöscht werden. Ist es noch mit dem alten Repository `AppsOfUse/ProExtinction` verbunden, sieht es neue Änderungen aus `proextinction/ProExtinction` nicht.
 
 ## Schriften neu beziehen
 Quelle: npm-Pakete `@fontsource/*` (Oswald, Anton, Barlow, JetBrains Mono).

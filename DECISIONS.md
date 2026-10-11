@@ -1,6 +1,6 @@
 # Entscheidungen · Pro Extinction Website-Redesign
 
-Stand: laufend gepflegt. **Entschieden: Design B (Poster).** A Ember ist entfernt (noch auf `backup/vercel-2026-10-06`), C Ring war schon verworfen.
+Stand: laufend gepflegt. **Entschieden: Design B (Poster).** A Ember ist entfernt (noch im alten Repository `AppsOfUse/ProExtinction` auf `backup/vercel-2026-10-06`), C Ring war schon verworfen.
 
 ## Offen (später festlegen)
 | Frage | Stand | Wann |
@@ -13,7 +13,7 @@ Stand: laufend gepflegt. **Entschieden: Design B (Poster).** A Ember ist entfern
 | Bilder von „Suffering in detail" (16) | hinter einem Klick verschwommen | – |
 | Deutsche Übersetzung der 4 fehlenden Seiten | Entwürfe in `content/_translation-pending/`, nicht eingebaut | eigener Schritt |
 | Telefonnummer auf der deutschen Seite | bleibt (Wunsch), vor Livegang bestätigen | vor Livegang |
-| Hosting und Domain | **Cloudflare Pages** im Cloudflare-Konto von James, wo die Domain schon liegt (gratis, `HOSTING.md`); `proextinction.com` ohne www. Offen: Einrichtung durch James, Branch `main` als Live-Stand, Repository in eine GitHub-Organisation | mit dem Umzug |
+| Hosting und Domain | **Cloudflare Pages** im Cloudflare-Konto von James, wo die Domain schon liegt (gratis, `HOSTING.md`); `proextinction.com` ohne www. Repository liegt in der Organisation `proextinction` (`proextinction/ProExtinction`). Offen: Einrichtung durch James mit Branch `main` als Live-Stand; `main` schützen (Repository öffentlich oder GitHub Team, `HOSTING.md` Abschnitt 6) | beim Livegang |
 
 ## Entschieden
 1. **Marke:** Pro Extinction. „AbolishSuffering" bleibt nur der Discord-Name.

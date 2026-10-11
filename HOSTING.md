@@ -5,13 +5,12 @@ It's free, and there is no server or software to maintain. Cloudflare serves the
 Every change pushed to GitHub goes live automatically, and you can roll back any change yourself.
 
 ## 1. Give Cloudflare access to the repository
-Cloudflare needs permission to read the GitHub repository. Only the repository's owner can grant it.
-- **Recommended:** move the repository into a free GitHub organisation for Pro Extinction (github.com → *Your organizations* → *New organization* → Free), with both of us as owners. Then neither the code nor the domain depends on one person. GitHub redirects the old links automatically.
-- **Otherwise:** the current owner approves the Cloudflare GitHub app for this repository when Cloudflare asks in step 2.
+Cloudflare needs permission to read the GitHub repository. It lives in the Pro Extinction organisation on GitHub: `proextinction/ProExtinction`, with both of us as owners, so neither the code nor the domain depends on one person.
+An owner of the organisation approves the Cloudflare GitHub app for this repository when Cloudflare asks in step 2. (The old repository `AppsOfUse/ProExtinction` stays only as an archive. Don't connect Cloudflare to it.)
 
 ## 2. Create the Pages project
 1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** (or *Import an existing Git repository*).
-2. Choose **GitHub**, sign in and allow access to the `proextinction` repository only.
+2. Choose **GitHub**, sign in and allow access to the `proextinction/ProExtinction` repository only.
 3. Settings:
    | Field | Value |
    |---|---|
@@ -48,15 +47,19 @@ The website itself has no login, database or forms, so the main way to attack it
 
 ## 6. Who can publish: owners and contributors
 Goal: the two of us are owners. Other people (and their AI tools) can change the site and propose changes, but nothing goes live until one of us merges it.
-All of this is free and set up once in GitHub, in the organisation from step 1.
+Set up once in GitHub, in the `proextinction` organisation from step 1.
+**Cost:** teams, CODEOWNERS and the Actions settings are free. Protecting `main` (the ruleset below) is not free for a private repository: GitHub Free offers rulesets and branch protection only for **public** repositories. The repository is private now, so there are two ways:
+- **Make it public** (Repository → *Settings* → *General* → *Danger Zone* → *Change visibility*). Then the ruleset is free. Everyone can read the code and the texts, which are on the website anyway. The repository holds no secrets (see `AGENTS.md`).
+- **Keep it private** and switch the organisation to **GitHub Team** (about 4 $ per person and month): Organisation → *Settings* → *Billing and plans*.
+Without one of the two, `main` can't be protected: anyone with write access could push straight to the live site.
 
 **People**
 - Organisation → *People*: both of us **Owner**. Everyone else **Member** (they get no rights to settings).
 - Organisation → *Teams* → *New team*: `owners` (both of us) and `contributors`. Repository → *Settings* → *Collaborators and teams*: `owners` **Admin**, `contributors` **Write**.
   Write lets people push branches and open pull requests, not change settings. Occasional helpers need no access at all: they fork the repository and open a pull request from their fork.
-- Replace the names in `.github/CODEOWNERS` with `@<organisation>/owners`.
+- Replace the names in `.github/CODEOWNERS` with `@proextinction/owners`.
 
-**Protect `main`** (Repository → *Settings* → *Rules* → *Rulesets* → *New branch ruleset*)
+**Protect `main`** (public repository, or GitHub Team; Repository → *Settings* → *Rules* → *Rulesets* → *New branch ruleset*)
 | Setting | Value |
 |---|---|
 | Name / Enforcement | `main is live` / **Active** |

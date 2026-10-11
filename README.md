@@ -1,7 +1,7 @@
 # Pro Extinction · Website
 
-Die neue Website von Pro Extinction in Design B (Poster), in 29 Sprachen (EN, DE, PL, ES, IT sowie die komplett KI-übersetzten FR, PT, RU, ZH, HI, AR, BN, UR, ID, JA, TR, VI, KO, FA, MR, TE, TA, SW, TH, NL, UK, TL, PA, GU; Arabisch, Urdu und Persisch von rechts nach links), Hell und Dunkel.
-Design A (Ember) ist entfernt; er liegt noch auf dem Branch `backup/vercel-2026-10-06`.
+Die neue Website von Pro Extinction (Repository `proextinction/ProExtinction`) in Design B (Poster), in 29 Sprachen (EN, DE, PL, ES, IT sowie die komplett KI-übersetzten FR, PT, RU, ZH, HI, AR, BN, UR, ID, JA, TR, VI, KO, FA, MR, TE, TA, SW, TH, NL, UK, TL, PA, GU; Arabisch, Urdu und Persisch von rechts nach links), Hell und Dunkel.
+Design A (Ember) ist entfernt; er liegt noch im alten Repository `AppsOfUse/ProExtinction` (Archiv) auf dem Branch `backup/vercel-2026-10-06`.
 
 | Pfad | Inhalt |
 |---|---|
