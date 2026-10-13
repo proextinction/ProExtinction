@@ -6,7 +6,7 @@ Design A (Ember) ist entfernt; er liegt noch auf dem Branch `backup/vercel-2026-
 | Pfad | Inhalt |
 |---|---|
 | **`site/`** | **Die fertige Website (geht live):** eine Datei pro Seite, `site/<sprache>/<seite>.html`, erreichbar als `/<sprache>/<seite>` (Startseite: `/<sprache>/`). Dazu `index.html` (Sprachwahl), `404.html`, `sitemap.xml`, `robots.txt`, `style.css`, `site.js`, `og.png`, Schriften und Bilder. Wird von `tools/build.py` erzeugt, nur `fonts/`, `img/` und `favicon.svg` sind Quellen |
-| `DEPLOY.md`, `HOSTING.md` | Livegang auf Cloudflare Pages: Checkliste (DE) und Einrichtung für James (EN). Steuerdateien `site/_headers` und `site/_redirects` schreibt `tools/build.py` |
+| `DEPLOY.md`, `HOSTING.md`, `wrangler.jsonc` | Livegang auf Cloudflare Workers: Checkliste (DE) und Einrichtung für James (EN). Steuerdateien `site/_headers` und `site/_redirects` schreibt `tools/build.py` |
 | `brand/` | Brand Kit von Design B (Tokens, `BRAND.md`, Referenzseiten) |
 | `content/` | Text als JSON pro Sprache: Originaltext der jeweiligen Sprachseite plus KI-Übersetzungen der fehlenden Seiten (welche das sind, steht in `SITE` in `tools/build.py`) |
 | `content/seo/` | Suchmaschinen-Beschreibung jeder Seite pro Sprache; `en.json` ist die Vorlage |

@@ -1,6 +1,6 @@
 # Rules for AI agents (and humans) working on this repository
 
-This is the website of Pro Extinction: a static site in 29 languages, built by a Python script and hosted on Cloudflare Pages.
+This is the website of Pro Extinction: a static site in 29 languages, built by a Python script and hosted on Cloudflare Workers (static files only).
 These rules apply to every contributor and every AI tool (Claude Code, Codex, Cursor, Copilot …). `CLAUDE.md` points here.
 
 ## How the repository works
