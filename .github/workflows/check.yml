@@ -1,5 +1,5 @@
 # Runs the same gate as `python tools/check.py` on every pull request and every push.
-# Owners: make "check" a required status check for main (see HOSTING.md, section 6).
+# Owners: make "check" a required status check for main (see HOSTING.md, section 5).
 name: check
 on:
   pull_request:

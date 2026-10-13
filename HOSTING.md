@@ -23,8 +23,7 @@ An owner of the organisation approves the Cloudflare GitHub app for this reposit
 
 ## 3. Connect the domain
 1. In the Pages project → **Custom domains** → **Set up a custom domain** → `proextinction.com`. Then add a second one: `www.proextinction.com`.
-2. Cloudflare offers to replace the old DNS records that point to Google Sites (the `A` records and the `CNAME` for `www` → `ghs.googlehosted.com`). Accept.
-   **Leave the `MX` and `TXT` records alone.** They are for email, and email keeps working as before.
+2. Cloudflare offers to replace the DNS records of the old site. Accept, and leave all other records as they are.
 3. Send `www` to the address without www: **Rules** → **Redirect Rules** → **Create rule** → template **"Redirect from WWW to root"** → Deploy.
 4. After a few minutes `https://proextinction.com` shows the new site, with HTTPS done by Cloudflare.
 
@@ -37,15 +36,7 @@ An owner of the organisation approves the Cloudflare GitHub app for this reposit
   - Cloudflare → **Caching** → **Configuration** → turn on **Crawler Hints**. It tells Bing and other search engines about changes right away (IndexNow), free.
   - Add the site to **Google Search Console** (search.google.com/search-console, *Domain* property; Cloudflare can add the verification record for you) and submit `https://proextinction.com/sitemap.xml`. The same for **Bing Webmaster Tools**, which can import it from Search Console.
 
-## 5. Account and domain security (5 minutes, recommended)
-The website itself has no login, database or forms, so the main way to attack it is through the accounts behind it.
-- **Two-factor login** on the Cloudflare account and on every GitHub account with access. For the GitHub organisation: *Settings* → *Authentication security* → **Require two-factor authentication**.
-- **DNSSEC:** Cloudflare → the domain → **DNS** → **Settings** → **Enable DNSSEC**. It stops others from faking the domain's DNS answers. If the domain is registered at Cloudflare, that's all; otherwise copy the DS record it shows to the registrar.
-- **DMARC (email spoofing):** the domain has SPF but no DMARC, so anyone can send mail that claims to come from `@proextinction.com`. Add a DNS record of type `TXT`, name `_dmarc`:
-  - if nobody sends email *from* the domain (Cloudflare Email Routing only forwards incoming mail): `v=DMARC1; p=reject;`
-  - if someone does send from `info@proextinction.com` (e.g. "send as" in Gmail): start with `v=DMARC1; p=none;` and fix SPF for that sender first.
-
-## 6. Who can publish: owners and contributors
+## 5. Who can publish: owners and contributors
 Goal: the two of us are owners. Other people (and their AI tools) can change the site and propose changes, but nothing goes live until one of us merges it.
 Set up once in GitHub, in the `proextinction` organisation from step 1.
 **Cost:** teams, CODEOWNERS and the Actions settings are free. Protecting `main` (the ruleset below) is not free for a private repository: GitHub Free offers rulesets and branch protection only for **public** repositories. The repository is private now, so there are two ways:

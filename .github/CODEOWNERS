@@ -1,6 +1,6 @@
 # The owners approve every pull request before it reaches main (the live website).
 # James is still missing here: add his GitHub name next to @AppsOfUse on every line,
-# or replace both with @proextinction/owners once that team exists (HOSTING.md, section 6).
+# or replace both with @proextinction/owners once that team exists (HOSTING.md, section 5).
 *                @AppsOfUse
 
 # Extra care: these decide what gets published and how agents and CI behave.
