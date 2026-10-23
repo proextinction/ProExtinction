@@ -607,7 +607,7 @@ def give_box(lang):
             f'<section class="give-card"><p class="give-k mono">{esc(bank)}</p><p class="give-iban mono" dir="ltr" translate="no">{IBAN}</p>'
             f'<button class="give-btn" type="button" data-iban="{plain}" onclick="{js}"><span class="c">{esc(copy)}</span><span class="d" aria-live="polite">{esc(done)}</span></button></section>'
             f'<section class="give-card"><p class="give-k mono">Ko-fi</p><p class="give-url mono" dir="ltr" translate="no">ko-fi.com/abolishsuffering</p>'
-            f'<a class="give-btn" href="{KOFI}" target="_blank" rel="noopener">{esc(kofi)} <span aria-hidden="true">&#8599;</span></a></section></div>')
+            f'<a class="give-btn" href="{KOFI}" target="_blank" rel="noopener" aria-describedby="new-tab">{esc(kofi)} <span aria-hidden="true">&#8599;</span></a></section></div>')
 
 def give_blocks(bl, lang):
     """Swap the IBAN line for the donate cards and drop the bare Ko-fi line (IT: its "Dona qui" line)."""
@@ -693,6 +693,26 @@ FAQ_JS = (ROOT / 'tools' / 'faqsearch.js').read_text(encoding='utf-8')
 
 DISCORD = 'https://discord.gg/nb2K8y846R'
 DEBATE_DISCORD = 'https://discord.gg/887fVYCDsN'
+
+def link_attrs(href):
+    """Social and messaging platforms open in a new tab; screen readers hear so (the note in footer())."""
+    host = (urllib.parse.urlsplit(href).hostname or '').lower()
+    platforms = ('whatsapp.com', 'whatsapp.net', 'wa.me', 'discord.gg', 'discord.com', 'discordapp.com',
+                 'tiktok.com', 'instagram.com', 'youtube.com', 'youtu.be', 'facebook.com', 'fb.com',
+                 'x.com', 'twitter.com', 'threads.net', 'linkedin.com', 'reddit.com', 't.me',
+                 'telegram.me', 'telegram.org', 'twitch.tv', 'pinterest.com', 'bsky.app')
+    new_tab = any(host == platform or host.endswith('.' + platform) for platform in platforms)
+    return ' target="_blank" rel="noopener" aria-describedby="new-tab"' if new_tab else ' rel="noopener"'
+NEW_TAB = {
+ 'en': 'Opens in a new tab', 'de': 'Öffnet in einem neuen Tab', 'pl': 'Otwiera się w nowej karcie', 'es': 'Se abre en una pestaña nueva',
+ 'it': 'Si apre in una nuova scheda', 'fr': "S'ouvre dans un nouvel onglet", 'pt': 'Abre em uma nova aba', 'ru': 'Открывается в новой вкладке',
+ 'zh': '在新标签页中打开', 'hi': 'नए टैब में खुलता है', 'ar': 'يفتح في علامة تبويب جديدة', 'bn': 'নতুন ট্যাবে খোলে', 'ur': 'نئے ٹیب میں کھلتا ہے',
+ 'id': 'Terbuka di tab baru', 'ja': '新しいタブで開きます', 'tr': 'Yeni sekmede açılır', 'vi': 'Mở trong thẻ mới', 'ko': '새 탭에서 열립니다',
+ 'fa': 'در زبانه\u200cای تازه باز می\u200cشود', 'mr': 'नवीन टॅबमध्ये उघडते', 'te': 'కొత్త ట్యాబ్‌లో తెరుచుకుంటుంది', 'ta': 'புதிய தாவலில் திறக்கும்',
+ 'sw': 'Hufunguka kwenye kichupo kipya', 'th': 'เปิดในแท็บใหม่', 'nl': 'Opent in een nieuw tabblad', 'uk': 'Відкривається в новій вкладці',
+ 'tl': 'Bubukas sa bagong tab', 'pa': 'ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਖੁੱਲ੍ਹਦਾ ਹੈ', 'gu': 'નવા ટૅબમાં ખૂલે છે',
+}
+
 # Debate server: open to everyone, pro-lifers included. (heading, text, button) per language; shown on the home and contact pages.
 DEBATE = {
  'en': ('Debate with us', 'Our debate server on Discord is open to everyone, also to people who disagree with us. Pro-lifers are welcome: bring your best arguments.', 'Debate on Discord'),
@@ -730,7 +750,7 @@ def debate_html(lang, tag='h2'):
     """The debate server: who it is for and a button to join."""
     h, text, btn = DEBATE.get(lang, DEBATE['en'])
     return (f'<{tag}>{esc(h)}</{tag}><p>{esc(text)}</p>'
-            f'<p class="cta-links"><a class="btn" href="{DEBATE_DISCORD}" rel="noopener">{icon("discord")}{esc(btn)}</a></p>')
+            f'<p class="cta-links"><a class="btn" href="{DEBATE_DISCORD}"{link_attrs(DEBATE_DISCORD)}>{icon("discord")}{esc(btn)}</a></p>')
 
 WHATSAPP = {l: 'https://chat.whatsapp.com/KvNQxQiyCl4GO3w3J1w5Gb' for l in LANGS}   # one group for every language (October 2026)
 EMAIL = 'info@proextinction.com'
@@ -1128,16 +1148,16 @@ WA_CLOSED = {
 
 def wa_link(lang):
     if not WHATSAPP_OPEN:
-        return f'<a class="btn primary" href="{DISCORD}" rel="noopener" data-wa-closed>{icon("whatsapp")}WhatsApp</a>'
+        return f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)} data-wa-closed>{icon("whatsapp")}WhatsApp</a>'
     gate = ' data-gate' if WHATSAPP_QUIZ and lang in JOIN_GATE else ''
-    return f'<a class="btn primary" href="{WHATSAPP[lang]}" rel="noopener"{gate}>{icon("whatsapp")}WhatsApp</a>'
+    return f'<a class="btn primary" href="{WHATSAPP[lang]}"{link_attrs(WHATSAPP[lang])}{gate}>{icon("whatsapp")}WhatsApp</a>'
 
 def wa_closed_html(lang):
     """The note behind the WhatsApp buttons while the group is closed; site.js opens it."""
     close = JOIN_GATE.get(lang, JOIN_GATE['en'])['close']
     return (f'<dialog class="gate" id="wa-closed" aria-labelledby="wa-closed-title"><div class="gate-in">'
             f'<h2 id="wa-closed-title">WhatsApp</h2><p>{esc(WA_CLOSED[lang])}</p>'
-            f'<p class="cta-links"><a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a></p>'
+            f'<p class="cta-links"><a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a></p>'
             f'<button class="gate-x" type="button" aria-label="{esc(close)}">×</button></div></dialog>')
 
 def gate_html(lang):
@@ -1155,9 +1175,9 @@ def gate_html(lang):
             f'<h2 id="gate-title">{esc(g["title"])}</h2>'
             f'<div data-show="ask missing"><p>{esc(g["intro"])}</p>{qs}<p class="gate-missing" data-show="missing" role="alert">{esc(g["missing"])}</p>'
             f'<p class="cta-links"><button class="btn primary gate-go" type="button">{esc(g["go"])}</button></p></div>'
-            f'<div data-show="ok"><p>{esc(g["ok"])}</p><p class="cta-links"><a class="btn primary" href="{WHATSAPP[lang]}" rel="noopener">{icon("whatsapp")}{esc(g["ok_btn"])}</a></p></div>'
+            f'<div data-show="ok"><p>{esc(g["ok"])}</p><p class="cta-links"><a class="btn primary" href="{WHATSAPP[lang]}"{link_attrs(WHATSAPP[lang])}>{icon("whatsapp")}{esc(g["ok_btn"])}</a></p></div>'
             f'<div data-show="fail"><p>{esc(g["fail"])}</p><p class="cta-links">{read}'
-            f'<a class="btn" href="{DEBATE_DISCORD}" rel="noopener">{icon("discord")}{esc(debate)}</a></p>'
+            f'<a class="btn" href="{DEBATE_DISCORD}"{link_attrs(DEBATE_DISCORD)}>{icon("discord")}{esc(debate)}</a></p>'
             f'<p class="gate-share" data-share hidden>{esc(SHARE[lang][4])}</p><p class="cta-links">{share_btn(lang)}</p></div>'
             f'<button class="gate-x" type="button" value="close" aria-label="{esc(g["close"])}">×</button></div></dialog>')
 
@@ -1204,7 +1224,7 @@ def share_html(lang):
     """The share dialog, once per page; site.js fills in the page address when it opens."""
     label, title, copy, copied, _, mail = SHARE[lang]
     close = JOIN_GATE.get(lang, JOIN_GATE['en'])['close']
-    nets = ''.join(f'<a class="btn" data-net="{n}" target="_blank" rel="noopener">{icon(n) if n in ICON else ""}{name}</a>' for n, name in SHARE_NETS)
+    nets = ''.join(f'<a class="btn" data-net="{n}" target="_blank" rel="noopener" aria-describedby="new-tab">{icon(n) if n in ICON else ""}{name}</a>' for n, name in SHARE_NETS)
     return (f'<dialog class="gate share-box" id="share-box" aria-labelledby="share-title" data-text="{esc(T[lang]["sub"])}"><div class="gate-in">'
             f'<h2 id="share-title">{esc(title)}</h2><p class="cta-links">{nets}<a class="btn" data-net="mail">{icon("mail")}{esc(mail)}</a></p>'
             f'<p class="share-copy"><input class="share-url" type="text" dir="ltr" readonly aria-label="URL"><button class="btn primary" type="button">{esc(copy)}</button></p>'
@@ -1287,7 +1307,7 @@ def own_pics(slug, rest):
 
 def join_buttons(lang):
     return (f'<p class="cta-links join">{wa_link(lang)}'
-            f'<a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a></p>')
+            f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a></p>')
 
 CONCEPTS = {
  'a-ember':  dict(name='Ember',  mode='dark',  fonts='family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Oswald:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500'),
@@ -1296,7 +1316,7 @@ CONCEPTS = {
 
 def linkify(s):
     s = esc(s)
-    s = re.sub(r'(https?://[^\s<]+)', lambda m: f'<a href="{m.group(1)}" rel="noopener">{m.group(1)}</a>', s)
+    s = re.sub(r'(https?://[^\s<]+)', lambda m: f'<a href="{m.group(1)}"{link_attrs(m.group(1))}>{m.group(1)}</a>', s)
     return re.sub(r'\b([\w.+-]+@[\w-]+\.[\w.-]+)\b', r'<a href="mailto:\1">\1</a>', s)
 
 ID_PREFIX = ''   # set by present.py so ids stay unique when all views live in one document
@@ -1496,7 +1516,7 @@ def social_body(lang, lines, used):
             out.append(f'<h3 class="plat">{icon(pl["name"].lower())}{pl["name"]}</h3>')
             if 'note' in pl: out.append(f'<p class="plat-note">{esc(L(pl["note"]))}</p>')
             out.append('<ul class="channels">' + ''.join(
-                f'<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '') + f'<a href="{esc(x["url"])}" rel="noopener">{esc(x["label"])}</a>' + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>'
+                f'<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '') + f'<a href="{esc(x["url"])}"{link_attrs(x["url"])}>{esc(x["label"])}</a>' + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>'
                 for x in pl['items']) + '</ul>')
     out.append(f'<p class="note">{esc(L(94))}</p>')
     return '\n'.join(out), toc
@@ -1632,9 +1652,9 @@ def footer(lang, cta=True):
   <hr class="slash">
   <h2>{t["action"]}</h2>
   <p class="cta-sub">{t["tagline"]}</p>
-  <p class="cta-links">{wa_link(lang)}<a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>
+  <p class="cta-links">{wa_link(lang)}<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>
 </section>
-''' if cta else '') + f'''<footer class="foot" data-peace="{esc(peace(lang))}" data-discord="{DISCORD}"><p class="mono">{t["foot"].replace("Global", '<span class="glob">Global</span>', 1)}{legal_links(lang)}<span data-share hidden> · <button class="share legal" type="button">{esc(SHARE[lang][0])}</button></span></p>{born_line(lang)}</footer>{(gate_html(lang) if WHATSAPP_QUIZ else '') if WHATSAPP_OPEN else wa_closed_html(lang)}{share_html(lang)}'''
+''' if cta else '') + f'''<footer class="foot" data-peace="{esc(peace(lang))}" data-discord="{DISCORD}"><p class="mono">{t["foot"].replace("Global", '<span class="glob">Global</span>', 1)}{legal_links(lang)}<span data-share hidden> · <button class="share legal" type="button">{esc(SHARE[lang][0])}</button></span></p>{born_line(lang)}<span id="new-tab" hidden>{esc(NEW_TAB[lang])}</span></footer>{(gate_html(lang) if WHATSAPP_QUIZ else '') if WHATSAPP_OPEN else wa_closed_html(lang)}{share_html(lang)}'''
 
 def born_line(lang):
     label, humans, animals, wild, insects = BORN[lang]
@@ -1672,7 +1692,7 @@ def page_main(lang, slug, kind, href=None):
     soc = next((x for x, _ in PAGES[lang] if EN_OF[lang][x] == 'social-media-channels'), None)
     if EN_OF[lang][slug] == 'contact':   # every way to reach us right on the contact page, not only in the footer
         body += (f'<p class="cta-links join">{wa_link(lang)}'
-                 f'<a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>'
+                 f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>'
                  + '<div class="debate">' + debate_html(lang) + ('<!--social-link-->' if soc else '') + '</div>')
     body = body.replace('<!--social-link-->', f'<p class="go"><a class="btn" href="{href(soc)}">{esc(NAV[lang][soc])} <span aria-hidden="true">&rarr;</span></a></p>' if soc else '')
     main = f'<article class="doc"><header class="doc-head"><p class="mono kicker">{esc(NAV[lang][slug])}</p><h1>{esc(title)}</h1>{lede_html}<hr class="slash"></header>{toc_html}<div class="prose">{notes}{body}</div></article>'
