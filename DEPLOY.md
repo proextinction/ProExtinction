@@ -1,4 +1,4 @@
-# Livegang auf Cloudflare Pages
+# Livegang auf Cloudflare Workers
 
 **Was live geht:** der Ordner `site/`: eine Datei pro Seite, dazu Sprachwahl, 404-Seite, Sitemap, `robots.txt`, Schriften und Bilder.
 Es gibt keinen Build-Schritt bei Cloudflare: Die Seiten werden hier mit `python tools/build_all.py` gebaut und fertig committet.
@@ -13,7 +13,7 @@ Schritt-für-Schritt-Anleitung für James (Englisch): `HOSTING.md`.
 - Startseite einer Sprache: `/en/`, `/de/` (mit Schrägstrich; Cloudflare leitet `/en` dorthin um)
 - Seiten: `/en/manifesto`, `/de/manifest` (Cloudflare leitet `…/manifest.html` dorthin um)
 - `/` wählt die Sprache nach dem Browser und leitet alte Links der Ein-Datei-Version (`#/de/manifest`) weiter
-- Jede Änderung auf einem anderen Branch bekommt bei Cloudflare automatisch eine eigene Vorschau-Adresse (`<branch>.<projekt>.pages.dev`)
+- Jeder andere Branch wird bei Cloudflare als Vorschau-Version hochgeladen, mit eigener Adresse, wenn *Preview URLs* an sind
 
 ## Vor dem Teilen prüfen
 | Punkt | Stand |
@@ -28,7 +28,7 @@ Schritt-für-Schritt-Anleitung für James (Englisch): `HOSTING.md`.
 
 ## Aktualisieren
 Nach Änderungen: `python tools/build_all.py`, Ergebnis committen und pushen. Cloudflare veröffentlicht automatisch neu.
-Lokal ansehen: `python tools/serve.py`. Genau wie Cloudflare (mit `_headers` und `_redirects`): `npx wrangler pages dev site`.
+Lokal ansehen: `python tools/serve.py`. Genau wie Cloudflare (mit `_headers` und `_redirects`, liest `wrangler.jsonc`): `npx wrangler dev`.
 
 ## Vercel (Übergang)
 `vercel.json` zeigt nur noch Vorschauen von `site/` (immer `noindex`), bis die Seite auf Cloudflare läuft. Danach kann das Vercel-Projekt gelöscht werden.
