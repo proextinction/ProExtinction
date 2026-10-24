@@ -12,29 +12,29 @@
   --r-card:0;
 }
 :root[data-theme=dark]{
-  --bg:#0b0708;  /* Grundfläche */
-  --surface:#150f10;  /* Karten, Panels, Navigationsleiste */
-  --text:#e2dfdf;  /* Haupttext */
-  --muted:#9d9595;  /* Beschreibungen, Labels, Metadaten */
-  --line:#2f2426;  /* Rahmen, Trenner, 1px */
-  --accent:#c4161c;  /* Akzent: Flächen, Linien, Buttons, große Zahlen (nicht für kleinen Text) */
-  --link:#e8484d;  /* Akzent für Text: Links, aktive Navigation, kleine Nummern */
-  --on-accent:#fff;  /* Text auf Akzentfläche */
-  --accent-deep:#7e0e12;  /* dunklere Akzentvariante (Reserve) */
-  --grain:.08;  /* Deckkraft der Körnung */
+  --bg:#0b0708;  /* Base surface */
+  --surface:#150f10;  /* Cards, panels, navigation bar */
+  --text:#e2dfdf;  /* Main text */
+  --muted:#9d9595;  /* Descriptions, labels, metadata */
+  --line:#2f2426;  /* Borders, dividers, 1px */
+  --accent:#c4161c;  /* Accent: areas, lines, buttons, large numbers (not for small text) */
+  --link:#e8484d;  /* Accent for text: links, active navigation, small numbers */
+  --on-accent:#fff;  /* Text on the accent colour */
+  --accent-deep:#7e0e12;  /* darker accent variant (reserve) */
+  --grain:.08;  /* Grain opacity */
   --metal:linear-gradient(180deg,#fff 0%,#b5b5b5 40%,#f0f0f0 52%,#7d7d7d 100%);
 }
 :root[data-theme=light]{
-  --bg:#f3efe9;  /* Grundfläche */
-  --surface:#e9e3da;  /* Karten, Panels, Navigationsleiste */
-  --text:#130d0e;  /* Haupttext */
-  --muted:#5a5253;  /* Beschreibungen, Labels, Metadaten */
-  --line:#cdc4b8;  /* Rahmen, Trenner, 1px */
-  --accent:#a30f14;  /* Akzent: Flächen, Linien, Buttons, große Zahlen (nicht für kleinen Text) */
-  --link:#a30f14;  /* Akzent für Text: Links, aktive Navigation, kleine Nummern */
-  --on-accent:#fff;  /* Text auf Akzentfläche */
-  --accent-deep:#6d0a0d;  /* dunklere Akzentvariante (Reserve) */
-  --grain:.05;  /* Deckkraft der Körnung */
+  --bg:#f3efe9;  /* Base surface */
+  --surface:#e9e3da;  /* Cards, panels, navigation bar */
+  --text:#130d0e;  /* Main text */
+  --muted:#5a5253;  /* Descriptions, labels, metadata */
+  --line:#cdc4b8;  /* Borders, dividers, 1px */
+  --accent:#a30f14;  /* Accent: areas, lines, buttons, large numbers (not for small text) */
+  --link:#a30f14;  /* Accent for text: links, active navigation, small numbers */
+  --on-accent:#fff;  /* Text on the accent colour */
+  --accent-deep:#6d0a0d;  /* darker accent variant (reserve) */
+  --grain:.05;  /* Grain opacity */
   --grain-blend:multiply;
   --metal:linear-gradient(180deg,#0f0a0b 0%,#4f484a 45%,#120c0d 55%,#6a6263 100%);
 }
