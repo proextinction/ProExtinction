@@ -1,28 +1,28 @@
 # Brand Kit · Pro Extinction · Poster
 
-Eckig, zentriert, plakativ: große Versalien, Konturziffern, ruhiger Text. **Status: Konzept, noch nicht gewählt** (siehe `/DECISIONS.md`).
+Square, centred, poster-like: large capitals, outlined numbers, calm text. **Status: concept, not chosen yet** (see `/DECISIONS.md`).
 
-| Datei | Zweck |
+| File | Purpose |
 |---|---|
-| `BRAND.md` | die verbindliche Kurzfassung |
-| `CLAUDE.md` | Arbeitsregeln, greifen automatisch in diesem Ordner |
-| `tokens.css` | ausführbare Tokens, einzige Quelle der Wahrheit |
-| `brand-helmet.html` | Schriften-Link, Tokens und Grundstile als fertiger Block (generiert) |
-| `brand-props.json` | Akzent im Design-Editor umschaltbar (nur Markenfarben) |
-| `wordmark.svg` | Schriftzug |
-| `mark.svg` | Bildmarke, aus dem Original nachgezeichnet |
-| `beispiel/` | lauffähige Referenz mit allen Bausteinen, Desktop und mobil |
-| `../REFERENCE.md` | Rohfassung aus dem Interview, mit Begründungen |
+| `BRAND.md` | the binding summary |
+| `CLAUDE.md` | working rules, apply automatically in this folder |
+| `tokens.css` | executable tokens, the only source of truth |
+| `brand-helmet.html` | font link, tokens and base styles as a ready block (generated) |
+| `brand-props.json` | accent switchable in the design editor (brand colours only) |
+| `wordmark.svg` | lettering |
+| `mark.svg` | logo mark, redrawn from the original |
+| `beispiel/` | working reference with all building blocks, desktop and mobile |
+| `../REFERENCE.md` | raw notes from the interview, with reasons |
 
-**Das Kit lädt sich nicht von allein.** Arbeitest du außerhalb dieses Ordners, kopiere diesen Satz an
-den Anfang der Sitzung:
+**The kit does not load by itself.** If you work outside this folder, copy this sentence to
+the start of the session:
 
 ```
-Lies zuerst brand/b-poster/BRAND.md und halte dich exakt daran.
-Referenz: brand/b-poster/beispiel/bausteine.html
+First read brand/b-poster/BRAND.md and follow it exactly.
+Reference: brand/b-poster/beispiel/bausteine.html
 ```
 
-`wordmark.svg` enthält `<text>` und braucht die Schrift Anton auf dem anzeigenden Gerät.
-Sobald die Wordmark den Browser verlässt (Druck, Illustrator, PDF), muss sie in Pfade umgewandelt werden.
+`wordmark.svg` contains `<text>` and needs the font Anton on the displaying device.
+As soon as the wordmark leaves the browser (print, Illustrator, PDF), it must be converted to paths.
 
-Neu erzeugen: `python3 tools/kit.py` (Kit-Dateien) und `python3 tools/build.py` (Seiten).
+Generate again: `python3 tools/kit.py` (kit files) and `python3 tools/build.py` (pages).
