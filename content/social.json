@@ -1,101 +1,113 @@
 [
  {
-  "line": 3,
+  "lang": "en",
   "platforms": [
    {
     "name": "TikTok",
     "items": [
      {
-      "label": "❌Suffering❌ (@endthecycle036)",
-      "url": "https://www.tiktok.com/@endthecycle036"
-     },
-     {
-      "label": "the pro-extinction (@proextinction.com)",
+      "name": "the pro-extinction",
       "url": "https://www.tiktok.com/@proextinction.com"
      },
      {
-      "label": "antibadexperience_proextinct (@antibadexperience)",
+      "name": "James Idoine",
+      "url": "https://www.tiktok.com/@james.idoine"
+     },
+     {
+      "name": "antibadexperience_proextinct",
       "url": "https://www.tiktok.com/@antibadexperience"
      },
      {
-      "label": "permabansuffering (@permabansuffering)",
-      "url": "https://www.tiktok.com/@permabansuffering"
+      "name": "the extinctionist",
+      "url": "https://www.tiktok.com/@theextinctionist"
      },
      {
-      "label": "Extinctionist (@res_sentiens)",
-      "url": "https://www.tiktok.com/@res_sentiens"
-     },
-     {
-      "label": "bigredbutton_ (@bigredbutton_)",
+      "name": "Bigredbutton",
       "url": "https://www.tiktok.com/@bigredbutton_"
      },
      {
-      "label": "Extinction 101 (@branster3)",
+      "name": "Extinction 101",
       "url": "https://www.tiktok.com/@branster3"
      },
      {
-      "label": "GP (@iservethesentient)",
-      "url": "https://www.tiktok.com/@iservethesentient"
+      "name": "all suffering is bad",
+      "url": "https://www.tiktok.com/@allsufferingbad"
      },
      {
-      "label": "undo existence (@undoexistence)",
-      "url": "https://www.tiktok.com/@undoexistence"
-     },
-     {
-      "label": "Violet Kelly (@bluejaysgirl)",
-      "url": "https://www.tiktok.com/@bluejaysgirl"
-     },
-     {
-      "label": "scientifically good (@preventionforall)",
-      "url": "https://www.tiktok.com/@preventionforall"
-     },
-     {
-      "label": "focusOnSuffering (@focusonsuffering)",
+      "name": "focusOnSuffering",
       "url": "https://www.tiktok.com/@focusonsuffering"
      },
      {
-      "label": "SolvingSuffering (@solvingsuffering)",
-      "url": "https://www.tiktok.com/@solvingsuffering"
+      "name": "Extinctionist",
+      "url": "https://www.tiktok.com/@res_sentiens"
      },
      {
-      "label": "against the suffering (@1zhizha1)",
-      "url": "https://www.tiktok.com/@1zhizha1"
+      "name": "Eradicate suffering",
+      "url": "https://www.tiktok.com/@eradicatesuffering"
      },
      {
-      "label": "Proextinction_node2100 (@extinction_node21007)",
-      "url": "https://www.tiktok.com/@extinction_node21007"
+      "name": "undo existence",
+      "url": "https://www.tiktok.com/@undoexistence"
      },
      {
-      "label": "End All Suffering (@end.all.suffering)",
-      "url": "https://www.tiktok.com/@end.all.suffering"
+      "name": "pro extinction",
+      "url": "https://www.tiktok.com/@goneguy26"
      },
      {
-      "label": "hmmm (@doughnot6789)",
-      "url": "https://www.tiktok.com/@doughnot6789"
+      "name": "scientifically good",
+      "url": "https://www.tiktok.com/@preventionforall"
      },
      {
-      "label": "Proextinction_123# (@proextinction_123)",
-      "url": "https://www.tiktok.com/@proextinction_123"
+      "name": "luisa85",
+      "url": "https://www.tiktok.com/@aline8556"
      },
      {
-      "label": "Proextinction_33407 (@proextinction_334)",
+      "name": "Proextinction_33407",
       "url": "https://www.tiktok.com/@proextinction_334"
      },
      {
-      "label": "Lina🍓 (@v4lzorix)",
+      "name": "ProExtinction460",
+      "url": "https://www.tiktok.com/@proextinction460"
+     },
+     {
+      "name": "Lina🍓",
       "url": "https://www.tiktok.com/@v4lzorix"
      },
      {
-      "label": "extinctionist (@pro_extinction_movement3)",
+      "name": "extinctionist",
       "url": "https://www.tiktok.com/@pro_extinction_movement3"
      },
      {
-      "label": "Bigredbutton (@bigredbutton_)",
-      "url": "https://www.tiktok.com/@bigredbutton_?is_from_webapp=1&sender_device=pc"
+      "name": "GP",
+      "url": "https://www.tiktok.com/@iservethesentient"
      },
      {
-      "label": "luisa85 (@aline8556)",
-      "url": "https://www.tiktok.com/@aline8556/photo/7673162865162931488?is_from_webapp=1&sender_device=pc&web_id=7623449227327505942"
+      "name": "Proextinction_node2100",
+      "url": "https://www.tiktok.com/@extinction_node21007"
+     },
+     {
+      "name": "Extinction Revolution",
+      "url": "https://www.tiktok.com/@extinctionrevolution"
+     },
+     {
+      "name": "Violet Kelly",
+      "url": "https://www.tiktok.com/@bluejaysgirl"
+     },
+     {
+      "name": "against the suffering",
+      "url": "https://www.tiktok.com/@1zhizha1"
+     },
+     {
+      "name": "SolvingSuffering",
+      "url": "https://www.tiktok.com/@solvingsuffering"
+     },
+     {
+      "name": "hmmm",
+      "url": "https://www.tiktok.com/@doughnot6789"
+     },
+     {
+      "name": "End All Suffering",
+      "url": "https://www.tiktok.com/@end.all.suffering"
      }
     ]
    },
@@ -103,51 +115,42 @@
     "name": "Instagram",
     "items": [
      {
-      "label": "Pro-Extinction (@proextinction)",
+      "name": "Pro-Extinction",
       "url": "https://www.instagram.com/proextinction"
      },
      {
-      "label": "how to end every suffering (@proextinct)",
+      "name": "how to end every suffering",
       "url": "https://www.instagram.com/proextinct"
      },
      {
-      "label": "James Idoine (@abolishsuffering)",
+      "name": "James Idoine",
       "url": "https://www.instagram.com/abolishsuffering"
      },
      {
-      "label": "(@nature.is.cruel_)",
       "url": "https://www.instagram.com/nature.is.cruel_"
      },
      {
-      "label": "Merciful Extinctionist (@mercifulextinctionist)",
+      "name": "Merciful Extinctionist",
       "url": "https://www.instagram.com/mercifulextinctionist"
      },
      {
-      "label": "(@proextinction_memes)",
       "url": "https://www.instagram.com/proextinction_memes"
      },
      {
-      "label": "FocusOnSuffering (@focusonsuffering)",
+      "name": "FocusOnSuffering",
       "url": "https://www.instagram.com/focusonsuffering"
      },
      {
-      "label": "Extinctionist (@res_sentiens)",
-      "url": "https://www.tiktok.com/@res_sentiens"
-     },
-     {
-      "label": "(@pro_extinction_movment345)",
       "url": "https://www.instagram.com/pro_extinction_movment345"
      },
      {
-      "label": "(@proextinctionat)",
       "url": "https://www.instagram.com/proextinctionat"
      },
      {
-      "label": "ExtinctionNow (@extinction_now)",
+      "name": "ExtinctionNow",
       "url": "https://www.instagram.com/extinction_now"
      },
      {
-      "label": "(@proextinction_2255)",
       "url": "https://www.instagram.com/proextinction_2255"
      }
     ]
@@ -156,31 +159,25 @@
     "name": "YouTube",
     "items": [
      {
-      "label": "Proextinction",
+      "name": "Proextinction",
       "url": "https://youtube.com/@pro_extinction",
       "desc": "Life is inherently negative because suffering is the only bad thing in this universe. This channel, Proextinction aims to create a Extinctionist Revolution as sentient beings are the ones who are suffering unnecessarily and involuntarily in this existence and their suffering needs to end. How can suffering end? Extinction of all sentient life i.e. Non-existence of life.",
       "pic": 25
      },
      {
-      "label": "Proextinctiongermany",
+      "name": "Proextinctiongermany",
       "url": "https://youtube.com/@proextinctiongermany",
       "desc": "Wir setzen uns für die Ausrottung aller empfindungsfähigen Lebewesen ein um alles Leiden zu beenden.",
       "pic": 26
      },
      {
-      "label": "FocusOnSuffering | againstVictimization",
+      "name": "FocusOnSuffering | againstVictimization",
       "url": "https://youtube.com/@aginstsuffering",
       "desc": "(previously Now4Extinction Now pro extinction)",
       "pic": 27
      },
      {
-      "label": "antisuffering",
-      "url": "https://youtube.com/@antisuffering381",
-      "desc": "",
-      "pic": 29
-     },
-     {
-      "label": "UniversalExtinction",
+      "name": "UniversalExtinction",
       "url": "https://youtube.com/@universalextinction",
       "desc": "A channel dedicated to preventing all suffering. It's a growing movement! And we're recruiting!",
       "pic": 30
@@ -195,7 +192,6 @@
     ],
     "items": [
      {
-      "label": "@ekstynkcja",
       "url": "https://x.com/ekstynkcja"
      }
     ]
@@ -203,18 +199,29 @@
   ]
  },
  {
-  "line": 65,
+  "lang": "de",
   "platforms": [
    {
     "name": "Instagram",
     "items": [
      {
-      "label": "@proextinction.germany",
-      "url": "https://www.instagram.com/proextinction.germany/"
+      "url": "https://www.instagram.com/proextinction.germany"
      },
      {
-      "label": "@rene._h_",
       "url": "https://www.instagram.com/rene._h_"
+     }
+    ]
+   },
+   {
+    "name": "TikTok",
+    "items": [
+     {
+      "name": "René Horn",
+      "url": "https://www.tiktok.com/@suffering_abolition_de2"
+     },
+     {
+      "name": "ProExtinction",
+      "url": "https://www.tiktok.com/@keinleiden"
      }
     ]
    },
@@ -222,8 +229,7 @@
     "name": "Facebook",
     "items": [
      {
-      "label": "facebook.com/Proextinctiongermany",
-      "url": "https://www.facebook.com/Proextinctiongermany/"
+      "url": "https://www.facebook.com/Proextinctiongermany"
      }
     ]
    },
@@ -231,7 +237,6 @@
     "name": "YouTube",
     "items": [
      {
-      "label": "@Proextinctiongermany",
       "url": "https://www.youtube.com/@Proextinctiongermany"
      }
     ]
@@ -239,17 +244,15 @@
   ]
  },
  {
-  "line": 77,
+  "lang": "pl",
   "platforms": [
    {
     "name": "Instagram",
     "items": [
      {
-      "label": "@pro_extinction.zawyginieciem",
       "url": "https://www.instagram.com/pro_extinction.zawyginieciem"
      },
      {
-      "label": "@ekstynkcjonizm",
       "url": "https://www.instagram.com/ekstynkcjonizm"
      }
     ]
@@ -258,12 +261,19 @@
     "name": "Facebook",
     "items": [
      {
-      "label": "facebook.com/ekstynkcjonist",
       "url": "https://www.facebook.com/ekstynkcjonist"
      },
      {
-      "label": "facebook.com/ekstynkcjonizm",
       "url": "https://www.facebook.com/ekstynkcjonizm"
+     }
+    ]
+   },
+   {
+    "name": "TikTok",
+    "items": [
+     {
+      "name": "ProWymarcie",
+      "url": "https://www.tiktok.com/@prowymarcie"
      }
     ]
    },
@@ -271,7 +281,6 @@
     "name": "YouTube",
     "items": [
      {
-      "label": "@za_wyginieciem",
       "url": "https://youtube.com/@za_wyginieciem"
      }
     ]
@@ -279,14 +288,41 @@
   ]
  },
  {
-  "line": 88,
+  "lang": "it",
   "platforms": [
    {
     "name": "TikTok",
     "items": [
      {
-      "label": "Estinzionista (@proextinction.italia)",
+      "name": "Estinzionista",
       "url": "https://www.tiktok.com/@proextinction.italia"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "lang": "ru",
+  "platforms": [
+   {
+    "name": "TikTok",
+    "items": [
+     {
+      "url": "https://www.tiktok.com/@proextinctionru"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "lang": "zh",
+  "platforms": [
+   {
+    "name": "TikTok",
+    "items": [
+     {
+      "name": "寻求消除苦难",
+      "url": "https://www.tiktok.com/@xunqiuxiaochukunan"
      }
     ]
    }

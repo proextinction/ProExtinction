@@ -1503,21 +1503,33 @@ SOCIAL = json.loads((ROOT / 'content' / 'social.json').read_text(encoding='utf-8
 # Line positions where a language's own channel page differs from the English one (PL lists Twitter/X too).
 SOCIAL_IDX = {'pl': {65: 67, 77: 79, 88: 90, 91: 93, 94: 96}}
 
+def handle(url):
+    """'@name' from a profile link ('facebook.com/name' for Facebook, which has no @ handles)."""
+    u = urllib.parse.urlsplit(url); name = u.path.strip('/').split('/')[0]
+    return f'facebook.com/{name}' if 'facebook' in u.hostname else '@' + name.lstrip('@')
+
 def social_body(lang, lines, used):
-    """Channel list (content/social.json: language > platform > accounts with links). Headings, intro and notes come
-    from the page's lines (index-aligned with English); account names and channel bios stay as their owners wrote them."""
+    """Channel cards (content/social.json: language > platform > accounts with links), the reader's language first.
+    Groups are headed by the language's own name; intro and notes come from the page's lines (index-aligned with English);
+    account names and channel bios stay as their owners wrote them."""
     L = lambda i: lines[SOCIAL_IDX.get(lang, {}).get(i, i)]
     out, toc = [f'<p>{esc(L(1))}</p><p>{esc(L(2))}</p>'], []
-    for g in SOCIAL:
-        name = L(g['line']).rstrip(':：'); i = slug_id(name, used); toc.append((i, name))
-        out.append(f'<h2 id="{i}">{esc(name)}</h2>')
+    for g in sorted(SOCIAL, key=lambda g: g['lang'] != lang):
+        name = LANG_NAME[g['lang']]; i = slug_id(g['lang'], used); toc.append((i, name))
+        out.append(f'<h2 id="{i}"' + (f' lang="{g["lang"]}"' if g['lang'] != lang else '') + f'>{esc(name)}</h2>')
         for pl in g['platforms']:
             if lang not in pl.get('only', [lang]): continue
-            out.append(f'<h3 class="plat">{icon(pl["name"].lower())}{pl["name"]}</h3>')
+            out.append(f'<h3 class="plat">{icon(pl["name"].lower())}{pl["name"]}<span class="count">{len(pl["items"])}</span></h3>')
             if 'note' in pl: out.append(f'<p class="plat-note">{esc(L(pl["note"]))}</p>')
-            out.append('<ul class="channels">' + ''.join(
-                f'<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '') + f'<a href="{esc(x["url"])}"{link_attrs(x["url"])}>{esc(x["label"])}</a>' + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>'
-                for x in pl['items']) + '</ul>')
+            cards = []
+            for x in pl['items']:
+                h = handle(x['url']); nm = x.get('name', '')
+                if nm.lower() == h.lstrip('@').lower(): nm = ''
+                cards.append('<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '')
+                             + f'<a href="{esc(x["url"])}"{link_attrs(x["url"])}>' + (f'<span class="nm">{esc(nm)}</span>' if nm else '')
+                             + f'<span class="hd" dir="ltr">{esc(h)}</span></a>'
+                             + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>')
+            out.append(f'<ul class="channels{" wide" if any(x.get("desc") for x in pl["items"]) else ""}">' + ''.join(cards) + '</ul>')
     out.append(f'<p class="note">{esc(L(94))}</p>')
     return '\n'.join(out), toc
 
