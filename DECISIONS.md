@@ -9,6 +9,7 @@ Status: kept up to date. **Decided: design B (Poster).** A Ember is removed (sti
 | Original logo as a vector | missing, `mark.svg` is a redrawing | as soon as it turns up |
 | Self-hosted fonts | **done** for `site/` (local, OFL). Only `brand-helmet.html` still loads from Google | – |
 | Legal notice | **decided: none for now** (loose group, operators not in DE/AT). Draft is ready, `IMPRINT` in `tools/build.py` | check again as soon as someone from DE/AT acts as operator |
+| Visitor statistics | **decided** (October 2026): Cloudflare Web Analytics, without cookies. The CSP allows only its script (`ANALYTICS` in `tools/build.py`); named in the privacy policy. Switched on by James in Cloudflare | – |
 | Open to search engines | **done** (October 2026), `INDEXABLE = True` in `tools/build.py`: all 29 languages, all crawlers (AI too) | – |
 | Pictures on "Suffering in detail" (16) | blurred behind a click | – |
 | German translation of the 4 missing pages | drafts in `content/_translation-pending/`, not built in | separate step |

@@ -1965,15 +1965,19 @@ def not_found():
 </html>
 '''
 
+# Cloudflare Web Analytics (owners' decision, October 2026): cookieless visitor counts. Cloudflare adds its script to every page;
+# the CSP allows only that script and the address it reports to. Nothing else may load from other servers (see the privacy policy).
+ANALYTICS = ('https://static.cloudflareinsights.com', 'https://cloudflareinsights.com')
+
 HEADERS = {
     'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'X-Frame-Options': 'DENY', 'Cross-Origin-Opener-Policy': 'same-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     'Strict-Transport-Security': 'max-age=31536000',   # HTTPS only; no includeSubDomains, so other subdomains stay untouched
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; "
-                               "img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'"}
+    'Content-Security-Policy': f"default-src 'self'; script-src 'self' 'unsafe-inline' {ANALYTICS[0]}; style-src 'self' 'unsafe-inline'; font-src 'self'; "
+                               f"img-src 'self' data:; connect-src 'self' {ANALYTICS[1]}; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'"}
 
 def hosting():
-    """Cloudflare Pages reads site/_headers and site/_redirects (neither is served as a page). Both follow INDEXABLE."""
+    """Cloudflare reads site/_headers and site/_redirects (neither is served as a page). Both follow INDEXABLE."""
     hdr = ({} if INDEXABLE else {'X-Robots-Tag': 'noindex, nofollow'}) | HEADERS
     (OUT / '_headers').write_text('/*\n' + ''.join(f'  {k}: {v}\n' for k, v in hdr.items())
                                   + '\n/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n', encoding='utf-8')
