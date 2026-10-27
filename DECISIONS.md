@@ -13,7 +13,7 @@ Status: kept up to date. **Decided: design B (Poster).** A Ember is removed (sti
 | Pictures on "Suffering in detail" (16) | blurred behind a click | – |
 | German translation of the 4 missing pages | drafts in `content/_translation-pending/`, not built in | separate step |
 | Phone number on the German site | stays (as requested), confirm before going live | before going live |
-| Hosting and domain | **Cloudflare Pages** in James's Cloudflare account, where the domain already is (free, `HOSTING.md`); `proextinction.com` without www. Open: setup by James, branch `main` as the live version, repository in a GitHub organisation | with the move |
+| Hosting and domain | **Cloudflare Workers** (static files from `site/`, `wrangler.jsonc`) in James's Cloudflare account, where the domain already is (free, `HOSTING.md`); `proextinction.com` without www. Open: setup by James, branch `main` as the live version, repository in a GitHub organisation | with the move |
 
 ## Decided
 1. **Brand:** Pro Extinction. "AbolishSuffering" stays only as the Discord name.

@@ -1,0 +1,10 @@
+// Cloudflare Workers: serve the finished site from site/ as static files. No build step, no Worker code.
+// site/_headers and site/_redirects (written by tools/build.py) are read by Cloudflare. See HOSTING.md.
+{
+  "name": "proextinction",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page"
+  }
+}

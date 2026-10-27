@@ -99,8 +99,7 @@ Best kept internal (Discord) rather than public on the website.
 ## 6. Other open points (waiting for an owner decision)
 
 - **Quiz before the WhatsApp group:** add "Sorry, you didn't make it" to the rejection text? (Today: friendly text plus "You can still help: share our website!")
-- **PR #7 (Cloudflare Workers):** close it, keep only the docs, or only remove the security section from `HOSTING.md` (it should go before the repo is public).
-- **Preview builds on pull requests** always fail at Cloudflare (the real site from `main` works). Look for the cause in the Worker settings at Cloudflare.
+- **Preview builds on pull requests** always failed at Cloudflare (the real site from `main` works). Fix: `wrangler.jsonc` in the repository. If they still fail, check the Worker's *Build* settings against `HOSTING.md`, step 2.
 - **`CODEOWNERS`:** add James (`idoinejd`) as soon as he has accepted the invitation as org owner.
 - **Shorten the privacy policy** (sections "Contact by e-mail", "Your rights"): only after confirmation.
 - **Cartoon picture in the FAQ** (picture 31, moral subjectivity): blurred behind a click like the pictures on "Suffering in detail"?
