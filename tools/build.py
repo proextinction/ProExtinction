@@ -1,5 +1,5 @@
 """Build the website (all languages) into site/: one file per page, site/<lang>/<slug>.html, served as /<lang>/<slug>."""
-import json, re, html, pathlib, sys, urllib.parse
+import json, re, html, pathlib, sys, urllib.parse, datetime
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from blocks import blocks_of, abridge, faq_pairs, pic_anchors, place_pics
 import diagrams
@@ -1762,15 +1762,29 @@ def alternates(lang, slug):
 def jsonld(lang):
     return json.dumps({'@context': 'https://schema.org', '@graph': [
         {'@type': 'Organization', '@id': SITE_URL + '/#org', 'name': 'Pro Extinction', 'url': SITE_URL, 'email': EMAIL,
-         'logo': SITE_URL + '/logo.png', 'foundingDate': '2024', 'sameAs': [DISCORD]},
+         'logo': SITE_URL + '/logo.png', 'foundingDate': '2024', 'sameAs': [DISCORD] + SAME_AS},
         {'@type': 'WebSite', '@id': SITE_URL + '/#site', 'name': 'Pro Extinction', 'url': SITE_URL,
          'inLanguage': LANGS, 'publisher': {'@id': SITE_URL + '/#org'}}]}, ensure_ascii=False)
 
-def head(lang, path, title, desc, alts=(), index=True, home=False):
-    """<head> contents shared by every page: theme before paint, SEO tags, the one stylesheet."""
+# The project's own main accounts (content/social.json lists every activist channel), for search engines' knowledge panel.
+SAME_AS = ['https://www.tiktok.com/@proextinction.com', 'https://www.instagram.com/proextinction', 'https://youtube.com/@pro_extinction']
+
+def faq_ld(lang, slug):
+    """FAQPage data for search engines: the page's questions with their answers as plain text."""
+    lines = json.loads((ROOT / 'content' / lang / f'{slug}.json').read_text(encoding='utf-8'))
+    like = json.loads((ROOT / 'content' / 'en' / f'{EN_OF[lang][slug]}.json').read_text(encoding='utf-8')) if slug in AI[lang] else None
+    rest = head_lede(lines, like)[2]
+    pairs = faq_pairs(rest, like[len(lines) - len(rest):] if like else None)[1]
+    return json.dumps({'@context': 'https://schema.org', '@type': 'FAQPage', 'inLanguage': lang, 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': '\n'.join(a)}} for q, a in pairs]}, ensure_ascii=False)
+
+def head(lang, path, title, desc, alts=(), index=True, home=False, data=None):
+    """<head> contents shared by every page: theme before paint, SEO tags, the one stylesheet.
+    data: JSON-LD for search engines (the home page's organisation is added by itself)."""
     robots = 'index, follow' if INDEXABLE and index else 'noindex, nofollow'
     links = ''.join(f'<link rel="alternate" hreflang="{h}" href="{SITE_URL}{p}">\n' for h, p in alts)
-    ld = f'<script type="application/ld+json">{jsonld(lang)}</script>\n' if home else ''
+    data = data or (jsonld(lang) if home else None)
+    ld = '<script type="application/ld+json">' + data.replace('</', '<\\/') + '</script>\n' if data else ''
     return f'''<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
@@ -1792,18 +1806,30 @@ def head(lang, path, title, desc, alts=(), index=True, home=False):
 <script>(function(){{var d=document.documentElement,m=null;try{{m=new URLSearchParams(location.search).get('theme')||localStorage.getItem('pe-theme')}}catch(e){{}}
 d.dataset.theme=m==='light'?'light':'dark'}})()</script>'''
 
+HOME_TITLE = {'en': 'Ending forced existence and suffering', 'de': 'Erzwungene Existenz und Leid beenden',
+    'pl': 'Koniec przymusowego istnienia i cierpienia', 'es': 'Acabar con la existencia impuesta y el sufrimiento',
+    'it': "Fine dell'esistenza forzata e della sofferenza", 'fr': "En finir avec l'existence forcée et la souffrance",
+    'pt': 'Acabar com a existência forçada e o sofrimento', 'ru': 'Конец вынужденному существованию и страданию',
+    'zh': '终结被迫的存在与苦难', 'hi': 'जबरन अस्तित्व और पीड़ा का अंत', 'ar': 'إنهاء الوجود القسري والمعاناة',
+    'bn': 'জোরপূর্বক অস্তিত্ব ও দুঃখের অবসান', 'ur': 'جبری وجود اور تکلیف کا خاتمہ', 'id': 'Mengakhiri keberadaan paksa dan penderitaan',
+    'ja': '強いられた存在と苦しみを終わらせる', 'tr': 'Zorla var olmaya ve acıya son', 'vi': 'Chấm dứt sự tồn tại bị ép buộc và khổ đau',
+    'ko': '강요된 존재와 고통을 끝내다', 'fa': 'پایان دادن به هستی اجباری و رنج', 'mr': 'लादलेल्या अस्तित्वाचा आणि दुःखाचा अंत',
+    'te': 'బలవంతపు ఉనికికి, బాధకు ముగింపు', 'ta': 'கட்டாய இருப்புக்கும் துன்பத்துக்கும் முடிவு', 'sw': 'Kukomesha uwepo wa kulazimishwa na mateso',
+    'th': 'ยุติการดำรงอยู่ที่ถูกบังคับและความทุกข์', 'nl': 'Een einde aan gedwongen bestaan en lijden', 'uk': 'Кінець вимушеному існуванню і стражданню',
+    'tl': 'Wakasan ang sapilitang pag-iral at pagdurusa', 'pa': 'ਜ਼ਬਰਦਸਤੀ ਹੋਂਦ ਅਤੇ ਦੁੱਖ ਦਾ ਅੰਤ', 'gu': 'ફરજિયાત અસ્તિત્વ અને દુઃખનો અંત'}
+
 def page_html(lang, slug, kind, title=None, main=None, desc=None, index=True):
     if main is None: title, main, body_class = page_main(lang, slug, kind)
     else: body_class = 'page'
-    # search result titles: the home page says what the organisation is, in its own language (the English slogan is the same everywhere);
+    # search result titles (Google shows about 60 characters): the home page says briefly what the organisation is, in its own language (the English slogan is the same everywhere);
     # other pages use their heading, or the short menu name when the heading is long or set in capitals
-    if kind == 'home': full = f'Pro Extinction | {T[lang]["sub"].rstrip(".")}'
+    if kind == 'home': full = f'Pro Extinction | {HOME_TITLE[lang]}'
     else: full = f'{NAV[lang][slug] if slug in NAV[lang] and (len(title) > 50 or title.isupper()) else title} | Pro Extinction'
     alts = alternates(lang, slug) if slug in EN_OF[lang] else ()
     return f'''<!doctype html>
 <html lang="{lang}" dir="{DIR(lang)}" data-concept="b-poster">
 <head>
-{head(lang, url(lang, slug), full, desc or SEO[lang][slug], alts, index, kind == 'home')}
+{head(lang, url(lang, slug), full, desc or SEO[lang][slug], alts, index, kind == 'home', faq_ld(lang, slug) if kind == 'faq' else None)}
 </head>
 <body class="{body_class}">
 {header(lang, slug)}
@@ -1864,18 +1890,24 @@ def css():
 def build():
     (OUT / 'style.css').write_text(css(), encoding='utf-8')
     (OUT / 'site.js').write_text((ASSETS / 'site.js').read_text(encoding='utf-8'), encoding='utf-8')
-    paths = []   # (path, alternates, indexable) for the sitemap
+    paths = []   # (path, alternates, last change) for the sitemap
+    old = sitemap_dates()
+    def write(f, html, path):
+        """Writes a page; returns the date it last changed (kept from the sitemap while the file stays the same)."""
+        same = f.exists() and f.read_text(encoding='utf-8') == html
+        f.write_text(html, encoding='utf-8')
+        return old.get(path) if same and old.get(path) else datetime.date.today().isoformat()
     for lang in LANGS:
         d = OUT / lang; d.mkdir(parents=True, exist_ok=True)
         for slug, kind in PAGES[lang]:
-            (d / ('index.html' if slug == 'home' else f'{slug}.html')).write_text(page_html(lang, slug, kind), encoding='utf-8')
-            paths.append((url(lang, slug), alternates(lang, slug)))
+            day = write(d / ('index.html' if slug == 'home' else f'{slug}.html'), page_html(lang, slug, kind), url(lang, slug))
+            paths.append((url(lang, slug), alternates(lang, slug), day))
     for lang in LEGAL:
         for key in ('imprint', 'privacy')[not IMPRINT:]:
             p = LEGAL[lang][key]; title, main = legal_main(lang, key)
             draft = any(DRAFT.search(x) for x in p['text'])
-            (OUT / lang / f'{p["slug"]}.html').write_text(page_html(lang, p['slug'], 'doc', title, main, p['description'], not draft), encoding='utf-8')
-            if not draft: paths.append((url(lang, p['slug']), ()))
+            day = write(OUT / lang / f'{p["slug"]}.html', page_html(lang, p['slug'], 'doc', title, main, p['description'], not draft), url(lang, p['slug']))
+            if not draft: paths.append((url(lang, p['slug']), (), day))
     (OUT / 'index.html').write_text(root_page(), encoding='utf-8')
     (OUT / '404.html').write_text(not_found(), encoding='utf-8')
     (OUT / 'sitemap.xml').write_text(sitemap(paths), encoding='utf-8')
@@ -1883,11 +1915,17 @@ def build():
     hosting()
     print('built', len(paths), 'pages into site/')
 
+def sitemap_dates():
+    """{path: lastmod} from the sitemap of the previous build."""
+    f = OUT / 'sitemap.xml'
+    if not f.exists(): return {}
+    return {loc[len(SITE_URL):]: day for loc, day in re.findall(r'<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>', f.read_text(encoding='utf-8'))}
+
 def sitemap(paths):
     rows = []
-    for p, alts in paths:
+    for p, alts, day in paths:
         alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{SITE_URL}{a}"/>' for h, a in alts)
-        rows.append(f'<url><loc>{SITE_URL}{p}</loc>{alt}</url>')
+        rows.append(f'<url><loc>{SITE_URL}{p}</loc><lastmod>{day}</lastmod>{alt}</url>')
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
             + '\n'.join(rows) + '\n</urlset>\n')
 
