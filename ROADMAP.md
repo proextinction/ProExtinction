@@ -80,12 +80,11 @@ Best kept internal (Discord) rather than public on the website.
 ## 4. Search engines and domain
 
 - **Done:** website open to search engines (`INDEXABLE = True`, October 2026).
-- **Google still shows the old version** (old Google Sites page, "no information available"). It is read again on Google's next visit.
-- **Google Search Console:** verify the domain `proextinction.com` (TXT record in Cloudflare DNS), submit the sitemap `https://proextinction.com/sitemap.xml`,
-  `https://proextinction.com/en/` via *URL Inspection* → *Request indexing*. Optionally the same in Bing Webmaster Tools.
-- **Redirect www to the domain without www:** today www serves its own copy. Cloudflare → *Rules* → *Redirect Rules*: hostname `www.proextinction.com`
-  → `https://proextinction.com${http.request.uri.path}`, 301, keep the query string.
-- Responsible: James (Cloudflare account) or Jonas with access (see 5).
+- **Done by James (October 2026):** Google Search Console with the sitemap, www redirects to the domain without www (301), Always Use HTTPS, Crawler Hints.
+- **Next, in the code:** structured data (JSON-LD: Organization on the home page, FAQPage on the FAQ pages), `lastmod` in the sitemap,
+  a shorter German home page title (Google cuts after about 60 characters), optionally a preview picture per page and language.
+- **Later:** after 2 to 4 weeks, read the search terms in Search Console and adjust titles and descriptions to them.
+- **Links from outside:** every social media account and YouTube description links to `proextinction.com`.
 
 ## 5. Cloudflare access for Jonas
 
@@ -99,8 +98,7 @@ Best kept internal (Discord) rather than public on the website.
 ## 6. Other open points (waiting for an owner decision)
 
 - **Quiz before the WhatsApp group:** add "Sorry, you didn't make it" to the rejection text? (Today: friendly text plus "You can still help: share our website!")
-- **PR #7 (Cloudflare Workers):** close it, keep only the docs, or only remove the security section from `HOSTING.md` (it should go before the repo is public).
-- **Preview builds on pull requests** always fail at Cloudflare (the real site from `main` works). Look for the cause in the Worker settings at Cloudflare.
+- **Preview builds on pull requests** always failed at Cloudflare (the real site from `main` works). Fix: `wrangler.jsonc` in the repository. If they still fail, check the Worker's *Build* settings against `HOSTING.md`, step 2.
 - **`CODEOWNERS`:** add James (`idoinejd`) as soon as he has accepted the invitation as org owner.
 - **Shorten the privacy policy** (sections "Contact by e-mail", "Your rights"): only after confirmation.
 - **Cartoon picture in the FAQ** (picture 31, moral subjectivity): blurred behind a click like the pictures on "Suffering in detail"?
