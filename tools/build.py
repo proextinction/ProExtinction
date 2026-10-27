@@ -1959,8 +1959,17 @@ def not_found():
 {head('en', '/404', 'Page not found | Pro Extinction', 'This page does not exist.', index=False)}
 </head>
 <body class="page">
-<main id="main" class="shell"><article class="doc"><header class="doc-head"><p class="mono kicker">404</p><h1>Page not found</h1><p class="lede">This page does not exist (any more). Pick your language to go to the start page.</p><hr class="slash"></header>
-<ul class="lang-list">{items}</ul></article></main>
+<main id="main" class="shell nf">
+<a class="nf-home" href="{url('en', 'home')}">{HERO_LOGO}<span class="wordmark">PRO EXTINCTION</span></a>
+<p class="mono kicker">404 · Page not found</p>
+<h1>This page does not exist</h1>
+<p class="lede">Non-existence is not a problem. Suffering is. Read why we want to end it.</p>
+<p class="hero-cta"><a class="btn primary" href="{url('en', 'manifesto')}">Read the manifesto</a><a class="btn" href="{url('en', 'home')}">Start page</a></p>
+<hr class="slash">
+<p class="mono kicker">Choose your language</p>
+<ul class="lang-list">{items}</ul>
+<p class="hero-tag">{T['en']['tagline']}</p>
+</main>
 </body>
 </html>
 '''
