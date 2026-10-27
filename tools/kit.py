@@ -7,31 +7,31 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRAND = ROOT / 'brand'
 
 ROLES = {
- 'bg': 'Grundfläche', 'surface': 'Karten, Panels, Navigationsleiste', 'text': 'Haupttext',
- 'muted': 'Beschreibungen, Labels, Metadaten', 'line': 'Rahmen, Trenner, 1px',
- 'accent': 'Akzent: Flächen, Linien, Buttons, große Zahlen (nicht für kleinen Text)',
- 'link': 'Akzent für Text: Links, aktive Navigation, kleine Nummern',
- 'on-accent': 'Text auf Akzentfläche', 'scare': 'nur Logo-Effekt (Jumpscare)',
- 'accent-deep': 'dunklere Akzentvariante (Reserve)', 'grain': 'Deckkraft der Körnung',
+ 'bg': 'Base surface', 'surface': 'Cards, panels, navigation bar', 'text': 'Main text',
+ 'muted': 'Descriptions, labels, metadata', 'line': 'Borders, dividers, 1px',
+ 'accent': 'Accent: areas, lines, buttons, large numbers (not for small text)',
+ 'link': 'Accent for text: links, active navigation, small numbers',
+ 'on-accent': 'Text on the accent colour',
+ 'accent-deep': 'darker accent variant (reserve)', 'grain': 'Grain opacity',
 }
-ORDER = ['bg', 'surface', 'text', 'muted', 'line', 'accent', 'link', 'on-accent', 'scare']
+ORDER = ['bg', 'surface', 'text', 'muted', 'line', 'accent', 'link', 'on-accent']
 
 CONCEPTS = {
  'b-poster': dict(
   name='Poster', fonts='family=Anton&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500',
-  display='Anton', body='Barlow', body_kind='Sans-Serif (nicht Inter, nicht Roboto)', default_mode='dunkel',
-  one_liner='Eckig, zentriert, plakativ: große Versalien, Konturziffern, ruhiger Text.',
-  shape='eckig (Radius 0 überall)', shape_short='eckig',
-  accent_share='unter 5 % der Fläche',
-  nav='Navbar oben unter der Kopfzeile, zentriert, ab 900 px auf zwei Zeilen umbrechend, klebt oben (sticky). Darunter waagerechter Streifen. Aktive Seite: rot und unterstrichen.',
-  toc='Kapitelübersicht wie in A: Akzentlinie links, nummeriert; ab 1280 px rechts neben dem Text, 14 rem, mitlaufend (sticky). Darunter über dem Text.',
-  layout='Zentriert: Titel, Trenner, Kapitelüberschriften mittig, Fließtext linksbündig in 68-ch-Spalte.',
-  efforts='Container-Breite: unter 38 rem 1 Spalte, ab 38 rem 2×2. Nummer als Konturziffer 4–7 rem (Anton, 2 px Akzent-Kontur).',
-  h1='clamp(2,6 rem, 9 vw, 6 rem)', wordmark_hero='clamp(2,2 rem, 11,5 vw, 9,5 rem)',
-  gutter='clamp(1,1 rem, 5 vw, 3 rem)', wide='60 rem', body_size='1,125 rem / Zeilenhöhe 1,65',
-  bp='640 (Kopfzeile kompakt) · 760 (Kopfzeile dreispaltig) · 900 (Navbar umbrechend)',
-  banned_extra=['Runde Formen', 'Linksbündige Überschriften', 'Serifen im Fließtext'],
-  rail_note='Keine Seitenleiste, daher kein Scrollproblem in der Navigation.'),
+  display='Anton', body='Barlow', body_kind='sans-serif (not Inter, not Roboto)', default_mode='dark',
+  one_liner='Square, centred, poster-like: large capitals, outlined numbers, calm text.',
+  shape='square (radius 0 everywhere)', shape_short='square',
+  accent_share='under 5 % of the area',
+  nav='Navbar at the top below the header, centred, wraps onto two lines from 900 px, sticks to the top (sticky). A horizontal stripe below. Active page: red and underlined.',
+  toc='Chapter overview as in A: accent line on the left, numbered; from 1280 px to the right of the text, 14 rem, following the reader (sticky). Below that, above the text.',
+  layout='Centred: title, divider, chapter headings in the middle, body text left-aligned in a 68 ch column.',
+  efforts='Container width: under 38 rem 1 column, from 38 rem 2×2. Number as an outlined digit 4–7 rem (Anton, 2 px accent outline).',
+  h1='clamp(2,6 rem, 9 vw, 6 rem)', wordmark_hero='clamp(2.2 rem, 11.5 vw, 9.5 rem)',
+  gutter='clamp(1.1 rem, 5 vw, 3 rem)', wide='60 rem', body_size='1.125 rem / line height 1.65',
+  bp='640 (compact header) · 760 (three-column header) · 900 (navbar wraps)',
+  banned_extra=['Round shapes', 'Left-aligned headings', 'Serifs in body text'],
+  rail_note='No sidebar, so no scrolling problem in the navigation.'),
 }
 
 # ---------- helpers
@@ -90,195 +90,194 @@ def brand_md(c):
     for k in ORDER:
         rows.append(f'| `--{k}` | `{th["dark"].get(k,"–")}` | `{th["light"].get(k,"–")}` | {ROLES[k]} |')
     cr = []
-    for m, label in (('dark', 'Dunkel'), ('light', 'Hell')):
+    for m, label in (('dark', 'Dark'), ('light', 'Light')):
         t = th[m]
         cr.append(f'| {label} | {contrast(t["text"], t["bg"])} | {contrast(t["muted"], t["bg"])} | {contrast(t["link"], t["bg"])} | {contrast(t["accent"], t["bg"])} | {contrast(t["on-accent"], t["accent"])} |')
-    banned = ['Inter oder Roboto als Hauptschrift', 'Stockfotos, Sonnenuntergangs-Silhouetten, Totenkopf- und Blut-Klischees',
-              'Metal-Optik im Fließtext', 'Verläufe oder Glanz außer in Logo und Wordmark', 'Schatten und Glaseffekte',
-              'Akzentfarbe als Sektionshintergrund oder Verlauf', 'Akzentfarbe für kleinen Text (dafür `--link`)',
-              'Neue Farben, neue Schriften, rohe Hex-Werte im Layout'] + d['banned_extra']
+    banned = ['Inter or Roboto as the main font', 'Stock photos, sunset silhouettes, skull and blood clichés',
+              'Metal look in body text', 'Gradients or shine except in the logo and wordmark', 'Shadows and glass effects',
+              'Accent colour as a section background or gradient', 'Accent colour for small text (use `--link`)',
+              'New colours, new fonts, raw hex values in the layout'] + d['banned_extra']
     bl = '\n'.join(f'- {b}' for b in banned)
-    return f'''# BRAND · Pro Extinction · Konzept {d["name"]}
+    return f'''# BRAND · Pro Extinction · Concept {d["name"]}
 
-Verbindliche Kurzfassung. Begründungen stehen in `../REFERENCE.md`. **Status: Konzept,
-nicht final.** Welches der zwei Konzepte gilt, ist noch offen (`/DECISIONS.md`). Alle Werte
-unten sind vorläufig, aber innerhalb dieses Konzepts verbindlich.
+Binding summary. The reasons are in `../REFERENCE.md`. **Status: concept,
+not final.** Which of the two concepts applies is still open (`/DECISIONS.md`). All values
+below are provisional, but binding within this concept.
 
-## 1. Marke
-**Pro Extinction.** Bewegung, die Leid beenden will, indem sie gegen erzwungene Existenz eintritt.
-Zielgruppe: Neulinge überzeugen. Tagline: **„Together, we end suffering."**
-Persönlichkeit: ernst · rational · empathisch · entschlossen · ruhig-düster.
-Nicht: reißerisch, schockierend, esoterisch, verspielt, hoffnungslos.
-Konzept {d["name"]}: {d["one_liner"]}
+## 1. Brand
+**Pro Extinction.** A movement that wants to end suffering by standing against forced existence.
+Audience: convince newcomers. Tagline: **"Together, we end suffering."**
+Personality: serious · rational · empathetic · determined · calm and dark.
+Not: sensational, shocking, esoteric, playful, hopeless.
+Concept {d["name"]}: {d["one_liner"]}
 
 ## 2. Tokens
-Quelle: `tokens.css` (identisch eingebettet in `brand-helmet.html`). Hell und Dunkel sind
-gleichwertig, Umschalter oben rechts. Standard: {d["default_mode"]}.
+Source: `tokens.css` (embedded identically in `brand-helmet.html`). Light and dark are
+equal, switch at the top right. Default: {d["default_mode"]}.
 
-| Token | Dunkel | Hell | Rolle |
+| Token | Dark | Light | Role |
 |---|---|---|---|
 {chr(10).join(rows)}
 
-Namen weichen von der Vorlage des Skills ab (`--surface` statt `--surf`, `--text` statt `--fg`,
-`--muted` statt `--mut`, `--accent` statt `--acc`). Sie gelten ausschließlich in diesem Kit.
+The names differ from the skill's template (`--surface` instead of `--surf`, `--text` instead of `--fg`,
+`--muted` instead of `--mut`, `--accent` instead of `--acc`). They apply only in this kit.
 
-**Flächenverteilung:** Grundfläche 75–85 % · Karten/Panels 10–20 % · Akzent {d["accent_share"]}.
-Akzent nie als Sektionshintergrund, nie als Verlauf.
+**Area split:** base surface 75–85 % · cards/panels 10–20 % · accent {d["accent_share"]}.
+Accent never as a section background, never as a gradient.
 
-**Kontrast (Verhältnis zur Grundfläche, Ziel für Text ≥ 4,5):**
+**Contrast (ratio to the base surface, target for text ≥ 4.5):**
 
-| Modus | Text | Muted | Link | Akzent | Schrift auf Akzent |
+| Mode | Text | Muted | Link | Accent | Text on accent |
 |---|---|---|---|---|---|
 {chr(10).join(cr)}
 
-Der Akzent selbst liegt in manchen Modi unter 4,5. Deshalb: **kleiner Text nie in `--accent`,
-immer in `--link`.** `--accent` nur für Flächen, Linien, Balken und große Zahlen (ab 2 rem).
+The accent itself is below 4.5 in some modes. So: **small text never in `--accent`,
+always in `--link`.** `--accent` only for areas, lines, bars and large numbers (from 2 rem).
 
-## 3. Typografie
-| Rolle | Schrift | Einsatz |
+## 3. Typography
+| Role | Font | Use |
 |---|---|---|
-| Display | {d["display"]} (Fallback Arial Narrow, Impact) | Überschriften, Wordmark, Buttons, Navigation. Immer Versalien |
-| Body | {d["body"]} · {d["body_kind"]} | Fließtext |
-| Mono | JetBrains Mono | Labels, Kapitelnummern, Quellen. Sparsam, Versalien, 0,72–0,8 rem |
+| Display | {d["display"]} (fallback Arial Narrow, Impact) | Headings, wordmark, buttons, navigation. Always capitals |
+| Body | {d["body"]} · {d["body_kind"]} | Body text |
+| Mono | JetBrains Mono | Labels, chapter numbers, sources. Sparingly, capitals, 0.72–0.8 rem |
 
-Größen: Fließtext {d["body_size"]} · Zeilenlänge 65–70 Zeichen (`68ch`) · H1 `{d["h1"]}` ·
-H2 `clamp(1,4 rem, 3,2 vw, 2 rem)` · Hero-Wordmark `{d["wordmark_hero"]}`.
-Nie Inter oder Roboto als Hauptschrift. Schriften vor dem Livegang selbst hosten.
+Sizes: body text {d["body_size"]} · line length 65–70 characters (`68ch`) · H1 `{d["h1"]}` ·
+H2 `clamp(1.4 rem, 3.2 vw, 2 rem)` · hero wordmark `{d["wordmark_hero"]}`.
+Never Inter or Roboto as the main font. Self-host the fonts before going live.
 
-## 4. Raster und Abstände
-| Maß | Wert |
+## 4. Grid and spacing
+| Measure | Value |
 |---|---|
-| Seitenrand | `{d["gutter"]}` |
-| maximale Inhaltsbreite | {d["wide"]} |
-| Form | {d["shape"]} |
-| Rahmen | 1 px `--line`; Akzent-Rahmen nur für aktive Elemente |
-| Schatten, Verläufe, Glas | keine (Ausnahme: Wordmark-Metall, Logo-Schein im Effekt) |
-| Körnung | SVG-Rauschen über der Seite, `--grain` Deckkraft, nie animiert |
+| Page margin | `{d["gutter"]}` |
+| Maximum content width | {d["wide"]} |
+| Shape | {d["shape"]} |
+| Border | 1 px `--line`; accent border only for active elements |
+| Shadows, gradients, glass | none (exception: wordmark metal, logo glow in the effect) |
+| Grain | SVG noise over the page, `--grain` opacity, never animated |
 | Breakpoints | {d["bp"]} |
 
-Getestet wird bei 320 · 390 · 600 · 768 · 1024 · 1280 · 1920 · 2560 px. Kein horizontales Scrollen.
+Tested at 320 · 390 · 600 · 768 · 1024 · 1280 · 1920 · 2560 px. No horizontal scrolling.
 
-## 5. Logo und Wordmark
-| Datei | Wann |
+## 5. Logo and wordmark
+| File | When |
 |---|---|
-| `wordmark.svg` | Schriftzug „PRO EXTINCTION" in {d["display"]}, Standardfall |
-| `mark.svg` | Bildmarke (Ouroboros mit Schrägstrich) für kleine Flächen und Hero |
-| Metall-Look | nur Wordmark, per CSS (`--metal`), nie als Bild |
+| `wordmark.svg` | Lettering "PRO EXTINCTION" in {d["display"]}, the default case |
+| `mark.svg` | Logo mark (ouroboros with a slash) for small areas and the hero |
+| Metal look | wordmark only, by CSS (`--metal`), never as a picture |
 
-Mindestgröße: Wordmark 16 px Schrifthöhe · Marke 24 px. Schutzraum: Höhe des „P" rundherum.
-Marke färbt sich in Textfarbe, bei Hover in `--accent`. Nicht verzerren, nicht drehen
-(außer im Logo-Effekt), nicht mit Schatten versehen. Die Marke ist eine **Nachzeichnung** eines
-500-px-Bildes; das Original-Vektor fehlt (siehe Offen).
+Minimum size: wordmark 16 px letter height · mark 24 px. Clear space: the height of the "P" all around.
+The mark takes the text colour, on hover `--accent`. Do not distort, do not rotate
+(except in the logo animation), no shadows. The mark is a **redrawing** of a
+500 px picture; the original vector is missing (see Open).
 
-**Logo-Effekt (nur Startseite, großes Logo):** beim 1. Hover und danach bei jedem 10.: Wachstum
-auf höchstens 1,5×, Vibrieren, zwei Drehungen, 4 s, Farbe `--scare`, Seite dahinter auf 90 %
-abgedunkelt. Kein Blitzen. Bei „Bewegung reduzieren" aus (Test: `?motion=on`, Zähler: `?scare=reset`).
+**Logo animation (home page only, large logo):** the snake turns once, then the
+slash cuts through, holds and fades, in a loop. No hover effect. With "reduce motion" the logo stands still.
 
-## 6. Bausteine
-| Baustein | Maße und Regeln |
+## 6. Building blocks
+| Block | Sizes and rules |
 |---|---|
 | Navigation | {d["nav"]} {d["rail_note"]} |
-| Kapitelübersicht | {d["toc"]} Aktives Kapitel in `--link`, nummeriert 01, 02 … |
-| Langtext | {d["layout"]} Absatzabstand 1,15 em |
-| Vier Efforts | {d["efforts"]} |
-| Mission-Zitat | Display, Versalien (C: Serif kursiv), bis 3,2 rem, höchstens 22–28 Zeichen Breite |
-| FAQ | aufklappbar (`<details>`), fortlaufend nummeriert per CSS, Pfeil als Schrägstrich |
-| Call-to-Action | Discord (primär), WhatsApp, E-Mail; am Seitenende jeder Seite |
-| Schrägstrich | Signatur: Trenner, Fortschrittsbalken (oben, 4 px), Hover; immer `--accent` |
-| Scrollbars | 8 px, `--accent` (Seite); in Leisten 6 px, `--accent-dim` (58 % Akzent), Hover `--accent` |
-| Umschalter | Sprachauswahl (EN, DE, PL, ES, IT sowie FR, PT, RU, ZH, HI, AR, BN, UR, ID als „(AI)“; AR und UR von rechts nach links) und Hell/Dunkel oben rechts; Zurück-Knopf zur Konzeptübersicht nur im Prototyp |
+| Chapter overview | {d["toc"]} Active chapter in `--link`, numbered 01, 02 … |
+| Long text | {d["layout"]} Paragraph spacing 1.15 em |
+| Four efforts | {d["efforts"]} |
+| Mission quote | Display, capitals (C: serif italic), up to 3.2 rem, at most 22–28 characters wide |
+| FAQ | expandable (`<details>`), numbered by CSS, arrow as a slash |
+| Call to action | Discord (primary), WhatsApp, e-mail; at the end of every page |
+| Slash | Signature: divider, progress bar (top, 4 px), hover; always `--accent` |
+| Scrollbars | 8 px, `--accent` (page); in bars 6 px, `--accent-dim` (58 % accent), hover `--accent` |
+| Switchers | Language picker (EN, DE, PL, ES, IT plus FR, PT, RU, ZH, HI, AR, BN, UR, ID as "(AI)"; AR and UR right to left) and light/dark at the top right; back button to the concept overview only in the prototype |
 
-## 7. Formate
-Nur Website, responsiv. Keine Thumbnails, Slides oder PDFs in dieser Runde.
+## 7. Formats
+Website only, responsive. No thumbnails, slides or PDFs in this round.
 
 ## 8. Text
-Deutsch mit „du", sachlich und direkt. Der Originaltext der Bewegung bleibt wörtlich
-(nur Tippfehler korrigiert). Neu geschrieben werden nur Buttons, Zwischenüberschriften und
-Hinweise. Fehlende Seiten in DE, PL, ES und IT: KI-Übersetzung aus dem Englischen, **sichtbar gekennzeichnet** (Hinweis auf der Seite, kein „(AI)“ im Menü). FR, PT, RU, ZH und HI sind komplett KI-übersetzt und in der Sprachauswahl als „(AI)“ markiert, plus Hinweis auf jeder Seite.
-Gut: „Wir wollen so viel Leid wie möglich beenden, ohne Kompromisse."
-Schlecht: „Gemeinsam für eine bessere Welt voller Hoffnung!"
-Verboten in neu geschriebenen Texten: „revolutionär", „bahnbrechend", „Reise", „Community"
-im Marketing-Sinn, „Hoffnung" als Floskel, Ausrufezeichen, Emojis.
+In German, address the reader as "du"; factual and direct. The movement's original text stays word for word
+(only typos corrected). Only buttons, subheadings and notes are newly written.
+Missing pages in DE, PL, ES and IT: AI translation from English, **visibly marked** (note on the page, no "(AI)" in the menu). FR, PT, RU, ZH and HI are fully AI-translated and marked "(AI)" in the language picker, plus a note on every page.
+Good: "We want to end as much suffering as possible, without compromise."
+Bad: "Together for a better world full of hope!"
+Banned in newly written texts: "revolutionary", "groundbreaking", "journey", "community"
+in the marketing sense, "hope" as a phrase, exclamation marks, emojis.
 
-## 9. Nicht benutzen
+## 9. Do not use
 {bl}
 
-## 10. Prüfliste vor dem Abgeben
-1. Stehen im Layout nur `var(--…)`-Tokens, keine rohen Hex-Werte?
-2. Funktioniert die Seite in Hell **und** Dunkel, mit sichtbarem Umschalter?
-3. Liegt der Akzent unter 5 % der Fläche und nie als Hintergrund?
-4. Steht kleiner Text in `--link`/`--text`/`--muted`, nie in `--accent`?
-5. Sind Text-Kontraste ≥ 4,5 : 1 (Tabelle oben)?
-6. Ist die Textspalte höchstens 70 Zeichen breit?
-7. Gibt es kein horizontales Scrollen bei 320, 390, 768, 1280, 2560 px?
-8. Steht der Originaltext wörtlich da, KI-Übersetzungen sind gekennzeichnet?
-9. Sind Navigation, Kapitelübersicht und FAQ per Tastatur bedienbar, Fokus sichtbar?
-10. Ist „Bewegung reduzieren" respektiert (kein Logo-Effekt, keine Animation)?
+## 10. Checklist before handing in
+1. Does the layout use only `var(--…)` tokens, no raw hex values?
+2. Does the page work in light **and** dark, with a visible switch?
+3. Is the accent under 5 % of the area and never a background?
+4. Is small text in `--link`/`--text`/`--muted`, never in `--accent`?
+5. Are text contrasts ≥ 4.5 : 1 (table above)?
+6. Is the text column at most 70 characters wide?
+7. Is there no horizontal scrolling at 320, 390, 768, 1280, 2560 px?
+8. Is the original text there word for word, and are AI translations marked?
+9. Can navigation, chapter overview and FAQ be used by keyboard, with visible focus?
+10. Is "reduce motion" respected (no logo effect, no animation)?
 
-## Offen (nicht erfunden)
-- **Konzeptwahl** A, B oder C: später, siehe `/DECISIONS.md`.
-- **Hex-Werte** sind Vorschläge, nicht abgenommen.
-- **Original-Logo als Vektor** fehlt; `mark.svg` ist eine Nachzeichnung.
-- **Schriften:** in `presentation/` lokal gehostet. `brand-helmet.html` und die Prototyp-Seiten laden noch von Google; vor Livegang auch dort umstellen (DSGVO).
-- **Bilder** („Suffering in detail", 16 Stück): erste Runde ohne Fotos; drastische Bilder nur hinter Klick.
-- **Telefonnummer** nur auf der deutschen Seite, vor Livegang bestätigen lassen.
-- **IBAN auf der Spendenseite:** unverändert aus dem Original; Seite gehört erst nach Freigabe live.
+## Open (not made up)
+- **Choice of concept** A, B or C: later, see `/DECISIONS.md`.
+- **Hex values** are suggestions, not approved.
+- **Original logo as a vector** is missing; `mark.svg` is a redrawing.
+- **Fonts:** self-hosted in `presentation/`. `brand-helmet.html` and the prototype pages still load from Google; switch them too before going live (GDPR).
+- **Pictures** ("Suffering in detail", 16 of them): first round without photos; graphic pictures only behind a click.
+- **Phone number** only on the German site, confirm before going live.
+- **IBAN on the donation page:** unchanged from the original; the page goes live only after approval.
 '''
 
 def claude_md(c):
     d = CONCEPTS[c]
-    return f'''# Arbeitsregeln in diesem Ordner
+    return f'''# Working rules in this folder
 
-Hier liegt das Brand-Kit-Konzept **{d["name"]}** der Marke **Pro Extinction**. Für jede Design-, Web- oder
-Grafikarbeit gilt:
+This is the brand kit concept **{d["name"]}** of the brand **Pro Extinction**. For any design, web or
+graphics work:
 
-1. **`BRAND.md` ist verbindlich** und schlägt allgemeine Design-Konventionen.
-   `../REFERENCE.md` ist Nachschlagewerk. Bei Widerspruch gewinnt `BRAND.md`.
-2. **Nur die definierten Tokens.** Keine neuen Farben, keine neuen Schriften, keine rohen
-   Hex-Werte im Layout, immer `var(--…)` aus `tokens.css` / `brand-helmet.html`.
-3. **Hell und Dunkel sind gleichwertig.** Jede Fläche muss in beiden Modi funktionieren.
-4. **Akzent unter 5 % der Fläche,** nie als Hintergrund, nie als Verlauf. Kleiner Text nie in `--accent`.
-5. **Wordmark nicht neu erfinden.** `wordmark.svg` und `mark.svg` benutzen. Verboten: Stockfotos,
-   Totenkopf- und Blut-Klischees, Metal-Optik im Fließtext.
-6. **Vor dem Neuerfinden nachsehen:** `beispiel/bausteine.html` zeigt alle Bausteine in korrekten Maßen.
-7. **Text:** Deutsch mit „du", sachlich. Originaltext der Bewegung nie umschreiben. Verbotene Floskeln stehen in `BRAND.md`.
-8. **Vor dem Abgeben** die Prüfliste in `BRAND.md` durchgehen.
-9. **Dieses Konzept ist nicht gewählt.** Nicht zwischen den Konzepten mischen. Ändert sich ein Token,
-   danach `python3 tools/kit.py && python3 tools/build.py` ausführen.
+1. **`BRAND.md` is binding** and beats general design conventions.
+   `../REFERENCE.md` is for reference. If they disagree, `BRAND.md` wins.
+2. **Only the defined tokens.** No new colours, no new fonts, no raw
+   hex values in the layout, always `var(--…)` from `tokens.css` / `brand-helmet.html`.
+3. **Light and dark are equal.** Every area must work in both modes.
+4. **Accent under 5 % of the area,** never as a background, never as a gradient. Small text never in `--accent`.
+5. **Do not reinvent the wordmark.** Use `wordmark.svg` and `mark.svg`. Banned: stock photos,
+   skull and blood clichés, metal look in body text.
+6. **Look before reinventing:** `beispiel/bausteine.html` shows all building blocks at the correct sizes.
+7. **Text:** in German, address the reader as "du"; factual. Never rewrite the movement's original text. Banned phrases are in `BRAND.md`.
+8. **Before handing in,** go through the checklist in `BRAND.md`.
+9. **This concept is not chosen.** Do not mix concepts. If a token changes,
+   run `python3 tools/kit.py && python3 tools/build.py` afterwards.
 
-Änderungen am Kit selbst: erst fragen. Diese Dateien sind die einzige Quelle der Wahrheit für dieses Konzept.
+Changes to the kit itself: ask first. These files are the only source of truth for this concept.
 '''
 
 def readme(c):
     d = CONCEPTS[c]
     return f'''# Brand Kit · Pro Extinction · {d["name"]}
 
-{d["one_liner"]} **Status: Konzept, noch nicht gewählt** (siehe `/DECISIONS.md`).
+{d["one_liner"]} **Status: concept, not chosen yet** (see `/DECISIONS.md`).
 
-| Datei | Zweck |
+| File | Purpose |
 |---|---|
-| `BRAND.md` | die verbindliche Kurzfassung |
-| `CLAUDE.md` | Arbeitsregeln, greifen automatisch in diesem Ordner |
-| `tokens.css` | ausführbare Tokens, einzige Quelle der Wahrheit |
-| `brand-helmet.html` | Schriften-Link, Tokens und Grundstile als fertiger Block (generiert) |
-| `brand-props.json` | Akzent im Design-Editor umschaltbar (nur Markenfarben) |
-| `wordmark.svg` | Schriftzug |
-| `mark.svg` | Bildmarke, aus dem Original nachgezeichnet |
-| `beispiel/` | lauffähige Referenz mit allen Bausteinen, Desktop und mobil |
-| `../REFERENCE.md` | Rohfassung aus dem Interview, mit Begründungen |
+| `BRAND.md` | the binding summary |
+| `CLAUDE.md` | working rules, apply automatically in this folder |
+| `tokens.css` | executable tokens, the only source of truth |
+| `brand-helmet.html` | font link, tokens and base styles as a ready block (generated) |
+| `brand-props.json` | accent switchable in the design editor (brand colours only) |
+| `wordmark.svg` | lettering |
+| `mark.svg` | logo mark, redrawn from the original |
+| `beispiel/` | working reference with all building blocks, desktop and mobile |
+| `../REFERENCE.md` | raw notes from the interview, with reasons |
 
-**Das Kit lädt sich nicht von allein.** Arbeitest du außerhalb dieses Ordners, kopiere diesen Satz an
-den Anfang der Sitzung:
+**The kit does not load by itself.** If you work outside this folder, copy this sentence to
+the start of the session:
 
 ```
-Lies zuerst brand/{c}/BRAND.md und halte dich exakt daran.
-Referenz: brand/{c}/beispiel/bausteine.html
+First read brand/{c}/BRAND.md and follow it exactly.
+Reference: brand/{c}/beispiel/bausteine.html
 ```
 
-`wordmark.svg` enthält `<text>` und braucht die Schrift {d["display"]} auf dem anzeigenden Gerät.
-Sobald die Wordmark den Browser verlässt (Druck, Illustrator, PDF), muss sie in Pfade umgewandelt werden.
+`wordmark.svg` contains `<text>` and needs the font {d["display"]} on the displaying device.
+As soon as the wordmark leaves the browser (print, Illustrator, PDF), it must be converted to paths.
 
-Neu erzeugen: `python3 tools/kit.py` (Kit-Dateien) und `python3 tools/build.py` (Seiten).
+Generate again: `python3 tools/kit.py` (kit files) and `python3 tools/build.py` (pages).
 '''
 
 def wordmark_svg(c):
@@ -334,7 +333,7 @@ def examples(c):
 <section class="ex-block"><h2>Farben (Tokens)</h2><p class="mono ex-flag">Dunkel</p><ul class="sw-list">{sw("dark")}</ul><p class="mono ex-flag" style="margin-top:1.2rem">Hell</p><ul class="sw-list">{sw("light")}</ul></section>
 <section class="ex-block"><h2>Typografie</h2><h1 style="font-size:{d['h1'].replace(',', '.').replace(' ', '')}">Überschrift H1</h1><h2 style="margin:1rem 0">Überschrift H2</h2><p class="lede">Lede-Zeile in Kursiv.</p><p style="max-width:68ch">Fließtext: {d["body"]}. Die Zeilenlänge bleibt bei etwa 68 Zeichen, damit lange Texte lesbar sind. <a href="#">Ein Link</a> steht in <code>--link</code>.</p><p class="mono">Mono-Label · 01 · Quelle</p></section>
 <section class="ex-block"><h2>Buttons und Trenner</h2><div class="ex-row"><a class="btn primary" href="#">Aktiv werden</a><a class="btn" href="#">Manifest lesen</a></div><hr class="slash"></section>
-<section class="hero" aria-label="Hero und Logo-Effekt"><span class="hero-logo" role="img" aria-label="Logo (Hover testen)"><span class="lg lg-snake"></span><span class="lg lg-cut"></span><span class="lg lg-slash"></span></span><h1 class="wordmark">PRO EXTINCTION</h1><p class="hero-tag">Together, we end suffering.</p><p class="hero-sub">Hover über das Logo: Effekt beim 1. und jedem 10. Mal. Zurücksetzen mit ?scare=reset.</p></section>
+<section class="hero" aria-label="Hero und Logo-Animation"><span class="hero-logo" role="img" aria-label="Logo"><span class="lg lg-snake"></span><span class="lg lg-cut"></span><span class="lg lg-slash"></span></span><h1 class="wordmark">PRO EXTINCTION</h1><p class="hero-tag">Together, we end suffering.</p><p class="hero-sub">Das große Logo dreht sich in Schleife.</p></section>
 <section class="mission"><hr class="slash"><p class="mono kicker">Unsere Mission</p><blockquote>Beispielzitat in der Zitat-Schrift des Konzepts.</blockquote></section>
 <section class="efforts"><ol>{eff}</ol></section>
 <section class="ex-block"><h2>Kapitelübersicht und Langtext</h2><nav class="toc" aria-label="Auf dieser Seite"><p class="mono">Auf dieser Seite</p><ol>{toc}</ol></nav><div class="prose"><h2 id="b1">Beispielkapitel 1</h2><p>Absatz mit Beispieltext. Das mitlaufende aktive Kapitel wird per Script markiert.</p><ul><li>Listenpunkt mit Akzent-Marker</li><li>Zweiter Punkt</li></ul><h2 id="b2">Beispielkapitel 2</h2><p>Zweiter Absatz.</p></div></section>

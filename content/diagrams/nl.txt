@@ -4,31 +4,3 @@ Predatie|Leeuw doodt zebra|Gewelddadige, pijnlijke dood|Zebra ontsnapt|Leeuw ver
 De cirkel van lijden: geboorte leidt tot lijden, lijdende wezens planten zich voort en voortplanting leidt tot nieuwe geboortes.
 Cirkel van|lijden
 Geboorte|Lijden|Voortplanting
-Nieuw voorbeeld maken
-Droogteseizoen|Kudde blijft|Sterft van dorst|Kudde trekt weg|Krokodillen wachten|Verscheurd in de rivier|
-De winter komt|Vogel blijft|Vriest dood|Vogel trekt weg|Storm boven zee|Verdrinkt uitgeput|
-Sluipwesp|Wesp vindt gastheer|Gastheer van binnen opgegeten|Geen gastheer|Larven groeien niet|Jongen verhongeren|
-Zeeschildpadjes|Rennen naar zee|Opgegeten door vogels|Bereiken het water|Haaien en netten|De meeste sterven jong|
-Een kind wordt geboren|Geboren in armoede|Honger en ziekte|Geboren in rijkdom|Wordt toch oud|Ziekte en dood|Elke geboorte eindigt in de dood.
-Eierindustrie|Kuiken is vrouwtje|Uitgeput, dan gedood|Kuiken is mannetje|Nutteloos voor de industrie|Op dag één vermalen|
-Zuivelindustrie|Kalf is vrouwtje|Gemolken, dan gedood|Kalf is mannetje|Weg bij de moeder|Gedood voor kalfsvlees|
-Bevolkingsexplosie|Konijnen vermenigvuldigen|Massale hongersnood|Vossen vermenigvuldigen|Konijnen worden gejaagd|Dan verhongeren vossen|
-Ouderdom|Lichaam gaat door|Pijn en dementie|Lichaam geeft op|Organen falen|Sterft in het ziekenhuis|
-Er breekt oorlog uit|Soldaat vecht|Gedood of verminkt|Soldaat weigert|Cel of ballingschap|Familie wordt gestraft|
-De overstroming komt|Vluchten voor het water|Huis en land kwijt|Blijven en volhouden|Water blijft stijgen|Verdrinkt met het huis|
-Jachtluipaardmoeder|Gaat jagen|Hyena's pakken de jongen|Blijft bij de jongen|Er komt geen eten|Jongen verhongeren|
-Spinnenweb|Vlieg zit vast|Langzaam levend opgegeten|Vlieg ontsnapt|Web blijft leeg|Spin verhongert|
-Vissersboot|Vis wordt gevangen|Stikt aan dek|Vis ontsnapt|Grotere vis wacht|Levend opgegeten|
-Chronische pijn|Ermee leven|Jaren van kwelling|Pijnstillers nemen|Verslaving groeit|Afkicken of overdosis|
-Zwerfhond|Blijft op straat|Honger en auto's|Naar het asiel|Asiel is vol|Jaren in een kooi|
-Van iemand houden|Jij sterft eerst|Je geliefde rouwt|Je geliefde sterft eerst|Jij blijft achter|Jij rouwt|Elke band eindigt in rouw.
-Bosbrand|Hert rent|Stikt in de rook|Hert verstopt zich|Vuur bereikt het|Levend verbrand|
-Rangorde in de roedel|Wolf daagt leider uit|Gewond of gedood|Wolf onderwerpt zich|Eet als laatste|Verhongert in de winter|
-Een infectie verspreidt zich|Ziek hert blijft|Kudde raakt besmet|Hert wordt verstoten|Alleen en zwak|Wolven vinden het|
-Maandagochtend|Opstaan voor werk|De hele dag moe|Doorslapen|Baas belt|Ontslagen en nog moe|
-Laatste stuk pizza|Opeten|Buikpijn|Laten liggen|Huisgenoot eet het op|Eeuwige spijt|
-Telefoon op 1%|Oplader zoeken|Elk stopcontact bezet|Blijven scrollen|Scherm wordt zwart|Alleen met je gedachten|
-Groepsproject|Alles zelf doen|Anderen krijgen de eer|Niets doen|Niemand anders doet iets|Iedereen zakt|Winnen kan niet.
-Warme zomernacht|Raam open|Muggen smullen|Raam dicht|Kamer is een sauna|Geen oog dichtgedaan|
-Software-update|Nu installeren|Alles gaat kapot|Later herinneren|Het vraagt opnieuw|Herstart midden in je werk|
-Sportabonnement|Naar de sportschool|Een week spierpijn|Op de bank blijven|Toch blijven betalen|Schuldgevoel en rugpijn|

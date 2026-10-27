@@ -1,36 +1,8 @@
-# Manifesto diagrams. One field per "|". Lines: heading | lion example title | lion example | cycle title | cycle centre | cycle nodes | button, then 27 examples.
-# Example: root|left choice|left end|right choice|right step|right end|verdict (empty verdict = the lion example's verdict).
+# Manifesto diagrams. One field per "|". Lines: heading | lion example title | lion example | cycle title | cycle centre | cycle nodes.
+# Lion example: root|left choice|left end|right choice|right step|right end|verdict.
 Cruel Design
 Cruel design, predation: if the lion kills the zebra, the zebra dies a violent, painful death. If the zebra escapes, the lion starves and dies slowly. Both paths end in suffering.
 Predation|Lion kills zebra|Violent, painful death|Zebra escapes|Lion starves|Slow starvation death|Both paths end in suffering.
 The cycle of suffering: birth leads to suffering, suffering beings reproduce, and reproduction leads to new births.
 Cycle of|suffering
 Birth|Suffering|Reproduction
-Generate new example
-Drought season|Herd stays put|Dies of thirst|Herd migrates|Crocodiles wait|Torn apart in river|
-Winter comes|Bird stays|Freezes to death|Bird migrates|Storm over the sea|Drowns exhausted|
-Parasitic wasp|Wasp finds a host|Host eaten from inside|No host found|Larvae cannot grow|Offspring starve|
-Sea turtle hatching|Run to the sea|Eaten by birds|Reach the water|Sharks and nets|Most die young|
-A child is born|Born into poverty|Hunger and disease|Born into wealth|Grows old anyway|Illness and death|Every birth ends in death.
-Egg industry|Chick is female|Spent, then killed|Chick is male|Useless to industry|Shredded on day one|
-Dairy industry|Calf is female|Milked, then killed|Calf is male|Taken from mother|Killed for veal|
-Population boom|Rabbits multiply|Mass starvation|Foxes multiply|Rabbits are hunted|Then foxes starve|
-Old age|Body keeps going|Pain and dementia|Body gives up|Organs fail|Dies in a hospital|
-War breaks out|Soldier fights|Killed or maimed|Soldier refuses|Prison or exile|Family is punished|
-The flood comes|Flee the flood|Lose home and land|Stay and hold on|Water keeps rising|Drowns with the house|
-Cheetah mother|Leaves to hunt|Cubs taken by hyenas|Stays with cubs|No food comes|Cubs starve|
-Spider web|Fly is caught|Eaten alive slowly|Fly escapes|Web stays empty|Spider starves|
-Fishing boat|Fish is caught|Suffocates on deck|Fish escapes|Bigger fish waits|Eaten alive|
-Chronic pain|Live with it|Years of agony|Take painkillers|Addiction grows|Withdrawal or overdose|
-Stray dog|Left on the street|Hunger and cars|Taken to a shelter|Shelter is full|Caged for years|
-Love someone|You die first|They grieve|They die first|You stay behind|You grieve|Every bond ends in grief.
-Wildfire|Deer runs|Burned in the smoke|Deer hides|Fire reaches it|Burned alive|
-Pack hierarchy|Wolf fights leader|Wounded or killed|Wolf submits|Eats last|Starves in winter|
-Infection spreads|Sick deer stays|Herd gets infected|Deer is cast out|Alone and weak|Wolves find it|
-Monday morning|Get up for work|Tired all day|Keep sleeping|Boss calls|Fired, still tired|
-Last slice of pizza|Eat it|Stomach ache|Leave it|Roommate eats it|Eternal regret|
-Phone at 1%|Look for a charger|Every outlet taken|Keep scrolling|Screen goes black|Alone with thoughts|
-Group project|Do all the work|Others get credit|Do nothing|Nobody else does|Everyone fails|There is no winning.
-Hot summer night|Open the window|Mosquitoes feast|Keep it closed|Room is a sauna|No sleep at all|
-Software update|Install now|Everything breaks|Remind me later|It asks again|Restarts mid-work|
-Gym membership|Go to the gym|Sore for a week|Stay on the couch|Still paying fees|Guilt and back pain|

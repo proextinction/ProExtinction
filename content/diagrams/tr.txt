@@ -4,31 +4,3 @@ Avcılık|Aslan zebrayı öldürür|Şiddetli, acılı ölüm|Zebra kaçar|Aslan
 Acı döngüsü: doğum acıya yol açar, acı çeken canlılar ürer ve üreme yeni doğumlara yol açar.
 Acı|döngüsü
 Doğum|Acı|Üreme
-Yeni örnek göster
-Kuraklık mevsimi|Sürü kalır|Susuzluktan ölür|Sürü göç eder|Timsahlar bekler|Nehirde parçalanır|
-Kış gelir|Kuş kalır|Donarak ölür|Kuş göç eder|Denizde fırtına|Bitkin düşüp boğulur|
-Parazit eşek arısı|Arı konak bulur|Konak içten yenir|Konak yok|Larvalar büyüyemez|Yavrular açlıktan ölür|
-Deniz kaplumbağaları|Denize koşarlar|Kuşlara yem olurlar|Suya ulaşırlar|Köpekbalığı ve ağlar|Çoğu genç ölür|
-Bir çocuk doğar|Yoksullukta doğar|Açlık ve hastalık|Zenginlikte doğar|Yine de yaşlanır|Hastalık ve ölüm|Her doğum ölümle biter.
-Yumurta sektörü|Civciv dişi|Tükenir, sonra öldürülür|Civciv erkek|Sektöre yaramaz|İlk gün öğütülür|
-Süt sektörü|Buzağı dişi|Sağılır, sonra öldürülür|Buzağı erkek|Annesinden alınır|Eti için öldürülür|
-Nüfus patlaması|Tavşanlar çoğalır|Toplu açlık|Tilkiler çoğalır|Tavşanlar avlanır|Sonra tilkiler aç kalır|
-Yaşlılık|Beden dayanır|Ağrı ve bunama|Beden pes eder|Organlar iflas eder|Hastanede ölür|
-Savaş çıkar|Asker savaşır|Ölür ya da sakatlanır|Asker reddeder|Hapis ya da sürgün|Ailesi cezalandırılır|
-Sel gelir|Selden kaç|Ev ve toprak gider|Kal ve direnmeye çalış|Su yükselmeye devam eder|Evle birlikte boğulur|
-Çita annesi|Avlanmaya gider|Sırtlanlar yavruları alır|Yavrularla kalır|Yiyecek gelmez|Yavrular açlıktan ölür|
-Örümcek ağı|Sinek yakalanır|Yavaşça diri diri yenir|Sinek kaçar|Ağ boş kalır|Örümcek aç kalır|
-Balıkçı teknesi|Balık yakalanır|Güvertede boğulur|Balık kaçar|Büyük balık bekler|Diri diri yenir|
-Kronik ağrı|Onunla yaşa|Yıllarca ızdırap|Ağrı kesici al|Bağımlılık büyür|Yoksunluk ya da aşırı doz|
-Sokak köpeği|Sokakta kalır|Açlık ve arabalar|Barınağa gider|Barınak dolu|Yıllarca kafeste|
-Birini sevmek|Önce sen ölürsün|O yas tutar|Önce o ölür|Sen geride kalırsın|Sen yas tutarsın|Her bağ yasla biter.
-Orman yangını|Geyik koşar|Dumanda boğulur|Geyik saklanır|Ateş onu bulur|Diri diri yanar|
-Sürü hiyerarşisi|Kurt lidere meydan okur|Yaralanır ya da ölür|Kurt boyun eğer|En son yer|Kışın açlıktan ölür|
-Enfeksiyon yayılır|Hasta geyik kalır|Sürü hastalanır|Geyik dışlanır|Yalnız ve zayıf|Kurtlar onu bulur|
-Pazartesi sabahı|İşe kalk|Bütün gün yorgun|Uyumaya devam et|Patron arar|Kovuldun, hâlâ yorgunsun|
-Son pizza dilimi|Ye|Karın ağrısı|Bırak|Ev arkadaşı yer|Sonsuz pişmanlık|
-Telefon %1|Şarj aleti ara|Bütün prizler dolu|Kaydırmaya devam et|Ekran kararır|Düşüncelerinle baş başa|
-Grup ödevi|Her şeyi sen yap|Övgüyü başkası alır|Hiçbir şey yapma|Kimse yapmaz|Herkes kalır|Kazanmanın yolu yok.
-Sıcak yaz gecesi|Pencereyi aç|Sivrisinek ziyafeti|Kapalı tut|Oda sauna olur|Hiç uyku yok|
-Yazılım güncellemesi|Şimdi yükle|Her şey bozulur|Sonra hatırlat|Yine sorar|İşin ortasında yeniden başlar|
-Spor salonu üyeliği|Salona git|Bir hafta ağrı|Kanepede kal|Yine ödersin|Suçluluk ve sırt ağrısı|

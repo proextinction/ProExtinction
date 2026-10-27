@@ -42,6 +42,7 @@ body{font-size:1.125rem}
 .cta{text-align:center}
 .cta .slash::after{left:50%;transform:translateX(-50%)}
 .cta-links{justify-content:center}
+.prose .debate{text-align:center}   /* contact page: debate text and the social media link centred like its heading and button */
 .btn{font-size:1.1rem;padding:.8rem 1.8rem}
 
 @media (min-width:1000px){

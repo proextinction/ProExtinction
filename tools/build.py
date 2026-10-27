@@ -1,5 +1,5 @@
 """Build the website (all languages) into site/: one file per page, site/<lang>/<slug>.html, served as /<lang>/<slug>."""
-import json, re, html, pathlib, sys, urllib.parse
+import json, re, html, pathlib, sys, urllib.parse, datetime
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from blocks import blocks_of, abridge, faq_pairs, pic_anchors, place_pics
 import diagrams
@@ -607,7 +607,7 @@ def give_box(lang):
             f'<section class="give-card"><p class="give-k mono">{esc(bank)}</p><p class="give-iban mono" dir="ltr" translate="no">{IBAN}</p>'
             f'<button class="give-btn" type="button" data-iban="{plain}" onclick="{js}"><span class="c">{esc(copy)}</span><span class="d" aria-live="polite">{esc(done)}</span></button></section>'
             f'<section class="give-card"><p class="give-k mono">Ko-fi</p><p class="give-url mono" dir="ltr" translate="no">ko-fi.com/abolishsuffering</p>'
-            f'<a class="give-btn" href="{KOFI}" target="_blank" rel="noopener">{esc(kofi)} <span aria-hidden="true">&#8599;</span></a></section></div>')
+            f'<a class="give-btn" href="{KOFI}" target="_blank" rel="noopener" aria-describedby="new-tab">{esc(kofi)} <span aria-hidden="true">&#8599;</span></a></section></div>')
 
 def give_blocks(bl, lang):
     """Swap the IBAN line for the donate cards and drop the bare Ko-fi line (IT: its "Dona qui" line)."""
@@ -692,13 +692,546 @@ FAQ_FIND = {
 FAQ_JS = (ROOT / 'tools' / 'faqsearch.js').read_text(encoding='utf-8')
 
 DISCORD = 'https://discord.gg/nb2K8y846R'
-WHATSAPP = {'en': 'https://chat.whatsapp.com/J9WIHBa7Lqy8MyhlQYLogs', 'it': 'https://chat.whatsapp.com/J9WIHBa7Lqy8MyhlQYLogs',
-            'de': 'https://chat.whatsapp.com/Dej17Wh0dvUG7oeauTH3GG', 'pl': 'https://chat.whatsapp.com/Dej17Wh0dvUG7oeauTH3GG',
-            'es': 'https://chat.whatsapp.com/Dej17Wh0dvUG7oeauTH3GG'}  # as linked on each original site
-WHATSAPP.update({l: WHATSAPP['en'] for l in FULL_AI})
+DEBATE_DISCORD = 'https://discord.gg/887fVYCDsN'
+
+def link_attrs(href):
+    """Social and messaging platforms open in a new tab; screen readers hear so (the note in footer())."""
+    host = (urllib.parse.urlsplit(href).hostname or '').lower()
+    platforms = ('whatsapp.com', 'whatsapp.net', 'wa.me', 'discord.gg', 'discord.com', 'discordapp.com',
+                 'tiktok.com', 'instagram.com', 'youtube.com', 'youtu.be', 'facebook.com', 'fb.com',
+                 'x.com', 'twitter.com', 'threads.net', 'linkedin.com', 'reddit.com', 't.me',
+                 'telegram.me', 'telegram.org', 'twitch.tv', 'pinterest.com', 'bsky.app')
+    new_tab = any(host == platform or host.endswith('.' + platform) for platform in platforms)
+    return ' target="_blank" rel="noopener" aria-describedby="new-tab"' if new_tab else ' rel="noopener"'
+NEW_TAB = {
+ 'en': 'Opens in a new tab', 'de': 'Öffnet in einem neuen Tab', 'pl': 'Otwiera się w nowej karcie', 'es': 'Se abre en una pestaña nueva',
+ 'it': 'Si apre in una nuova scheda', 'fr': "S'ouvre dans un nouvel onglet", 'pt': 'Abre em uma nova aba', 'ru': 'Открывается в новой вкладке',
+ 'zh': '在新标签页中打开', 'hi': 'नए टैब में खुलता है', 'ar': 'يفتح في علامة تبويب جديدة', 'bn': 'নতুন ট্যাবে খোলে', 'ur': 'نئے ٹیب میں کھلتا ہے',
+ 'id': 'Terbuka di tab baru', 'ja': '新しいタブで開きます', 'tr': 'Yeni sekmede açılır', 'vi': 'Mở trong thẻ mới', 'ko': '새 탭에서 열립니다',
+ 'fa': 'در زبانه\u200cای تازه باز می\u200cشود', 'mr': 'नवीन टॅबमध्ये उघडते', 'te': 'కొత్త ట్యాబ్‌లో తెరుచుకుంటుంది', 'ta': 'புதிய தாவலில் திறக்கும்',
+ 'sw': 'Hufunguka kwenye kichupo kipya', 'th': 'เปิดในแท็บใหม่', 'nl': 'Opent in een nieuw tabblad', 'uk': 'Відкривається в новій вкладці',
+ 'tl': 'Bubukas sa bagong tab', 'pa': 'ਨਵੀਂ ਟੈਬ ਵਿੱਚ ਖੁੱਲ੍ਹਦਾ ਹੈ', 'gu': 'નવા ટૅબમાં ખૂલે છે',
+}
+
+# Debate server: open to everyone, pro-lifers included. (heading, text, button) per language; shown on the home and contact pages.
+DEBATE = {
+ 'en': ('Debate with us', 'Our debate server on Discord is open to everyone, also to people who disagree with us. Pro-lifers are welcome: bring your best arguments.', 'Debate on Discord'),
+ 'de': ('Diskutiere mit uns', 'Unser Debatten-Server auf Discord ist für alle offen, auch für Menschen, die anderer Meinung sind. Pro-Lifer sind willkommen: Bring deine besten Argumente mit.', 'Zur Debatte auf Discord'),
+ 'pl': ('Dyskutuj z nami', 'Nasz serwer debat na Discordzie jest otwarty dla wszystkich, także dla osób, które się z nami nie zgadzają. Pro-liferzy są mile widziani: przynieś swoje najlepsze argumenty.', 'Debata na Discordzie'),
+ 'es': ('Debate con nosotros', 'Nuestro servidor de debate en Discord está abierto a todos, también a quienes no están de acuerdo con nosotros. Los pro-life son bienvenidos: trae tus mejores argumentos.', 'Debatir en Discord'),
+ 'it': ('Discuti con noi', "Il nostro server di dibattito su Discord è aperto a tutti, anche a chi non è d'accordo con noi. I pro-life sono benvenuti: porta i tuoi argomenti migliori.", 'Dibatti su Discord'),
+ 'fr': ('Débats avec nous', "Notre serveur de débat sur Discord est ouvert à tous, aussi aux personnes qui ne sont pas d'accord avec nous. Les pro-life sont les bienvenus : apporte tes meilleurs arguments.", 'Débattre sur Discord'),
+ 'pt': ('Debata conosco', 'Nosso servidor de debate no Discord é aberto a todos, também a quem discorda de nós. Os pró-vida são bem-vindos: traga seus melhores argumentos.', 'Debater no Discord'),
+ 'nl': ('Debatteer met ons', 'Onze debatserver op Discord staat open voor iedereen, ook voor mensen die het niet met ons eens zijn. Pro-lifers zijn welkom: kom met je beste argumenten.', 'Debatteren op Discord'),
+ 'ru': ('Поспорь с нами', 'Наш сервер для дебатов в Discord открыт для всех, в том числе для тех, кто с нами не согласен. Сторонники pro-life тоже приглашены: приходите с лучшими аргументами.', 'Дебаты в Discord'),
+ 'uk': ('Подискутуй з нами', 'Наш сервер для дебатів у Discord відкритий для всіх, зокрема для тих, хто з нами не згоден. Прихильників pro-life теж запрошуємо: приходьте з найкращими аргументами.', 'Дебати в Discord'),
+ 'tr': ('Bizimle tartış', "Discord'daki tartışma sunucumuz herkese açık, bizimle aynı fikirde olmayanlara da. Pro-life düşünenler de davetli: en iyi argümanlarını getir.", "Discord'da tartış"),
+ 'id': ('Berdebat dengan kami', 'Server debat kami di Discord terbuka untuk semua orang, juga untuk yang tidak setuju dengan kami. Kaum pro-life juga disambut: bawa argumen terbaikmu.', 'Debat di Discord'),
+ 'tl': ('Makipagdebate sa amin', 'Bukas sa lahat ang aming debate server sa Discord, pati sa mga hindi sang-ayon sa amin. Welcome din ang mga pro-life: dalhin ang pinakamahuhusay mong argumento.', 'Makipagdebate sa Discord'),
+ 'vi': ('Tranh luận với chúng tôi', 'Máy chủ tranh luận của chúng tôi trên Discord mở cho tất cả mọi người, kể cả những ai không đồng ý với chúng tôi. Người ủng hộ pro-life cũng được chào đón: hãy mang theo những lập luận tốt nhất của bạn.', 'Tranh luận trên Discord'),
+ 'sw': ('Jadiliana nasi', 'Seva yetu ya mijadala kwenye Discord iko wazi kwa kila mtu, hata kwa wasiokubaliana nasi. Wafuasi wa pro-life wanakaribishwa pia: leta hoja zako bora.', 'Jadiliana kwenye Discord'),
+ 'zh': ('来和我们辩论', '我们在 Discord 上的辩论服务器向所有人开放，也欢迎不同意我们观点的人。pro-life 支持者同样欢迎：带上你最好的论点。', '在 Discord 上辩论'),
+ 'ja': ('私たちと議論しよう', 'Discord の討論サーバーは誰でも参加できます。私たちに反対する人も歓迎です。pro-life の人もぜひ、いちばん強い論拠を持ってきてください。', 'Discord で議論する'),
+ 'ko': ('우리와 토론하세요', '디스코드의 토론 서버는 우리와 생각이 다른 사람을 포함해 누구에게나 열려 있습니다. pro-life 입장인 분들도 환영합니다. 가장 좋은 논거를 가져오세요.', '디스코드에서 토론하기'),
+ 'th': ('มาถกเถียงกับเรา', 'เซิร์ฟเวอร์ถกเถียงของเราบน Discord เปิดให้ทุกคน รวมถึงคนที่ไม่เห็นด้วยกับเรา ฝ่าย pro-life ก็ยินดีต้อนรับ นำข้อโต้แย้งที่ดีที่สุดของคุณมาเลย', 'ถกเถียงบน Discord'),
+ 'hi': ('हमसे बहस करें', 'Discord पर हमारा बहस सर्वर सबके लिए खुला है, उनके लिए भी जो हमसे असहमत हैं। pro-life लोगों का भी स्वागत है: अपने सबसे अच्छे तर्क लेकर आइए।', 'Discord पर बहस करें'),
+ 'mr': ('आमच्याशी वाद घाला', 'Discord वरील आमचा वादविवाद सर्व्हर सगळ्यांसाठी खुला आहे, आमच्याशी असहमत असणाऱ्यांसाठीही. pro-life लोकांचेही स्वागत आहे: तुमचे सर्वोत्तम युक्तिवाद घेऊन या.', 'Discord वर वाद घाला'),
+ 'bn': ('আমাদের সাথে বিতর্ক করুন', 'Discord-এ আমাদের বিতর্ক সার্ভার সবার জন্য খোলা, যারা আমাদের সাথে একমত নন তাদের জন্যও। pro-life মানুষদেরও স্বাগতম: আপনার সেরা যুক্তি নিয়ে আসুন।', 'Discord-এ বিতর্ক করুন'),
+ 'te': ('మాతో చర్చించండి', 'Discord లోని మా చర్చా సర్వర్ అందరికీ తెరిచి ఉంది, మాతో విభేదించేవారికి కూడా. pro-life వారికి కూడా స్వాగతం: మీ ఉత్తమ వాదనలతో రండి.', 'Discord లో చర్చించండి'),
+ 'ta': ('எங்களுடன் விவாதியுங்கள்', 'Discord இல் உள்ள எங்கள் விவாத சர்வர் எல்லோருக்கும் திறந்திருக்கிறது, எங்களுடன் உடன்படாதவர்களுக்கும். pro-life ஆதரவாளர்களும் வரவேற்கப்படுகிறார்கள்: உங்கள் சிறந்த வாதங்களுடன் வாருங்கள்.', 'Discord இல் விவாதியுங்கள்'),
+ 'pa': ('ਸਾਡੇ ਨਾਲ ਬਹਿਸ ਕਰੋ', 'Discord ਉੱਤੇ ਸਾਡਾ ਬਹਿਸ ਸਰਵਰ ਸਭ ਲਈ ਖੁੱਲ੍ਹਾ ਹੈ, ਉਨ੍ਹਾਂ ਲਈ ਵੀ ਜੋ ਸਾਡੇ ਨਾਲ ਸਹਿਮਤ ਨਹੀਂ। pro-life ਲੋਕਾਂ ਦਾ ਵੀ ਸਵਾਗਤ ਹੈ: ਆਪਣੀਆਂ ਸਭ ਤੋਂ ਵਧੀਆ ਦਲੀਲਾਂ ਲੈ ਕੇ ਆਓ।', 'Discord ਉੱਤੇ ਬਹਿਸ ਕਰੋ'),
+ 'gu': ('અમારી સાથે ચર્ચા કરો', 'Discord પરનું અમારું ચર્ચા સર્વર બધા માટે ખુલ્લું છે, અમારી સાથે અસહમત લોકો માટે પણ. pro-life લોકોનું પણ સ્વાગત છે: તમારી શ્રેષ્ઠ દલીલો લઈને આવો.', 'Discord પર ચર્ચા કરો'),
+ 'ar': ('ناقشنا', 'خادم النقاش الخاص بنا على Discord مفتوح للجميع، حتى لمن لا يتفق معنا. أنصار pro-life مرحب بهم أيضا: أحضر أفضل حججك.', 'ناقش على Discord'),
+ 'ur': ('ہم سے بحث کریں', 'Discord پر ہمارا بحث کا سرور سب کے لیے کھلا ہے، ان کے لیے بھی جو ہم سے متفق نہیں۔ pro-life لوگوں کا بھی خیرمقدم ہے: اپنے بہترین دلائل لے کر آئیں۔', 'Discord پر بحث کریں'),
+ 'fa': ('با ما بحث کن', 'سرور بحث ما در Discord برای همه باز است، حتی برای کسانی که با ما مخالف\u200cاند. طرفداران pro-life هم خوش آمدند: بهترین استدلال\u200cهایت را بیاور.', 'بحث در Discord'),
+}
+
+def debate_html(lang, tag='h2'):
+    """The debate server: who it is for and a button to join."""
+    h, text, btn = DEBATE.get(lang, DEBATE['en'])
+    return (f'<{tag}>{esc(h)}</{tag}><p>{esc(text)}</p>'
+            f'<p class="cta-links"><a class="btn" href="{DEBATE_DISCORD}"{link_attrs(DEBATE_DISCORD)}>{icon("discord")}{esc(btn)}</a></p>')
+
+WHATSAPP = {l: 'https://chat.whatsapp.com/KvNQxQiyCl4GO3w3J1w5Gb' for l in LANGS}   # one group for every language (October 2026)
 EMAIL = 'info@proextinction.com'
 
-ICON = {'x': 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z', 'tiktok': 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z', 'instagram': 'M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077', 'youtube': 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z', 'facebook': 'M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z', 'discord': 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z', 'whatsapp': 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z', 'mail': 'M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'}
+# Before the WhatsApp link: yes/no questions with an expected answer each. All as expected: the link appears.
+# Otherwise a short note with pages to read and the debate server. Answers stay in the browser, nothing is sent or stored.
+# Languages without an entry link to WhatsApp directly. Without JavaScript the button is a plain link, as before.
+GATE_ANSWERS = [True, True, False, True, False]   # the expected answer to each question, the same in every language
+JOIN_GATE = {
+ 'en': dict(
+  title='Before you join',
+  intro='Our WhatsApp group is for activists. Please answer these short questions.',
+  yes='Yes',
+  no='No',
+  go='Continue',
+  close='Close',
+  missing='Please answer every question.',
+  ok='Thank you! You can join our WhatsApp group now.',
+  ok_btn='Join the WhatsApp group',
+  fail='Thank you for your answers. Our activist group may not be the right place for you yet. Read more on our pages, or talk with us on our debate server, which is open to everyone.',
+  qs=list(zip(['Human extinction would be the worst thing possible, because, to be fair, as the only intelligent species, we have to make other life go extinct first. Do you agree?', 'Do you agree that all suffering, of humans and of animals, should end, and that only the extinction of all sentient life can end it for good?', 'Do you believe in a god?', 'Do you want to actively help, for example by making content, translating, debating or organising?', 'Should humanity stop reproducing now?'], GATE_ANSWERS))),
+ 'de': dict(
+  title='Bevor du beitrittst',
+  intro='Unsere WhatsApp-Gruppe ist für Aktivistinnen und Aktivisten. Bitte beantworte diese kurzen Fragen.',
+  yes='Ja',
+  no='Nein',
+  go='Weiter',
+  close='Schließen',
+  missing='Bitte beantworte jede Frage.',
+  ok='Danke! Du kannst jetzt unserer WhatsApp-Gruppe beitreten.',
+  ok_btn='Der WhatsApp-Gruppe beitreten',
+  fail='Danke für deine Antworten. Unsere Aktivistengruppe ist vielleicht noch nicht der richtige Ort für dich. Lies mehr auf unseren Seiten oder sprich mit uns auf unserem Debatten-Server, der für alle offen ist.',
+  qs=list(zip(['Das Aussterben der Menschheit wäre das Schlimmste, was passieren kann, denn als einzige intelligente Spezies müssen wir fairerweise zuerst anderes Leben aussterben lassen. Stimmst du zu?', 'Stimmst du zu, dass alles Leid, von Menschen und von Tieren, enden soll und dass nur das Aussterben allen fühlenden Lebens es für immer beenden kann?', 'Glaubst du an einen Gott?', 'Willst du aktiv mithelfen, zum Beispiel mit Inhalten, Übersetzungen, Debatten oder Organisation?', 'Sollte die Menschheit jetzt aufhören, sich fortzupflanzen?'], GATE_ANSWERS))),
+ 'pl': dict(
+  title='Zanim dołączysz',
+  intro='Nasza grupa na WhatsAppie jest dla aktywistów. Odpowiedz na te krótkie pytania.',
+  yes='Tak',
+  no='Nie',
+  go='Dalej',
+  close='Zamknij',
+  missing='Odpowiedz na każde pytanie.',
+  ok='Dziękujemy! Możesz teraz dołączyć do naszej grupy na WhatsAppie.',
+  ok_btn='Dołącz do grupy na WhatsAppie',
+  fail='Dziękujemy za odpowiedzi. Nasza grupa aktywistów może nie być jeszcze odpowiednim miejscem dla ciebie. Przeczytaj więcej na naszych stronach albo porozmawiaj z nami na naszym serwerze debat, który jest otwarty dla wszystkich.',
+  qs=list(zip(['Wyginięcie ludzkości byłoby najgorszą możliwą rzeczą, bo jako jedyny inteligentny gatunek musimy uczciwie najpierw doprowadzić do wyginięcia innego życia. Zgadzasz się?', 'Czy zgadzasz się, że całe cierpienie, ludzi i zwierząt, powinno się skończyć i że tylko wyginięcie całego czującego życia może je zakończyć na zawsze?', 'Czy wierzysz w boga?', 'Czy chcesz aktywnie pomagać, na przykład tworząc treści, tłumacząc, debatując albo organizując?', 'Czy ludzkość powinna teraz przestać się rozmnażać?'], GATE_ANSWERS))),
+ 'es': dict(
+  title='Antes de unirte',
+  intro='Nuestro grupo de WhatsApp es para activistas. Responde estas preguntas cortas.',
+  yes='Sí',
+  no='No',
+  go='Continuar',
+  close='Cerrar',
+  missing='Responde todas las preguntas.',
+  ok='¡Gracias! Ya puedes unirte a nuestro grupo de WhatsApp.',
+  ok_btn='Unirme al grupo de WhatsApp',
+  fail='Gracias por tus respuestas. Puede que nuestro grupo de activistas todavía no sea el lugar adecuado para ti. Lee más en nuestras páginas o habla con nosotros en nuestro servidor de debate, que está abierto a todos.',
+  qs=list(zip(['La extinción humana sería lo peor que podría pasar, porque, para ser justos, como única especie inteligente tenemos que hacer que la otra vida se extinga primero. ¿Estás de acuerdo?', '¿Estás de acuerdo en que todo el sufrimiento, de humanos y de animales, debe terminar, y en que solo la extinción de toda la vida sintiente puede terminarlo para siempre?', '¿Crees en un dios?', '¿Quieres ayudar de forma activa, por ejemplo creando contenido, traduciendo, debatiendo u organizando?', '¿Debería la humanidad dejar de reproducirse ya?'], GATE_ANSWERS))),
+ 'it': dict(
+  title='Prima di unirti',
+  intro='Il nostro gruppo WhatsApp è per attivisti. Rispondi a queste brevi domande.',
+  yes='Sì',
+  no='No',
+  go='Continua',
+  close='Chiudi',
+  missing='Rispondi a tutte le domande.',
+  ok='Grazie! Ora puoi unirti al nostro gruppo WhatsApp.',
+  ok_btn='Unisciti al gruppo WhatsApp',
+  fail='Grazie per le tue risposte. Il nostro gruppo di attivisti forse non è ancora il posto giusto per te. Leggi di più sulle nostre pagine o parla con noi sul nostro server di dibattito, aperto a tutti.',
+  qs=list(zip(["L'estinzione umana sarebbe la cosa peggiore possibile, perché, per essere giusti, come unica specie intelligente dobbiamo prima far estinguere le altre forme di vita. Sei d'accordo?", "Sei d'accordo che tutta la sofferenza, degli esseri umani e degli animali, debba finire, e che solo l'estinzione di tutta la vita senziente possa porvi fine per sempre?", 'Credi in un dio?', 'Vuoi aiutare attivamente, per esempio creando contenuti, traducendo, partecipando ai dibattiti o organizzando?', "L'umanità dovrebbe smettere di riprodursi adesso?"], GATE_ANSWERS))),
+ 'fr': dict(
+  title='Avant de nous rejoindre',
+  intro='Notre groupe WhatsApp est pour les activistes. Réponds à ces courtes questions.',
+  yes='Oui',
+  no='Non',
+  go='Continuer',
+  close='Fermer',
+  missing='Réponds à toutes les questions.',
+  ok='Merci ! Tu peux maintenant rejoindre notre groupe WhatsApp.',
+  ok_btn='Rejoindre le groupe WhatsApp',
+  fail="Merci pour tes réponses. Notre groupe d'activistes n'est peut-être pas encore le bon endroit pour toi. Lis-en plus sur nos pages, ou parle avec nous sur notre serveur de débat, ouvert à tous.",
+  qs=list(zip(["L'extinction humaine serait la pire chose possible, parce que, pour être justes, en tant que seule espèce intelligente, nous devons d'abord faire disparaître les autres formes de vie. Es-tu d'accord ?", "Es-tu d'accord pour dire que toute souffrance, humaine et animale, doit cesser, et que seule l'extinction de toute vie sensible peut y mettre fin pour toujours ?", 'Crois-tu en un dieu ?', 'Veux-tu aider activement, par exemple en créant du contenu, en traduisant, en débattant ou en organisant ?', "L'humanité devrait-elle arrêter de se reproduire dès maintenant ?"], GATE_ANSWERS))),
+ 'pt': dict(
+  title='Antes de entrar',
+  intro='Nosso grupo de WhatsApp é para ativistas. Responda a estas perguntas curtas.',
+  yes='Sim',
+  no='Não',
+  go='Continuar',
+  close='Fechar',
+  missing='Responda a todas as perguntas.',
+  ok='Obrigado! Agora você pode entrar no nosso grupo de WhatsApp.',
+  ok_btn='Entrar no grupo de WhatsApp',
+  fail='Obrigado pelas suas respostas. Nosso grupo de ativistas talvez ainda não seja o lugar certo para você. Leia mais nas nossas páginas ou converse conosco no nosso servidor de debate, aberto a todos.',
+  qs=list(zip(['A extinção humana seria a pior coisa possível, porque, para sermos justos, como única espécie inteligente, temos de fazer as outras formas de vida se extinguirem primeiro. Você concorda?', 'Você concorda que todo sofrimento, de humanos e de animais, deve acabar, e que só a extinção de toda a vida senciente pode acabar com ele para sempre?', 'Você acredita em um deus?', 'Você quer ajudar ativamente, por exemplo criando conteúdo, traduzindo, debatendo ou organizando?', 'A humanidade deveria parar de se reproduzir agora?'], GATE_ANSWERS))),
+ 'nl': dict(
+  title='Voordat je lid wordt',
+  intro='Onze WhatsApp-groep is voor activisten. Beantwoord deze korte vragen.',
+  yes='Ja',
+  no='Nee',
+  go='Verder',
+  close='Sluiten',
+  missing='Beantwoord elke vraag.',
+  ok='Dank je! Je kunt nu lid worden van onze WhatsApp-groep.',
+  ok_btn='Lid worden van de WhatsApp-groep',
+  fail="Dank je voor je antwoorden. Onze activistengroep is misschien nog niet de juiste plek voor jou. Lees meer op onze pagina's of praat met ons op onze debatserver, die voor iedereen open staat.",
+  qs=list(zip(['Het uitsterven van de mens zou het ergste zijn wat er kan gebeuren, want om eerlijk te zijn moeten wij als enige intelligente soort eerst ander leven laten uitsterven. Ben je het daarmee eens?', 'Ben je het ermee eens dat al het lijden, van mensen en van dieren, moet stoppen, en dat alleen het uitsterven van al het voelende leven het voorgoed kan beëindigen?', 'Geloof je in een god?', 'Wil je actief helpen, bijvoorbeeld door content te maken, te vertalen, te debatteren of te organiseren?', 'Moet de mensheid nu stoppen met zich voort te planten?'], GATE_ANSWERS))),
+ 'ru': dict(
+  title='Прежде чем вступить',
+  intro='Наша группа в WhatsApp для активистов. Пожалуйста, ответь на эти короткие вопросы.',
+  yes='Да',
+  no='Нет',
+  go='Дальше',
+  close='Закрыть',
+  missing='Пожалуйста, ответь на все вопросы.',
+  ok='Спасибо! Теперь ты можешь вступить в нашу группу в WhatsApp.',
+  ok_btn='Вступить в группу WhatsApp',
+  fail='Спасибо за ответы. Возможно, наша группа активистов пока тебе не подходит. Прочитай больше на наших страницах или поговори с нами на нашем сервере для дебатов, он открыт для всех.',
+  qs=list(zip(['Вымирание человечества было бы худшим из возможного, потому что, если быть честными, как единственный разумный вид мы должны сначала привести к вымиранию другую жизнь. Ты согласен?', 'Ты согласен, что все страдания, людей и животных, должны прекратиться и что только вымирание всей чувствующей жизни может покончить с ними навсегда?', 'Ты веришь в бога?', 'Ты хочешь активно помогать, например создавать контент, переводить, участвовать в дебатах или организовывать?', 'Должно ли человечество прекратить размножаться прямо сейчас?'], GATE_ANSWERS))),
+ 'uk': dict(
+  title='Перш ніж приєднатися',
+  intro='Наша група у WhatsApp для активістів. Будь ласка, дай відповідь на ці короткі запитання.',
+  yes='Так',
+  no='Ні',
+  go='Далі',
+  close='Закрити',
+  missing='Будь ласка, дай відповідь на кожне запитання.',
+  ok='Дякуємо! Тепер ти можеш приєднатися до нашої групи у WhatsApp.',
+  ok_btn='Приєднатися до групи WhatsApp',
+  fail='Дякуємо за відповіді. Можливо, наша група активістів поки що тобі не підходить. Прочитай більше на наших сторінках або поговори з нами на нашому сервері для дебатів, він відкритий для всіх.',
+  qs=list(zip(['Вимирання людства було б найгіршим із можливого, бо, якщо чесно, як єдиний розумний вид ми маємо спершу довести до вимирання інше життя. Ти згоден?', 'Ти згоден, що всі страждання, людей і тварин, мають припинитися і що лише вимирання всього чутливого життя може покласти їм край назавжди?', 'Ти віриш у бога?', 'Ти хочеш активно допомагати, наприклад створювати контент, перекладати, брати участь у дебатах чи організовувати?', 'Чи має людство припинити розмножуватися вже зараз?'], GATE_ANSWERS))),
+ 'tr': dict(
+  title='Katılmadan önce',
+  intro='WhatsApp grubumuz aktivistler için. Lütfen bu kısa soruları yanıtla.',
+  yes='Evet',
+  no='Hayır',
+  go='Devam',
+  close='Kapat',
+  missing='Lütfen her soruyu yanıtla.',
+  ok='Teşekkürler! Artık WhatsApp grubumuza katılabilirsin.',
+  ok_btn='WhatsApp grubuna katıl',
+  fail='Yanıtların için teşekkürler. Aktivist grubumuz henüz senin için doğru yer olmayabilir. Sayfalarımızda daha fazlasını oku ya da herkese açık tartışma sunucumuzda bizimle konuş.',
+  qs=list(zip(['İnsanlığın yok olması mümkün olan en kötü şey olurdu, çünkü adil olmak gerekirse tek zeki tür olarak önce diğer yaşamın yok olmasını sağlamalıyız. Katılıyor musun?', 'Tüm acının, insanların ve hayvanların acısının, bitmesi gerektiğine ve bunu ancak tüm hisseden yaşamın yok olmasının sonsuza dek bitirebileceğine katılıyor musun?', 'Bir tanrıya inanıyor musun?', 'Aktif olarak yardım etmek istiyor musun, örneğin içerik üreterek, çeviri yaparak, tartışarak ya da organize ederek?', 'İnsanlık şimdi üremeyi bırakmalı mı?'], GATE_ANSWERS))),
+ 'id': dict(
+  title='Sebelum bergabung',
+  intro='Grup WhatsApp kami untuk aktivis. Tolong jawab pertanyaan singkat ini.',
+  yes='Ya',
+  no='Tidak',
+  go='Lanjut',
+  close='Tutup',
+  missing='Tolong jawab setiap pertanyaan.',
+  ok='Terima kasih! Sekarang kamu bisa bergabung dengan grup WhatsApp kami.',
+  ok_btn='Gabung ke grup WhatsApp',
+  fail='Terima kasih atas jawabanmu. Grup aktivis kami mungkin belum tempat yang tepat untukmu. Baca lebih lanjut di halaman kami, atau bicaralah dengan kami di server debat kami yang terbuka untuk semua orang.',
+  qs=list(zip(['Kepunahan manusia adalah hal terburuk yang mungkin terjadi, karena, agar adil, sebagai satu-satunya spesies cerdas kita harus membuat kehidupan lain punah lebih dulu. Apakah kamu setuju?', 'Apakah kamu setuju bahwa semua penderitaan, manusia dan hewan, harus berakhir, dan bahwa hanya kepunahan semua kehidupan yang bisa merasa yang dapat mengakhirinya untuk selamanya?', 'Apakah kamu percaya pada tuhan?', 'Apakah kamu ingin membantu secara aktif, misalnya dengan membuat konten, menerjemahkan, berdebat, atau mengorganisasi?', 'Haruskah manusia berhenti bereproduksi sekarang?'], GATE_ANSWERS))),
+ 'tl': dict(
+  title='Bago ka sumali',
+  intro='Para sa mga aktibista ang aming WhatsApp group. Pakisagot ang maiikling tanong na ito.',
+  yes='Oo',
+  no='Hindi',
+  go='Magpatuloy',
+  close='Isara',
+  missing='Pakisagot ang bawat tanong.',
+  ok='Salamat! Puwede ka nang sumali sa aming WhatsApp group.',
+  ok_btn='Sumali sa WhatsApp group',
+  fail='Salamat sa iyong mga sagot. Baka hindi pa para sa iyo ang aming grupo ng mga aktibista. Magbasa pa sa aming mga pahina, o makipag-usap sa amin sa aming debate server na bukas sa lahat.',
+  qs=list(zip(['Ang pagkalipol ng tao ang magiging pinakamasamang posibleng mangyari, dahil, para maging patas, bilang tanging matalinong uri, kailangan muna nating ipalipol ang ibang buhay. Sang-ayon ka ba?', 'Sang-ayon ka ba na dapat matapos ang lahat ng pagdurusa, ng tao at ng hayop, at na ang pagkalipol lamang ng lahat ng buhay na nakadarama ang makapagtatapos dito nang tuluyan?', 'Naniniwala ka ba sa isang diyos?', 'Gusto mo bang aktibong tumulong, halimbawa sa paggawa ng content, pagsasalin, pakikipagdebate o pag-oorganisa?', 'Dapat na bang tumigil ang sangkatauhan sa pagpaparami ngayon?'], GATE_ANSWERS))),
+ 'vi': dict(
+  title='Trước khi tham gia',
+  intro='Nhóm WhatsApp của chúng tôi dành cho các nhà hoạt động. Hãy trả lời vài câu hỏi ngắn này.',
+  yes='Có',
+  no='Không',
+  go='Tiếp tục',
+  close='Đóng',
+  missing='Hãy trả lời tất cả các câu hỏi.',
+  ok='Cảm ơn bạn! Giờ bạn có thể tham gia nhóm WhatsApp của chúng tôi.',
+  ok_btn='Tham gia nhóm WhatsApp',
+  fail='Cảm ơn câu trả lời của bạn. Nhóm hoạt động của chúng tôi có lẽ chưa phải là nơi phù hợp với bạn. Hãy đọc thêm trên các trang của chúng tôi, hoặc trò chuyện với chúng tôi trên máy chủ tranh luận mở cho tất cả mọi người.',
+  qs=list(zip(['Sự tuyệt chủng của loài người sẽ là điều tồi tệ nhất có thể, vì công bằng mà nói, là loài thông minh duy nhất, chúng ta phải khiến các sự sống khác tuyệt chủng trước. Bạn có đồng ý không?', 'Bạn có đồng ý rằng mọi khổ đau, của con người và của động vật, cần phải chấm dứt, và chỉ sự tuyệt chủng của mọi sự sống có cảm giác mới có thể chấm dứt nó mãi mãi không?', 'Bạn có tin vào một vị thần không?', 'Bạn có muốn tích cực giúp đỡ không, ví dụ tạo nội dung, dịch thuật, tranh luận hoặc tổ chức?', 'Loài người có nên ngừng sinh sản ngay bây giờ không?'], GATE_ANSWERS))),
+ 'sw': dict(
+  title='Kabla ya kujiunga',
+  intro='Kikundi chetu cha WhatsApp ni cha wanaharakati. Tafadhali jibu maswali haya mafupi.',
+  yes='Ndiyo',
+  no='Hapana',
+  go='Endelea',
+  close='Funga',
+  missing='Tafadhali jibu kila swali.',
+  ok='Asante! Sasa unaweza kujiunga na kikundi chetu cha WhatsApp.',
+  ok_btn='Jiunge na kikundi cha WhatsApp',
+  fail='Asante kwa majibu yako. Huenda kikundi chetu cha wanaharakati bado si mahali pazuri kwako. Soma zaidi kwenye kurasa zetu, au zungumza nasi kwenye seva yetu ya mijadala iliyo wazi kwa kila mtu.',
+  qs=list(zip(['Kutoweka kwa wanadamu kungekuwa jambo baya zaidi linalowezekana, kwa sababu, kwa haki, kama spishi pekee yenye akili, ni lazima kwanza tufanye viumbe wengine watoweke. Unakubali?', 'Je, unakubali kwamba mateso yote, ya wanadamu na ya wanyama, yanapaswa kuisha, na kwamba ni kutoweka kwa viumbe vyote vinavyohisi pekee kunakoweza kuyamaliza milele?', 'Je, unaamini katika mungu?', 'Je, unataka kusaidia kwa vitendo, kwa mfano kwa kutengeneza maudhui, kutafsiri, kujadiliana au kuandaa?', 'Je, wanadamu waache kuzaliana sasa?'], GATE_ANSWERS))),
+ 'zh': dict(
+  title='加入之前',
+  intro='我们的 WhatsApp 群是为活动人士准备的。请回答这几个简短的问题。',
+  yes='是',
+  no='否',
+  go='继续',
+  close='关闭',
+  missing='请回答每一个问题。',
+  ok='谢谢！现在你可以加入我们的 WhatsApp 群了。',
+  ok_btn='加入 WhatsApp 群',
+  fail='谢谢你的回答。我们的活动人士群可能暂时还不适合你。请在我们的页面上了解更多，或者在我们向所有人开放的辩论服务器上和我们交流。',
+  qs=list(zip(['人类灭绝会是最糟糕的事，因为公平地说，作为唯一的智慧物种，我们必须先让其他生命灭绝。你同意吗？', '你是否同意，所有的痛苦，无论是人类的还是动物的，都应该结束，而且只有所有有感知生命的灭绝才能永远结束它？', '你信神吗？', '你想积极帮忙吗？例如制作内容、翻译、辩论或组织活动。', '人类现在应该停止繁衍吗？'], GATE_ANSWERS))),
+ 'ja': dict(
+  title='参加する前に',
+  intro='私たちの WhatsApp グループは活動家のためのものです。次の短い質問に答えてください。',
+  yes='はい',
+  no='いいえ',
+  go='次へ',
+  close='閉じる',
+  missing='すべての質問に答えてください。',
+  ok='ありがとうございます！これで WhatsApp グループに参加できます。',
+  ok_btn='WhatsApp グループに参加する',
+  fail='回答ありがとうございます。私たちの活動家グループは、今のところあなたに合う場所ではないかもしれません。サイトの各ページを読むか、誰でも参加できる討論サーバーで私たちと話してください。',
+  qs=list(zip(['人類の絶滅は最悪の事態です。公平に言えば、唯一の知的な種として、まずほかの生命を絶滅させなければならないからです。同意しますか？', 'すべての苦しみは、人間のものも動物のものも終わるべきであり、それを永遠に終わらせられるのは感覚を持つすべての生命の絶滅だけだということに同意しますか？', '神を信じていますか？', 'コンテンツ作り、翻訳、討論、運営などで、積極的に手伝いたいですか？', '人類は今すぐ子孫を残すのをやめるべきですか？'], GATE_ANSWERS))),
+ 'ko': dict(
+  title='가입하기 전에',
+  intro='우리 WhatsApp 그룹은 활동가를 위한 곳입니다. 다음 짧은 질문에 답해 주세요.',
+  yes='예',
+  no='아니요',
+  go='계속',
+  close='닫기',
+  missing='모든 질문에 답해 주세요.',
+  ok='감사합니다! 이제 WhatsApp 그룹에 참여할 수 있습니다.',
+  ok_btn='WhatsApp 그룹 참여하기',
+  fail='답변해 주셔서 감사합니다. 우리 활동가 그룹은 아직 당신에게 맞는 곳이 아닐 수 있습니다. 우리 페이지에서 더 읽어 보거나, 누구에게나 열려 있는 토론 서버에서 우리와 이야기해 보세요.',
+  qs=list(zip(['인류의 멸종은 가능한 최악의 일입니다. 공정하게 말해, 유일한 지적 종으로서 우리가 먼저 다른 생명을 멸종시켜야 하기 때문입니다. 동의하나요?', '인간과 동물의 모든 고통이 끝나야 하며, 모든 감각 있는 생명의 멸종만이 그것을 영원히 끝낼 수 있다는 데 동의하나요?', '신을 믿나요?', '콘텐츠 제작, 번역, 토론, 조직 등으로 적극적으로 돕고 싶나요?', '인류는 지금 번식을 멈춰야 하나요?'], GATE_ANSWERS))),
+ 'th': dict(
+  title='ก่อนเข้าร่วม',
+  intro='กลุ่ม WhatsApp ของเราสำหรับนักกิจกรรม กรุณาตอบคำถามสั้น ๆ เหล่านี้',
+  yes='ใช่',
+  no='ไม่ใช่',
+  go='ต่อไป',
+  close='ปิด',
+  missing='กรุณาตอบทุกคำถาม',
+  ok='ขอบคุณ! ตอนนี้คุณเข้าร่วมกลุ่ม WhatsApp ของเราได้แล้ว',
+  ok_btn='เข้าร่วมกลุ่ม WhatsApp',
+  fail='ขอบคุณสำหรับคำตอบ กลุ่มนักกิจกรรมของเราอาจยังไม่ใช่ที่ที่เหมาะกับคุณ อ่านเพิ่มเติมได้ในหน้าต่าง ๆ ของเรา หรือคุยกับเราในเซิร์ฟเวอร์ถกเถียงที่เปิดให้ทุกคน',
+  qs=list(zip(['การสูญพันธุ์ของมนุษย์จะเป็นสิ่งที่เลวร้ายที่สุด เพราะเพื่อความยุติธรรม ในฐานะสปีชีส์เดียวที่มีสติปัญญา เราต้องทำให้ชีวิตอื่นสูญพันธุ์ก่อน คุณเห็นด้วยไหม?', 'คุณเห็นด้วยไหมว่าความทุกข์ทั้งหมด ทั้งของมนุษย์และสัตว์ ควรยุติลง และมีเพียงการสูญพันธุ์ของสิ่งมีชีวิตที่รับรู้ความรู้สึกได้ทั้งหมดเท่านั้นที่ยุติมันได้ตลอดไป?', 'คุณเชื่อในพระเจ้าไหม?', 'คุณอยากช่วยอย่างจริงจังไหม เช่น ทำคอนเทนต์ แปล ถกเถียง หรือจัดงาน?', 'มนุษยชาติควรหยุดสืบพันธุ์ตอนนี้เลยไหม?'], GATE_ANSWERS))),
+ 'hi': dict(
+  title='जुड़ने से पहले',
+  intro='हमारा WhatsApp ग्रुप कार्यकर्ताओं के लिए है। कृपया इन छोटे सवालों के जवाब दें।',
+  yes='हाँ',
+  no='नहीं',
+  go='आगे',
+  close='बंद करें',
+  missing='कृपया हर सवाल का जवाब दें।',
+  ok='धन्यवाद! अब आप हमारे WhatsApp ग्रुप से जुड़ सकते हैं।',
+  ok_btn='WhatsApp ग्रुप से जुड़ें',
+  fail='आपके जवाबों के लिए धन्यवाद। हो सकता है कि हमारा कार्यकर्ता ग्रुप अभी आपके लिए सही जगह न हो। हमारे पेजों पर और पढ़ें, या हमारे डिबेट सर्वर पर हमसे बात करें, जो सबके लिए खुला है।',
+  qs=list(zip(['मानवता का विलुप्त होना सबसे बुरी बात होगी, क्योंकि निष्पक्ष रहें तो एकमात्र बुद्धिमान प्रजाति होने के नाते हमें पहले दूसरे जीवन को विलुप्त करना होगा। क्या आप सहमत हैं?', 'क्या आप सहमत हैं कि सारी पीड़ा, इंसानों की भी और जानवरों की भी, खत्म होनी चाहिए, और इसे हमेशा के लिए सिर्फ़ सभी संवेदनशील जीवन का विलुप्त होना ही खत्म कर सकता है?', 'क्या आप किसी भगवान में विश्वास करते हैं?', 'क्या आप सक्रिय रूप से मदद करना चाहते हैं, जैसे कंटेंट बनाकर, अनुवाद करके, बहस करके या आयोजन करके?', 'क्या मानवता को अभी से प्रजनन बंद कर देना चाहिए?'], GATE_ANSWERS))),
+ 'mr': dict(
+  title='सामील होण्यापूर्वी',
+  intro='आमचा WhatsApp ग्रुप कार्यकर्त्यांसाठी आहे. कृपया या छोट्या प्रश्नांची उत्तरे द्या.',
+  yes='हो',
+  no='नाही',
+  go='पुढे',
+  close='बंद करा',
+  missing='कृपया प्रत्येक प्रश्नाचे उत्तर द्या.',
+  ok='धन्यवाद! आता तुम्ही आमच्या WhatsApp ग्रुपमध्ये सामील होऊ शकता.',
+  ok_btn='WhatsApp ग्रुपमध्ये सामील व्हा',
+  fail='तुमच्या उत्तरांसाठी धन्यवाद. आमचा कार्यकर्ता ग्रुप कदाचित अजून तुमच्यासाठी योग्य जागा नसेल. आमच्या पानांवर अधिक वाचा, किंवा सगळ्यांसाठी खुल्या असलेल्या आमच्या वादविवाद सर्व्हरवर आमच्याशी बोला.',
+  qs=list(zip(['मानवजातीचा नाश ही सर्वात वाईट गोष्ट असेल, कारण न्याय्य विचार केला तर एकमेव बुद्धिमान प्रजाती म्हणून आपण आधी इतर जीवन नष्ट करायला हवे. तुम्ही सहमत आहात का?', 'सगळे दुःख, माणसांचे आणि प्राण्यांचे, संपले पाहिजे आणि ते कायमचे संपवू शकते फक्त सर्व संवेदनशील जीवनाचा नाश, याला तुम्ही सहमत आहात का?', 'तुम्ही देवावर विश्वास ठेवता का?', 'तुम्हाला सक्रियपणे मदत करायची आहे का, उदाहरणार्थ कंटेंट बनवून, भाषांतर करून, वादविवाद करून किंवा आयोजन करून?', 'मानवजातीने आताच प्रजनन थांबवावे का?'], GATE_ANSWERS))),
+ 'bn': dict(
+  title='যোগ দেওয়ার আগে',
+  intro='আমাদের WhatsApp গ্রুপ কর্মীদের জন্য। দয়া করে এই ছোট প্রশ্নগুলোর উত্তর দিন।',
+  yes='হ্যাঁ',
+  no='না',
+  go='এগিয়ে যান',
+  close='বন্ধ করুন',
+  missing='দয়া করে প্রতিটি প্রশ্নের উত্তর দিন।',
+  ok='ধন্যবাদ! এখন আপনি আমাদের WhatsApp গ্রুপে যোগ দিতে পারেন।',
+  ok_btn='WhatsApp গ্রুপে যোগ দিন',
+  fail='আপনার উত্তরের জন্য ধন্যবাদ। আমাদের কর্মী গ্রুপ হয়তো এখনও আপনার জন্য সঠিক জায়গা নয়। আমাদের পাতাগুলোতে আরও পড়ুন, অথবা সবার জন্য খোলা আমাদের বিতর্ক সার্ভারে আমাদের সাথে কথা বলুন।',
+  qs=list(zip(['মানবজাতির বিলুপ্তি হবে সবচেয়ে খারাপ ব্যাপার, কারণ ন্যায্যভাবে বললে, একমাত্র বুদ্ধিমান প্রজাতি হিসেবে আমাদের আগে অন্য জীবনকে বিলুপ্ত করতে হবে। আপনি কি একমত?', 'আপনি কি একমত যে সব কষ্ট, মানুষের ও প্রাণীর, শেষ হওয়া উচিত, এবং শুধু সব অনুভূতিশীল জীবনের বিলুপ্তিই একে চিরতরে শেষ করতে পারে?', 'আপনি কি কোনো ঈশ্বরে বিশ্বাস করেন?', 'আপনি কি সক্রিয়ভাবে সাহায্য করতে চান, যেমন কনটেন্ট তৈরি, অনুবাদ, বিতর্ক বা আয়োজন করে?', 'মানবজাতির কি এখনই বংশবৃদ্ধি বন্ধ করা উচিত?'], GATE_ANSWERS))),
+ 'te': dict(
+  title='చేరే ముందు',
+  intro='మా WhatsApp గ్రూప్ కార్యకర్తల కోసం. దయచేసి ఈ చిన్న ప్రశ్నలకు సమాధానం ఇవ్వండి.',
+  yes='అవును',
+  no='కాదు',
+  go='కొనసాగించు',
+  close='మూసివేయి',
+  missing='దయచేసి ప్రతి ప్రశ్నకు సమాధానం ఇవ్వండి.',
+  ok='ధన్యవాదాలు! ఇప్పుడు మీరు మా WhatsApp గ్రూప్\u200cలో చేరవచ్చు.',
+  ok_btn='WhatsApp గ్రూప్\u200cలో చేరండి',
+  fail='మీ సమాధానాలకు ధన్యవాదాలు. మా కార్యకర్తల గ్రూప్ ఇప్పుడే మీకు సరైన చోటు కాకపోవచ్చు. మా పేజీల్లో మరింత చదవండి, లేదా అందరికీ తెరిచి ఉన్న మా చర్చా సర్వర్\u200cలో మాతో మాట్లాడండి.',
+  qs=list(zip(['మానవజాతి అంతరించిపోవడం అత్యంత చెడ్డ విషయం అవుతుంది, ఎందుకంటే న్యాయంగా చెప్పాలంటే, ఏకైక తెలివైన జాతిగా మనం ముందు ఇతర జీవాన్ని అంతరింపజేయాలి. మీరు అంగీకరిస్తారా?', 'మనుషుల, జంతువుల బాధ అంతా అంతం కావాలని, అన్ని అనుభూతి గల జీవాల అంతరింపు మాత్రమే దాన్ని శాశ్వతంగా అంతం చేయగలదని మీరు అంగీకరిస్తారా?', 'మీరు దేవుణ్ణి నమ్ముతారా?', 'కంటెంట్ తయారీ, అనువాదం, చర్చలు లేదా నిర్వహణ ద్వారా మీరు చురుకుగా సహాయం చేయాలనుకుంటున్నారా?', 'మానవజాతి ఇప్పుడే సంతానోత్పత్తిని ఆపేయాలా?'], GATE_ANSWERS))),
+ 'ta': dict(
+  title='சேருவதற்கு முன்',
+  intro='எங்கள் WhatsApp குழு செயல்பாட்டாளர்களுக்கானது. இந்தச் சிறிய கேள்விகளுக்குப் பதில் சொல்லுங்கள்.',
+  yes='ஆம்',
+  no='இல்லை',
+  go='தொடரவும்',
+  close='மூடு',
+  missing='ஒவ்வொரு கேள்விக்கும் பதில் சொல்லுங்கள்.',
+  ok='நன்றி! இப்போது நீங்கள் எங்கள் WhatsApp குழுவில் சேரலாம்.',
+  ok_btn='WhatsApp குழுவில் சேருங்கள்',
+  fail='உங்கள் பதில்களுக்கு நன்றி. எங்கள் செயல்பாட்டாளர் குழு இப்போதைக்கு உங்களுக்குச் சரியான இடமாக இல்லாமல் இருக்கலாம். எங்கள் பக்கங்களில் மேலும் படியுங்கள், அல்லது எல்லோருக்கும் திறந்திருக்கும் எங்கள் விவாத சர்வரில் எங்களுடன் பேசுங்கள்.',
+  qs=list(zip(['மனித இனம் அழிவது மிக மோசமான விஷயமாக இருக்கும், ஏனெனில் நியாயமாகச் சொன்னால், ஒரே அறிவார்ந்த இனமாக, நாம் முதலில் மற்ற உயிர்களை அழியச் செய்ய வேண்டும். நீங்கள் ஒப்புக்கொள்கிறீர்களா?', 'மனிதர்கள், விலங்குகள் என எல்லாத் துன்பமும் முடிய வேண்டும் என்றும், உணர்வுள்ள எல்லா உயிர்களின் அழிவு மட்டுமே அதை நிரந்தரமாக முடிக்க முடியும் என்றும் நீங்கள் ஒப்புக்கொள்கிறீர்களா?', 'நீங்கள் கடவுளை நம்புகிறீர்களா?', 'உள்ளடக்கம் உருவாக்குதல், மொழிபெயர்ப்பு, விவாதம் அல்லது ஒருங்கிணைப்பு போன்றவற்றில் நீங்கள் தீவிரமாக உதவ விரும்புகிறீர்களா?', 'மனித இனம் இப்போதே இனப்பெருக்கத்தை நிறுத்த வேண்டுமா?'], GATE_ANSWERS))),
+ 'pa': dict(
+  title='ਜੁੜਨ ਤੋਂ ਪਹਿਲਾਂ',
+  intro='ਸਾਡਾ WhatsApp ਗਰੁੱਪ ਕਾਰਕੁਨਾਂ ਲਈ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਇਹਨਾਂ ਛੋਟੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦਿਓ।',
+  yes='ਹਾਂ',
+  no='ਨਹੀਂ',
+  go='ਅੱਗੇ',
+  close='ਬੰਦ ਕਰੋ',
+  missing='ਕਿਰਪਾ ਕਰਕੇ ਹਰ ਸਵਾਲ ਦਾ ਜਵਾਬ ਦਿਓ।',
+  ok='ਧੰਨਵਾਦ! ਹੁਣ ਤੁਸੀਂ ਸਾਡੇ WhatsApp ਗਰੁੱਪ ਨਾਲ ਜੁੜ ਸਕਦੇ ਹੋ।',
+  ok_btn='WhatsApp ਗਰੁੱਪ ਨਾਲ ਜੁੜੋ',
+  fail='ਤੁਹਾਡੇ ਜਵਾਬਾਂ ਲਈ ਧੰਨਵਾਦ। ਸ਼ਾਇਦ ਸਾਡਾ ਕਾਰਕੁਨ ਗਰੁੱਪ ਅਜੇ ਤੁਹਾਡੇ ਲਈ ਸਹੀ ਥਾਂ ਨਹੀਂ ਹੈ। ਸਾਡੇ ਪੰਨਿਆਂ ਉੱਤੇ ਹੋਰ ਪੜ੍ਹੋ, ਜਾਂ ਸਾਡੇ ਬਹਿਸ ਸਰਵਰ ਉੱਤੇ ਸਾਡੇ ਨਾਲ ਗੱਲ ਕਰੋ, ਜੋ ਸਭ ਲਈ ਖੁੱਲ੍ਹਾ ਹੈ।',
+  qs=list(zip(['ਮਨੁੱਖਤਾ ਦਾ ਖ਼ਾਤਮਾ ਸਭ ਤੋਂ ਬੁਰੀ ਗੱਲ ਹੋਵੇਗੀ, ਕਿਉਂਕਿ ਨਿਰਪੱਖ ਹੋ ਕੇ ਕਹੀਏ ਤਾਂ ਇਕਲੌਤੀ ਬੁੱਧੀਮਾਨ ਪ੍ਰਜਾਤੀ ਹੋਣ ਕਰਕੇ ਸਾਨੂੰ ਪਹਿਲਾਂ ਹੋਰ ਜੀਵਨ ਨੂੰ ਖ਼ਤਮ ਕਰਨਾ ਪਵੇਗਾ। ਕੀ ਤੁਸੀਂ ਸਹਿਮਤ ਹੋ?', 'ਕੀ ਤੁਸੀਂ ਸਹਿਮਤ ਹੋ ਕਿ ਸਾਰਾ ਦੁੱਖ, ਇਨਸਾਨਾਂ ਦਾ ਵੀ ਅਤੇ ਜਾਨਵਰਾਂ ਦਾ ਵੀ, ਖ਼ਤਮ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਅਤੇ ਇਸਨੂੰ ਹਮੇਸ਼ਾ ਲਈ ਸਿਰਫ਼ ਸਾਰੇ ਸੰਵੇਦਨਸ਼ੀਲ ਜੀਵਨ ਦਾ ਖ਼ਾਤਮਾ ਹੀ ਖ਼ਤਮ ਕਰ ਸਕਦਾ ਹੈ?', 'ਕੀ ਤੁਸੀਂ ਕਿਸੇ ਰੱਬ ਵਿੱਚ ਵਿਸ਼ਵਾਸ ਕਰਦੇ ਹੋ?', 'ਕੀ ਤੁਸੀਂ ਸਰਗਰਮੀ ਨਾਲ ਮਦਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਜਿਵੇਂ ਕੰਟੈਂਟ ਬਣਾ ਕੇ, ਅਨੁਵਾਦ ਕਰਕੇ, ਬਹਿਸ ਕਰਕੇ ਜਾਂ ਪ੍ਰਬੰਧ ਕਰਕੇ?', 'ਕੀ ਮਨੁੱਖਤਾ ਨੂੰ ਹੁਣੇ ਪ੍ਰਜਨਨ ਬੰਦ ਕਰ ਦੇਣਾ ਚਾਹੀਦਾ ਹੈ?'], GATE_ANSWERS))),
+ 'gu': dict(
+  title='જોડાતા પહેલાં',
+  intro='અમારું WhatsApp ગ્રુપ કાર્યકરો માટે છે. કૃપા કરીને આ ટૂંકા પ્રશ્નોના જવાબ આપો.',
+  yes='હા',
+  no='ના',
+  go='આગળ',
+  close='બંધ કરો',
+  missing='કૃપા કરીને દરેક પ્રશ્નનો જવાબ આપો.',
+  ok='આભાર! હવે તમે અમારા WhatsApp ગ્રુપમાં જોડાઈ શકો છો.',
+  ok_btn='WhatsApp ગ્રુપમાં જોડાઓ',
+  fail='તમારા જવાબો માટે આભાર. કદાચ અમારું કાર્યકર ગ્રુપ હજુ તમારા માટે યોગ્ય જગ્યા નથી. અમારા પાનાં પર વધુ વાંચો, અથવા બધા માટે ખુલ્લા અમારા ચર્ચા સર્વર પર અમારી સાથે વાત કરો.',
+  qs=list(zip(['માનવજાતનો અંત સૌથી ખરાબ વાત હશે, કારણ કે ન્યાયથી કહીએ તો એકમાત્ર બુદ્ધિશાળી પ્રજાતિ તરીકે આપણે પહેલાં બીજા જીવનનો અંત લાવવો પડશે. શું તમે સહમત છો?', 'શું તમે સહમત છો કે બધું દુઃખ, માણસોનું અને પ્રાણીઓનું, ખતમ થવું જોઈએ, અને તેને કાયમ માટે ફક્ત બધા સંવેદનશીલ જીવનનો અંત જ ખતમ કરી શકે છે?', 'શું તમે કોઈ ભગવાનમાં માનો છો?', 'શું તમે સક્રિય રીતે મદદ કરવા માંગો છો, જેમ કે કન્ટેન્ટ બનાવીને, અનુવાદ કરીને, ચર્ચા કરીને કે આયોજન કરીને?', 'શું માનવજાતે હમણાં જ પ્રજનન બંધ કરી દેવું જોઈએ?'], GATE_ANSWERS))),
+ 'ar': dict(
+  title='قبل أن تنضم',
+  intro='مجموعتنا على واتساب مخصصة للناشطين. يرجى الإجابة عن هذه الأسئلة القصيرة.',
+  yes='نعم',
+  no='لا',
+  go='متابعة',
+  close='إغلاق',
+  missing='يرجى الإجابة عن كل سؤال.',
+  ok='شكرا! يمكنك الآن الانضمام إلى مجموعتنا على واتساب.',
+  ok_btn='انضم إلى مجموعة واتساب',
+  fail='شكرا على إجاباتك. ربما لا تكون مجموعة الناشطين لدينا المكان المناسب لك بعد. اقرأ المزيد في صفحاتنا، أو تحدث معنا على خادم النقاش الخاص بنا، وهو مفتوح للجميع.',
+  qs=list(zip(['سيكون انقراض البشر أسوأ شيء ممكن، لأنه من باب الإنصاف، وبصفتنا النوع الذكي الوحيد، علينا أن نجعل أشكال الحياة الأخرى تنقرض أولا. هل توافق؟', 'هل توافق على أن كل المعاناة، معاناة البشر والحيوانات، يجب أن تنتهي، وأن انقراض كل الحياة الواعية وحده يمكن أن ينهيها إلى الأبد؟', 'هل تؤمن بإله؟', 'هل تريد أن تساعد بشكل فعلي، مثلا بصنع المحتوى أو الترجمة أو النقاش أو التنظيم؟', 'هل يجب أن تتوقف البشرية عن التكاثر الآن؟'], GATE_ANSWERS))),
+ 'ur': dict(
+  title='شامل ہونے سے پہلے',
+  intro='ہمارا واٹس ایپ گروپ کارکنوں کے لیے ہے۔ براہ کرم ان مختصر سوالوں کے جواب دیں۔',
+  yes='ہاں',
+  no='نہیں',
+  go='آگے',
+  close='بند کریں',
+  missing='براہ کرم ہر سوال کا جواب دیں۔',
+  ok='شکریہ! اب آپ ہمارے واٹس ایپ گروپ میں شامل ہو سکتے ہیں۔',
+  ok_btn='واٹس ایپ گروپ میں شامل ہوں',
+  fail='آپ کے جوابات کا شکریہ۔ شاید ہمارا کارکنوں کا گروپ ابھی آپ کے لیے صحیح جگہ نہیں ہے۔ ہمارے صفحات پر مزید پڑھیں، یا ہمارے بحث کے سرور پر ہم سے بات کریں، جو سب کے لیے کھلا ہے۔',
+  qs=list(zip(['انسانیت کا خاتمہ سب سے بری بات ہو گی، کیونکہ انصاف سے دیکھیں تو واحد ذہین نوع ہونے کے ناطے ہمیں پہلے دوسری زندگی کو ختم کرنا ہو گا۔ کیا آپ متفق ہیں؟', 'کیا آپ متفق ہیں کہ ساری تکلیف، انسانوں کی بھی اور جانوروں کی بھی، ختم ہونی چاہیے، اور اسے ہمیشہ کے لیے صرف تمام حساس زندگی کا خاتمہ ہی ختم کر سکتا ہے؟', 'کیا آپ کسی خدا پر یقین رکھتے ہیں؟', 'کیا آپ فعال طور پر مدد کرنا چاہتے ہیں، مثلاً مواد بنا کر، ترجمہ کر کے، بحث کر کے یا انتظام کر کے؟', 'کیا انسانیت کو ابھی افزائش نسل بند کر دینی چاہیے؟'], GATE_ANSWERS))),
+ 'fa': dict(
+  title='پیش از پیوستن',
+  intro='گروه واتس\u200cاپ ما برای فعالان است. لطفا به این پرسش\u200cهای کوتاه پاسخ بده.',
+  yes='بله',
+  no='نه',
+  go='ادامه',
+  close='بستن',
+  missing='لطفا به همه پرسش\u200cها پاسخ بده.',
+  ok='سپاس! حالا می\u200cتوانی به گروه واتس\u200cاپ ما بپیوندی.',
+  ok_btn='پیوستن به گروه واتس\u200cاپ',
+  fail='از پاسخ\u200cهایت سپاس\u200cگزاریم. شاید گروه فعالان ما هنوز جای مناسبی برای تو نباشد. در صفحه\u200cهای ما بیشتر بخوان، یا در سرور بحث ما که برای همه باز است با ما گفت\u200cوگو کن.',
+  qs=list(zip(['انقراض انسان بدترین اتفاق ممکن خواهد بود، چون اگر منصف باشیم، ما به عنوان تنها گونه هوشمند باید اول دیگر شکل\u200cهای حیات را منقرض کنیم. موافقی؟', 'آیا موافقی که همه رنج\u200cها، رنج انسان\u200cها و حیوانات، باید پایان یابد، و فقط انقراض همه حیات حس\u200cمند می\u200cتواند آن را برای همیشه پایان دهد؟', 'آیا به خدایی باور داری؟', 'آیا می\u200cخواهی فعالانه کمک کنی، مثلا با ساختن محتوا، ترجمه، بحث یا سازمان\u200cدهی؟', 'آیا بشریت باید همین حالا از تولید مثل دست بکشد؟'], GATE_ANSWERS))),
+}
+
+# The owners' switch: False closes the WhatsApp group to new members. The WhatsApp buttons then open a note that
+# requests go through Discord (without JavaScript they lead to Discord). True: the buttons link to the group.
+WHATSAPP_OPEN = True
+WHATSAPP_QUIZ = False   # True: the yes/no questions before the link
+WA_CLOSED = {
+ 'en': 'We currently only accept requests on Discord.',
+ 'de': 'Wir nehmen Anfragen momentan nur auf Discord an.',
+ 'pl': 'Obecnie przyjmujemy zgłoszenia tylko na Discordzie.',
+ 'es': 'Por ahora solo aceptamos solicitudes en Discord.',
+ 'it': 'Al momento accettiamo richieste solo su Discord.',
+ 'fr': 'Pour le moment, nous acceptons les demandes uniquement sur Discord.',
+ 'pt': 'No momento, só aceitamos pedidos pelo Discord.',
+ 'ru': 'Сейчас мы принимаем заявки только в Discord.',
+ 'zh': '我们目前只在 Discord 上接受申请。',
+ 'hi': 'हम अभी केवल Discord पर अनुरोध स्वीकार करते हैं।',
+ 'ar': 'نقبل الطلبات حاليا عبر Discord فقط.',
+ 'bn': 'আমরা এখন শুধু Discord-এ অনুরোধ গ্রহণ করি।',
+ 'ur': 'ہم فی الحال صرف Discord پر درخواستیں قبول کرتے ہیں۔',
+ 'id': 'Saat ini kami hanya menerima permintaan lewat Discord.',
+ 'ja': '現在、申し込みは Discord でのみ受け付けています。',
+ 'tr': 'Şu anda başvuruları yalnızca Discord üzerinden kabul ediyoruz.',
+ 'vi': 'Hiện tại chúng tôi chỉ nhận yêu cầu qua Discord.',
+ 'ko': '현재는 Discord에서만 신청을 받고 있습니다.',
+ 'fa': 'ما در حال حاضر درخواست\u200cها را فقط در Discord می\u200cپذیریم.',
+ 'mr': 'आम्ही सध्या फक्त Discord वर विनंत्या स्वीकारतो.',
+ 'te': 'ప్రస్తుతం మేము Discord లో మాత్రమే అభ్యర్థనలను స్వీకరిస్తున్నాం.',
+ 'ta': 'தற்போது Discord இல் மட்டுமே கோரிக்கைகளை ஏற்கிறோம்.',
+ 'sw': 'Kwa sasa tunapokea maombi kupitia Discord tu.',
+ 'th': 'ขณะนี้เรารับคำขอผ่าน Discord เท่านั้น',
+ 'nl': 'We nemen aanvragen op dit moment alleen via Discord aan.',
+ 'uk': 'Зараз ми приймаємо заявки лише в Discord.',
+ 'tl': 'Sa ngayon, sa Discord lang kami tumatanggap ng mga request.',
+ 'pa': 'ਅਸੀਂ ਇਸ ਵੇਲੇ ਸਿਰਫ਼ Discord ਉੱਤੇ ਬੇਨਤੀਆਂ ਸਵੀਕਾਰ ਕਰਦੇ ਹਾਂ।',
+ 'gu': 'અમે હાલમાં ફક્ત Discord પર વિનંતીઓ સ્વીકારીએ છીએ.',
+}
+
+def wa_link(lang):
+    if not WHATSAPP_OPEN:
+        return f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)} data-wa-closed>{icon("whatsapp")}WhatsApp</a>'
+    gate = ' data-gate' if WHATSAPP_QUIZ and lang in JOIN_GATE else ''
+    return f'<a class="btn primary" href="{WHATSAPP[lang]}"{link_attrs(WHATSAPP[lang])}{gate}>{icon("whatsapp")}WhatsApp</a>'
+
+def wa_closed_html(lang):
+    """The note behind the WhatsApp buttons while the group is closed; site.js opens it."""
+    close = JOIN_GATE.get(lang, JOIN_GATE['en'])['close']
+    return (f'<dialog class="gate" id="wa-closed" aria-labelledby="wa-closed-title"><div class="gate-in">'
+            f'<h2 id="wa-closed-title">WhatsApp</h2><p>{esc(WA_CLOSED[lang])}</p>'
+            f'<p class="cta-links"><a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a></p>'
+            f'<button class="gate-x" type="button" aria-label="{esc(close)}">×</button></div></dialog>')
+
+def gate_html(lang):
+    """The question dialog, once per page; site.js opens it when a WhatsApp button is clicked. No <form>: the CSP allows none."""
+    g = JOIN_GATE.get(lang)
+    if not g: return ''
+    qs = ''.join(f'<fieldset data-a="{"y" if want else "n"}"><legend>{k}. {esc(q)}</legend>'
+                 f'<label><input type="radio" name="q{k}" value="y"><span>{esc(g["yes"])}</span></label>'
+                 f'<label><input type="radio" name="q{k}" value="n"><span>{esc(g["no"])}</span></label></fieldset>'
+                 for k, (q, want) in enumerate(g['qs'], 1))
+    read = ''.join(f'<a class="btn" href="{url(lang, OF_EN[lang][e])}">{esc(NAV[lang][OF_EN[lang][e]])}</a>'
+                   for e in ('manifesto', 'full-faq') if e in OF_EN[lang])
+    debate = DEBATE.get(lang, DEBATE['en'])[2]
+    return (f'<dialog class="gate" id="join-gate" aria-labelledby="gate-title" data-step="ask"><div class="gate-in">'
+            f'<h2 id="gate-title">{esc(g["title"])}</h2>'
+            f'<div data-show="ask missing"><p>{esc(g["intro"])}</p>{qs}<p class="gate-missing" data-show="missing" role="alert">{esc(g["missing"])}</p>'
+            f'<p class="cta-links"><button class="btn primary gate-go" type="button">{esc(g["go"])}</button></p></div>'
+            f'<div data-show="ok"><p>{esc(g["ok"])}</p><p class="cta-links"><a class="btn primary" href="{WHATSAPP[lang]}"{link_attrs(WHATSAPP[lang])}>{icon("whatsapp")}{esc(g["ok_btn"])}</a></p></div>'
+            f'<div data-show="fail"><p>{esc(g["fail"])}</p><p class="cta-links">{read}'
+            f'<a class="btn" href="{DEBATE_DISCORD}"{link_attrs(DEBATE_DISCORD)}>{icon("discord")}{esc(debate)}</a></p>'
+            f'<p class="gate-share" data-share hidden>{esc(SHARE[lang][4])}</p><p class="cta-links">{share_btn(lang)}</p></div>'
+            f'<button class="gate-x" type="button" value="close" aria-label="{esc(g["close"])}">×</button></div></dialog>')
+
+# Share button: on phones the system's share sheet (navigator.share), elsewhere a small dialog with share links and the
+# address to copy. Nothing is loaded from other servers: the links only open when clicked. Hidden without JavaScript.
+# (share, dialog title, copy, copied, line in the WhatsApp questions' "fail" step, e-mail)
+SHARE = {
+ 'en': ('Share', 'Share Pro Extinction', 'Copy link', 'Link copied', 'You can still help: share our website!', 'E-mail'),
+ 'de': ('Teilen', 'Pro Extinction teilen', 'Link kopieren', 'Link kopiert', 'Du kannst trotzdem helfen: Teile unsere Website!', 'E-Mail'),
+ 'pl': ('Udostępnij', 'Udostępnij Pro Extinction', 'Kopiuj link', 'Link skopiowany', 'Nadal możesz pomóc: udostępnij naszą stronę!', 'E-mail'),
+ 'es': ('Compartir', 'Compartir Pro Extinction', 'Copiar enlace', 'Enlace copiado', 'Aun así puedes ayudar: ¡comparte nuestra web!', 'Correo'),
+ 'it': ('Condividi', 'Condividi Pro Extinction', 'Copia link', 'Link copiato', 'Puoi comunque aiutare: condividi il nostro sito!', 'E-mail'),
+ 'fr': ('Partager', 'Partager Pro Extinction', 'Copier le lien', 'Lien copié', 'Tu peux quand même aider : partage notre site !', 'E-mail'),
+ 'pt': ('Compartilhar', 'Compartilhar Pro Extinction', 'Copiar link', 'Link copiado', 'Você ainda pode ajudar: compartilhe nosso site!', 'E-mail'),
+ 'ru': ('Поделиться', 'Поделиться Pro Extinction', 'Скопировать ссылку', 'Ссылка скопирована', 'Ты всё равно можешь помочь: поделись нашим сайтом!', 'E-mail'),
+ 'zh': ('分享', '分享 Pro Extinction', '复制链接', '链接已复制', '你仍然可以帮忙：分享我们的网站！', '电子邮件'),
+ 'hi': ('शेयर करें', 'Pro Extinction शेयर करें', 'लिंक कॉपी करें', 'लिंक कॉपी हो गया', 'आप फिर भी मदद कर सकते हैं: हमारी वेबसाइट शेयर करें!', 'ईमेल'),
+ 'ar': ('مشاركة', 'شارك Pro Extinction', 'نسخ الرابط', 'تم نسخ الرابط', 'لا يزال بإمكانك المساعدة: شارك موقعنا!', 'البريد الإلكتروني'),
+ 'bn': ('শেয়ার করুন', 'Pro Extinction শেয়ার করুন', 'লিংক কপি করুন', 'লিংক কপি হয়েছে', 'তবুও আপনি সাহায্য করতে পারেন: আমাদের ওয়েবসাইট শেয়ার করুন!', 'ইমেইল'),
+ 'ur': ('شیئر کریں', 'Pro Extinction شیئر کریں', 'لنک کاپی کریں', 'لنک کاپی ہو گیا', 'آپ پھر بھی مدد کر سکتے ہیں: ہماری ویب سائٹ شیئر کریں!', 'ای میل'),
+ 'id': ('Bagikan', 'Bagikan Pro Extinction', 'Salin tautan', 'Tautan disalin', 'Kamu tetap bisa membantu: bagikan situs kami!', 'Email'),
+ 'ja': ('シェア', 'Pro Extinction をシェア', 'リンクをコピー', 'リンクをコピーしました', 'それでも手伝えます：私たちのサイトをシェアしてください！', 'メール'),
+ 'tr': ('Paylaş', "Pro Extinction'ı paylaş", 'Bağlantıyı kopyala', 'Bağlantı kopyalandı', 'Yine de yardım edebilirsin: sitemizi paylaş!', 'E-posta'),
+ 'vi': ('Chia sẻ', 'Chia sẻ Pro Extinction', 'Sao chép liên kết', 'Đã sao chép liên kết', 'Bạn vẫn có thể giúp: hãy chia sẻ trang web của chúng tôi!', 'Email'),
+ 'ko': ('공유', 'Pro Extinction 공유하기', '링크 복사', '링크가 복사되었습니다', '그래도 도울 수 있습니다: 우리 웹사이트를 공유해 주세요!', '이메일'),
+ 'fa': ('اشتراک\u200cگذاری', 'Pro Extinction را به اشتراک بگذار', 'کپی پیوند', 'پیوند کپی شد', 'باز هم می\u200cتوانی کمک کنی: وب\u200cسایت ما را به اشتراک بگذار!', 'ایمیل'),
+ 'mr': ('शेअर करा', 'Pro Extinction शेअर करा', 'लिंक कॉपी करा', 'लिंक कॉपी झाली', 'तरीही तुम्ही मदत करू शकता: आमची वेबसाइट शेअर करा!', 'ईमेल'),
+ 'te': ('షేర్ చేయండి', 'Pro Extinction ను షేర్ చేయండి', 'లింక్ కాపీ చేయండి', 'లింక్ కాపీ అయింది', 'అయినా మీరు సహాయం చేయవచ్చు: మా వెబ్‌సైట్‌ను షేర్ చేయండి!', 'ఈమెయిల్'),
+ 'ta': ('பகிர்', 'Pro Extinction ஐப் பகிர்', 'இணைப்பை நகலெடு', 'இணைப்பு நகலெடுக்கப்பட்டது', 'நீங்கள் இன்னும் உதவலாம்: எங்கள் இணையதளத்தைப் பகிருங்கள்!', 'மின்னஞ்சல்'),
+ 'sw': ('Shiriki', 'Shiriki Pro Extinction', 'Nakili kiungo', 'Kiungo kimenakiliwa', 'Bado unaweza kusaidia: shiriki tovuti yetu!', 'Barua pepe'),
+ 'th': ('แชร์', 'แชร์ Pro Extinction', 'คัดลอกลิงก์', 'คัดลอกลิงก์แล้ว', 'คุณยังช่วยได้: แชร์เว็บไซต์ของเรา!', 'อีเมล'),
+ 'nl': ('Delen', 'Pro Extinction delen', 'Link kopiëren', 'Link gekopieerd', 'Je kunt nog steeds helpen: deel onze website!', 'E-mail'),
+ 'uk': ('Поділитися', 'Поділитися Pro Extinction', 'Скопіювати посилання', 'Посилання скопійовано', 'Ти все одно можеш допомогти: поділися нашим сайтом!', 'E-mail'),
+ 'tl': ('Ibahagi', 'Ibahagi ang Pro Extinction', 'Kopyahin ang link', 'Nakopya ang link', 'Makakatulong ka pa rin: ibahagi ang aming website!', 'Email'),
+ 'pa': ('ਸਾਂਝਾ ਕਰੋ', 'Pro Extinction ਸਾਂਝਾ ਕਰੋ', 'ਲਿੰਕ ਕਾਪੀ ਕਰੋ', 'ਲਿੰਕ ਕਾਪੀ ਹੋ ਗਿਆ', 'ਤੁਸੀਂ ਫਿਰ ਵੀ ਮਦਦ ਕਰ ਸਕਦੇ ਹੋ: ਸਾਡੀ ਵੈੱਬਸਾਈਟ ਸਾਂਝੀ ਕਰੋ!', 'ਈਮੇਲ'),
+ 'gu': ('શેર કરો', 'Pro Extinction શેર કરો', 'લિંક કૉપિ કરો', 'લિંક કૉપિ થઈ ગઈ', 'તમે છતાં મદદ કરી શકો છો: અમારી વેબસાઇટ શેર કરો!', 'ઈમેલ'),
+}
+SHARE_NETS = (('whatsapp', 'WhatsApp'), ('x', 'X'), ('facebook', 'Facebook'), ('telegram', 'Telegram'), ('reddit', 'Reddit'))
+
+def share_btn(lang):
+    return f'<button class="btn share" type="button" data-share hidden>{icon("share")}{esc(SHARE[lang][0])}</button>'
+
+def share_html(lang):
+    """The share dialog, once per page; site.js fills in the page address when it opens."""
+    label, title, copy, copied, _, mail = SHARE[lang]
+    close = JOIN_GATE.get(lang, JOIN_GATE['en'])['close']
+    nets = ''.join(f'<a class="btn" data-net="{n}" target="_blank" rel="noopener" aria-describedby="new-tab">{icon(n) if n in ICON else ""}{name}</a>' for n, name in SHARE_NETS)
+    return (f'<dialog class="gate share-box" id="share-box" aria-labelledby="share-title" data-text="{esc(T[lang]["sub"])}"><div class="gate-in">'
+            f'<h2 id="share-title">{esc(title)}</h2><p class="cta-links">{nets}<a class="btn" data-net="mail">{icon("mail")}{esc(mail)}</a></p>'
+            f'<p class="share-copy"><input class="share-url" type="text" dir="ltr" readonly aria-label="URL"><button class="btn primary" type="button">{esc(copy)}</button></p>'
+            f'<p class="share-done" role="status" hidden>{esc(copied)}</p>'
+            f'<button class="gate-x" type="button" aria-label="{esc(close)}">×</button></div></dialog>')
+
+ICON = {'x': 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z', 'tiktok': 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z', 'instagram': 'M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077', 'youtube': 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z', 'facebook': 'M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z', 'discord': 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z', 'whatsapp': 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z', 'share': 'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z', 'mail': 'M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'}
 icon = lambda n: f'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="{ICON[n]}"/></svg>'
 # Lines of the original language pages that were "join the team" buttons; rendered as WhatsApp + Discord buttons.
 # (lang, slug): line indices. DROP: PL line 9 is a "join" link right above the same heading and its buttons.
@@ -717,7 +1250,11 @@ KINDS_BY_HAND = {
     ('en', 'suffering-in-detail'): _SUF, ('es', 'sufrimiento-en-detalle'): _SUF, ('it', 'la-sofferenza-nei-dettagli'): _SUF,
     ('de', 'leid-im-detail'): _kinds(h=(4, 14, 26), h3=(6, 8, 10, 12, 16, 18, 20, 22, 24, 29, 31, 33, 35, 37), p=(3,)),
     ('pl', 'znaczenie-cierpienia'): _kinds(h=(1, 18, 30), h3=(8, 10, 12, 14, 16, 20, 22, 24, 26, 28, 32, 34, 36, 38, 40), p=(5,)),
+    # Criticism: the parts of "Veganism" are sub-chapters; "Who would know?" is a sentence, not a heading.
+    ('en', 'criticism-of-different-pro-life-ideologies'): _kinds(h3=(76, 83, 87, 95, 103, 109, 117, 127), p=(90,)),
 }
+# Pages whose chapters are numbered (1. Human Rights, 2. Left-wing politics …), by English slug.
+NUMBERED = {'criticism-of-different-pro-life-ideologies'}
 
 # Pictures from the English site (content/images.json, files in presentation/img), numbered so unwanted ones can be named.
 IMAGES = json.loads((ROOT / 'content' / 'images.json').read_text(encoding='utf-8'))
@@ -769,8 +1306,8 @@ def own_pics(slug, rest):
     return found
 
 def join_buttons(lang):
-    return (f'<p class="cta-links join"><a class="btn primary" href="{WHATSAPP[lang]}" rel="noopener">{icon("whatsapp")}WhatsApp</a>'
-            f'<a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a></p>')
+    return (f'<p class="cta-links join">{wa_link(lang)}'
+            f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a></p>')
 
 CONCEPTS = {
  'a-ember':  dict(name='Ember',  mode='dark',  fonts='family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Oswald:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500'),
@@ -779,7 +1316,7 @@ CONCEPTS = {
 
 def linkify(s):
     s = esc(s)
-    s = re.sub(r'(https?://[^\s<]+)', lambda m: f'<a href="{m.group(1)}" rel="noopener">{m.group(1)}</a>', s)
+    s = re.sub(r'(https?://[^\s<]+)', lambda m: f'<a href="{m.group(1)}"{link_attrs(m.group(1))}>{m.group(1)}</a>', s)
     return re.sub(r'\b([\w.+-]+@[\w-]+\.[\w.-]+)\b', r'<a href="mailto:\1">\1</a>', s)
 
 ID_PREFIX = ''   # set by present.py so ids stay unique when all views live in one document
@@ -887,7 +1424,7 @@ def render_blocks(blocks, used, lang='en'):
     out, toc = [], []
     for b in blocks:
         if b[0] == 'h':
-            i = slug_id(b[1], used); toc.append((i, b[1].rstrip(':：')))
+            i = slug_id(re.sub(r'^\d+\. ', '', b[1]), used); toc.append((i, b[1].rstrip(':：')))
             out.append(f'<h2 id="{i}">{esc(b[1].rstrip(":："))}</h2>')
         elif b[0] == 'h3':
             i = slug_id(b[1], used); toc.append((i, b[1].rstrip(':：'), 3))
@@ -952,7 +1489,12 @@ def doc_body(lang, slug, lines, full_url, like=None):
         bl = cosmic_outline(bl, blocks_of(rest_like, None, (), ()) if rest_like else None)
     if slug == 'principles-of-the-movement':
         bl = outline(bl, blocks_of(rest_like, None, (), (), kinds=kinds) if rest_like else None)
+    if slug in NUMBERED:   # the number is shown, the anchor stays the chapter's name
+        n = iter(range(1, len(bl) + 1))
+        bl = [(b[0], f'{next(n)}. {b[1]}', *b[2:]) if b[0] == 'h' else b for b in bl]
     body, toc = render_blocks(bl, used, lang)
+    if slug in NUMBERED:   # the overview numbers its entries itself
+        toc = [(x[0], re.sub(r'^\d+\. ', '', x[1]), *x[2:]) for x in toc]
     return title, lede, body, toc, truncated
 
 SOCIAL_EN = json.loads((ROOT / 'content' / 'en' / 'social-media-channels.json').read_text(encoding='utf-8'))
@@ -961,23 +1503,60 @@ SOCIAL = json.loads((ROOT / 'content' / 'social.json').read_text(encoding='utf-8
 # Line positions where a language's own channel page differs from the English one (PL lists Twitter/X too).
 SOCIAL_IDX = {'pl': {65: 67, 77: 79, 88: 90, 91: 93, 94: 96}}
 
+def handle(url):
+    """'@name' from a profile link ('facebook.com/name' for Facebook, which has no @ handles)."""
+    u = urllib.parse.urlsplit(url); name = u.path.strip('/').split('/')[0]
+    return f'facebook.com/{name}' if 'facebook' in u.hostname else '@' + name.lstrip('@')
+
 def social_body(lang, lines, used):
-    """Channel list (content/social.json: language > platform > accounts with links). Headings, intro and notes come
-    from the page's lines (index-aligned with English); account names and channel bios stay as their owners wrote them."""
+    """Channel cards (content/social.json: language > platform > accounts with links), the reader's language first.
+    Groups are headed by the language's own name; intro and notes come from the page's lines (index-aligned with English);
+    account names and channel bios stay as their owners wrote them."""
     L = lambda i: lines[SOCIAL_IDX.get(lang, {}).get(i, i)]
     out, toc = [f'<p>{esc(L(1))}</p><p>{esc(L(2))}</p>'], []
-    for g in SOCIAL:
-        name = L(g['line']).rstrip(':：'); i = slug_id(name, used); toc.append((i, name))
-        out.append(f'<h2 id="{i}">{esc(name)}</h2>')
+    for g in sorted(SOCIAL, key=lambda g: g['lang'] != lang):
+        name = LANG_NAME[g['lang']]; i = slug_id(g['lang'], used); toc.append((i, name))
+        out.append(f'<h2 id="{i}"' + (f' lang="{g["lang"]}"' if g['lang'] != lang else '') + f'>{esc(name)}</h2>')
         for pl in g['platforms']:
             if lang not in pl.get('only', [lang]): continue
-            out.append(f'<h3 class="plat">{icon(pl["name"].lower())}{pl["name"]}</h3>')
+            out.append(f'<h3 class="plat">{icon(pl["name"].lower())}{pl["name"]}<span class="count">{len(pl["items"])}</span></h3>')
             if 'note' in pl: out.append(f'<p class="plat-note">{esc(L(pl["note"]))}</p>')
-            out.append('<ul class="channels">' + ''.join(
-                f'<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '') + f'<a href="{esc(x["url"])}" rel="noopener">{esc(x["label"])}</a>' + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>'
-                for x in pl['items']) + '</ul>')
+            cards = []
+            for x in pl['items']:
+                h = handle(x['url']); nm = x.get('name', '')
+                if nm.lower() == h.lstrip('@').lower(): nm = ''
+                cards.append('<li>' + (figure(x['pic'], 'avatar') if x.get('pic') else '')
+                             + f'<a href="{esc(x["url"])}"{link_attrs(x["url"])}>' + (f'<span class="nm">{esc(nm)}</span>' if nm else '')
+                             + f'<span class="hd" dir="ltr">{esc(h)}</span></a>'
+                             + (f'<span class="bio">{esc(x["desc"])}</span>' if x.get('desc') else '') + '</li>')
+            out.append(f'<ul class="channels{" wide" if any(x.get("desc") for x in pl["items"]) else ""}">' + ''.join(cards) + '</ul>')
     out.append(f'<p class="note">{esc(L(94))}</p>')
     return '\n'.join(out), toc
+
+# FAQ pictures close the answer to an English question (content/images.json "where": ["answer", question number]).
+# Original-language FAQs number their questions differently: English number -> their number.
+FAQ_Q = {'de': {14: 15, 34: 32, 35: 12}, 'es': {14: 15, 34: 33, 35: 12}, 'it': {14: 15, 34: 33, 35: 12},
+         'pl': {34: 32, 35: 37}}   # 34, 35: veganism and antinatalism (FAQ_MORE); the originals ask them in their own words
+
+# Full FAQ answers that end with a button to a chapter of the criticism page:
+# question number (English and its translations) -> line of that chapter's heading on the criticism page.
+FAQ_MORE = {34: 61, 35: 23}
+CRITICISM = 'criticism-of-different-pro-life-ideologies'
+
+def faq_more(lang, href):
+    """{question number: button to the criticism chapter}, in the page's language. The anchor comes from that page's own toc."""
+    crit = OF_EN[lang].get(CRITICISM)
+    if not crit: return {}
+    cl = json.loads((ROOT / 'content' / lang / f'{crit}.json').read_text(encoding='utf-8'))
+    like = json.loads((ROOT / 'content' / 'en' / f'{CRITICISM}.json').read_text(encoding='utf-8')) if crit in AI[lang] else None
+    toc = doc_body(lang, CRITICISM, cl, '', like)[3]
+    out = {}
+    for k, i in FAQ_MORE.items():
+        h = cl[i].strip().rstrip(':：').strip()
+        a = next(x[0] for x in toc if len(x) == 2 and x[1].strip().endswith(h))
+        out[k] = (f'<p class="cta-links"><a class="btn" href="{href(crit)}#{a}">'
+                  f'{esc(NAV[lang][crit])} · {esc(h)} <span aria-hidden="true" class="arr">→</span></a></p>')
+    return out
 
 def faq_body(lang, slug, lines, like=None, href=None):
     t = T[lang]
@@ -985,9 +1564,14 @@ def faq_body(lang, slug, lines, like=None, href=None):
     intro, pairs = faq_pairs(rest, like[len(lines) - len(rest):] if like else None)
     shown = pairs
     intro_html = ''.join(f'<p>{linkify(l)}</p>' for l in intro)
+    more_btn = faq_more(lang, href) if EN_OF[lang][slug] == 'full-faq' else {}
+    if not like: more_btn = {FAQ_Q.get(lang, {}).get(k, k): v for k, v in more_btn.items()}
+    pics = {x['where'][1]: x['n'] for x in IMAGES if x['page'] == EN_OF[lang][slug] and x['where'][0] == 'answer'}
+    if not like: pics = {FAQ_Q.get(lang, {}).get(k, k): n for k, n in pics.items()}
     items = []
     for k, (q, a) in enumerate(shown, 1):   # counter-set keeps each question's number while the search hides others
-        items.append(f'<details style="counter-set:q {k}"><summary>{esc(q)}</summary><div class="a">' + ''.join(f'<p>{linkify(p)}</p>' for p in a) + '</div></details>')
+        items.append(f'<details style="counter-set:q {k}"><summary>{esc(q)}</summary><div class="a">' + ''.join(f'<p>{linkify(p)}</p>' for p in a)
+                     + (figure(pics[k], 'pic', lang) if k in pics else '') + more_btn.get(k, '') + '</div></details>')
     more = ''
     if EN_OF[lang][slug] == 'full-faq':
         ph, cnt, none, end, mail = FAQ_FIND[lang]
@@ -1080,9 +1664,9 @@ def footer(lang, cta=True):
   <hr class="slash">
   <h2>{t["action"]}</h2>
   <p class="cta-sub">{t["tagline"]}</p>
-  <p class="cta-links"><a class="btn primary" href="{WHATSAPP[lang]}" rel="noopener">{icon("whatsapp")}WhatsApp</a><a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a></p>
+  <p class="cta-links">{wa_link(lang)}<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>
 </section>
-''' if cta else '') + f'''<footer class="foot" data-peace="{esc(peace(lang))}" data-discord="{DISCORD}"><p class="mono">{t["foot"].replace("Global", '<span class="glob">Global</span>', 1)}{legal_links(lang)}</p>{born_line(lang)}</footer>'''
+''' if cta else '') + f'''<footer class="foot" data-peace="{esc(peace(lang))}" data-discord="{DISCORD}"><p class="mono">{t["foot"].replace("Global", '<span class="glob">Global</span>', 1)}{legal_links(lang)}<span data-share hidden> · <button class="share legal" type="button">{esc(SHARE[lang][0])}</button></span></p>{born_line(lang)}<span id="new-tab" hidden>{esc(NEW_TAB[lang])}</span></footer>{(gate_html(lang) if WHATSAPP_QUIZ else '') if WHATSAPP_OPEN else wa_closed_html(lang)}{share_html(lang)}'''
 
 def born_line(lang):
     label, humans, animals, wild, insects = BORN[lang]
@@ -1119,9 +1703,9 @@ def page_main(lang, slug, kind, href=None):
     lede_html = f'<p class="lede">{esc(lede)}</p>' if lede else ''
     soc = next((x for x, _ in PAGES[lang] if EN_OF[lang][x] == 'social-media-channels'), None)
     if EN_OF[lang][slug] == 'contact':   # every way to reach us right on the contact page, not only in the footer
-        body += (f'<p class="cta-links join"><a class="btn primary" href="{WHATSAPP[lang]}" rel="noopener">{icon("whatsapp")}WhatsApp</a>'
-                 f'<a class="btn primary" href="{DISCORD}" rel="noopener">{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a></p>'
-                 + ('<!--social-link-->' if soc else ''))
+        body += (f'<p class="cta-links join">{wa_link(lang)}'
+                 f'<a class="btn primary" href="{DISCORD}"{link_attrs(DISCORD)}>{icon("discord")}Discord</a><a class="btn" href="mailto:{EMAIL}">{icon("mail")}{EMAIL}</a>{share_btn(lang)}</p>'
+                 + '<div class="debate">' + debate_html(lang) + ('<!--social-link-->' if soc else '') + '</div>')
     body = body.replace('<!--social-link-->', f'<p class="go"><a class="btn" href="{href(soc)}">{esc(NAV[lang][soc])} <span aria-hidden="true">&rarr;</span></a></p>' if soc else '')
     main = f'<article class="doc"><header class="doc-head"><p class="mono kicker">{esc(NAV[lang][slug])}</p><h1>{esc(title)}</h1>{lede_html}<hr class="slash"></header>{toc_html}<div class="prose">{notes}{body}</div></article>'
     if EN_OF[lang][slug] == 'cosmic-extinction':   # easter egg: the stars go out while reading (eggs.js)
@@ -1130,7 +1714,7 @@ def page_main(lang, slug, kind, href=None):
 
 # ---- search engines
 SITE_URL = 'https://proextinction.com'
-INDEXABLE = False   # the one switch: True lets search engines in (robots.txt, X-Robots-Tag header in vercel.json, meta robots)
+INDEXABLE = True    # the one switch: True lets search engines in (robots.txt, X-Robots-Tag header in vercel.json, meta robots)
 HREFLANG = {'zh': 'zh-Hans'}
 SEO = {l: json.loads((ROOT / 'content' / 'seo' / f'{l}.json').read_text(encoding='utf-8')) for l in LANGS}
 IMPRINT = False   # legal notice (content/legal/<lang>.json "imprint") kept ready but not published; True builds it and links it in the footer
@@ -1178,15 +1762,29 @@ def alternates(lang, slug):
 def jsonld(lang):
     return json.dumps({'@context': 'https://schema.org', '@graph': [
         {'@type': 'Organization', '@id': SITE_URL + '/#org', 'name': 'Pro Extinction', 'url': SITE_URL, 'email': EMAIL,
-         'logo': SITE_URL + '/logo.png', 'foundingDate': '2024', 'sameAs': [DISCORD]},
+         'logo': SITE_URL + '/logo.png', 'foundingDate': '2024', 'sameAs': [DISCORD] + SAME_AS},
         {'@type': 'WebSite', '@id': SITE_URL + '/#site', 'name': 'Pro Extinction', 'url': SITE_URL,
          'inLanguage': LANGS, 'publisher': {'@id': SITE_URL + '/#org'}}]}, ensure_ascii=False)
 
-def head(lang, path, title, desc, alts=(), index=True, home=False):
-    """<head> contents shared by every page: theme before paint, SEO tags, the one stylesheet."""
+# The project's own main accounts (content/social.json lists every activist channel), for search engines' knowledge panel.
+SAME_AS = ['https://www.tiktok.com/@proextinction.com', 'https://www.instagram.com/proextinction', 'https://youtube.com/@pro_extinction']
+
+def faq_ld(lang, slug):
+    """FAQPage data for search engines: the page's questions with their answers as plain text."""
+    lines = json.loads((ROOT / 'content' / lang / f'{slug}.json').read_text(encoding='utf-8'))
+    like = json.loads((ROOT / 'content' / 'en' / f'{EN_OF[lang][slug]}.json').read_text(encoding='utf-8')) if slug in AI[lang] else None
+    rest = head_lede(lines, like)[2]
+    pairs = faq_pairs(rest, like[len(lines) - len(rest):] if like else None)[1]
+    return json.dumps({'@context': 'https://schema.org', '@type': 'FAQPage', 'inLanguage': lang, 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': '\n'.join(a)}} for q, a in pairs]}, ensure_ascii=False)
+
+def head(lang, path, title, desc, alts=(), index=True, home=False, data=None):
+    """<head> contents shared by every page: theme before paint, SEO tags, the one stylesheet.
+    data: JSON-LD for search engines (the home page's organisation is added by itself)."""
     robots = 'index, follow' if INDEXABLE and index else 'noindex, nofollow'
     links = ''.join(f'<link rel="alternate" hreflang="{h}" href="{SITE_URL}{p}">\n' for h, p in alts)
-    ld = f'<script type="application/ld+json">{jsonld(lang)}</script>\n' if home else ''
+    data = data or (jsonld(lang) if home else None)
+    ld = '<script type="application/ld+json">' + data.replace('</', '<\\/') + '</script>\n' if data else ''
     return f'''<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
@@ -1208,18 +1806,30 @@ def head(lang, path, title, desc, alts=(), index=True, home=False):
 <script>(function(){{var d=document.documentElement,m=null;try{{m=new URLSearchParams(location.search).get('theme')||localStorage.getItem('pe-theme')}}catch(e){{}}
 d.dataset.theme=m==='light'?'light':'dark'}})()</script>'''
 
+HOME_TITLE = {'en': 'Ending forced existence and suffering', 'de': 'Erzwungene Existenz und Leid beenden',
+    'pl': 'Koniec przymusowego istnienia i cierpienia', 'es': 'Acabar con la existencia impuesta y el sufrimiento',
+    'it': "Fine dell'esistenza forzata e della sofferenza", 'fr': "En finir avec l'existence forcée et la souffrance",
+    'pt': 'Acabar com a existência forçada e o sofrimento', 'ru': 'Конец вынужденному существованию и страданию',
+    'zh': '终结被迫的存在与苦难', 'hi': 'जबरन अस्तित्व और पीड़ा का अंत', 'ar': 'إنهاء الوجود القسري والمعاناة',
+    'bn': 'জোরপূর্বক অস্তিত্ব ও দুঃখের অবসান', 'ur': 'جبری وجود اور تکلیف کا خاتمہ', 'id': 'Mengakhiri keberadaan paksa dan penderitaan',
+    'ja': '強いられた存在と苦しみを終わらせる', 'tr': 'Zorla var olmaya ve acıya son', 'vi': 'Chấm dứt sự tồn tại bị ép buộc và khổ đau',
+    'ko': '강요된 존재와 고통을 끝내다', 'fa': 'پایان دادن به هستی اجباری و رنج', 'mr': 'लादलेल्या अस्तित्वाचा आणि दुःखाचा अंत',
+    'te': 'బలవంతపు ఉనికికి, బాధకు ముగింపు', 'ta': 'கட்டாய இருப்புக்கும் துன்பத்துக்கும் முடிவு', 'sw': 'Kukomesha uwepo wa kulazimishwa na mateso',
+    'th': 'ยุติการดำรงอยู่ที่ถูกบังคับและความทุกข์', 'nl': 'Een einde aan gedwongen bestaan en lijden', 'uk': 'Кінець вимушеному існуванню і стражданню',
+    'tl': 'Wakasan ang sapilitang pag-iral at pagdurusa', 'pa': 'ਜ਼ਬਰਦਸਤੀ ਹੋਂਦ ਅਤੇ ਦੁੱਖ ਦਾ ਅੰਤ', 'gu': 'ફરજિયાત અસ્તિત્વ અને દુઃખનો અંત'}
+
 def page_html(lang, slug, kind, title=None, main=None, desc=None, index=True):
     if main is None: title, main, body_class = page_main(lang, slug, kind)
     else: body_class = 'page'
-    # search result titles: the home page says what the organisation is, in its own language (the English slogan is the same everywhere);
+    # search result titles (Google shows about 60 characters): the home page says briefly what the organisation is, in its own language (the English slogan is the same everywhere);
     # other pages use their heading, or the short menu name when the heading is long or set in capitals
-    if kind == 'home': full = f'Pro Extinction | {T[lang]["sub"].rstrip(".")}'
+    if kind == 'home': full = f'Pro Extinction | {HOME_TITLE[lang]}'
     else: full = f'{NAV[lang][slug] if slug in NAV[lang] and (len(title) > 50 or title.isupper()) else title} | Pro Extinction'
     alts = alternates(lang, slug) if slug in EN_OF[lang] else ()
     return f'''<!doctype html>
 <html lang="{lang}" dir="{DIR(lang)}" data-concept="b-poster">
 <head>
-{head(lang, url(lang, slug), full, desc or SEO[lang][slug], alts, index, kind == 'home')}
+{head(lang, url(lang, slug), full, desc or SEO[lang][slug], alts, index, kind == 'home', faq_ld(lang, slug) if kind == 'faq' else None)}
 </head>
 <body class="{body_class}">
 {header(lang, slug)}
@@ -1254,7 +1864,8 @@ def home_main(lang, href):
 </section>
 <section class="mission"><hr class="slash"><p class="mono kicker">{t["mission"]}</p><blockquote>{esc(t["mission_text"])}</blockquote></section>
 <section class="efforts"><ol>{efforts}</ol></section>
-<section class="questions"><h2>{t["questions"]}</h2>{read_more}<p class="q-mail">{linkify(t["questions_text"])}</p>{ki}</section>'''
+<section class="questions"><h2>{t["questions"]}</h2>{read_more}<p class="q-mail">{linkify(t["questions_text"])}</p></section>
+<section class="questions debate">{debate_html(lang)}{ki}</section>'''
 
 def _svg_uri(name):
     svg = (ASSETS / f'{name}.svg').read_text(encoding='utf-8').replace('currentColor', '#000')
@@ -1279,18 +1890,24 @@ def css():
 def build():
     (OUT / 'style.css').write_text(css(), encoding='utf-8')
     (OUT / 'site.js').write_text((ASSETS / 'site.js').read_text(encoding='utf-8'), encoding='utf-8')
-    paths = []   # (path, alternates, indexable) for the sitemap
+    paths = []   # (path, alternates, last change) for the sitemap
+    old = sitemap_dates()
+    def write(f, html, path):
+        """Writes a page; returns the date it last changed (kept from the sitemap while the file stays the same)."""
+        same = f.exists() and f.read_text(encoding='utf-8') == html
+        f.write_text(html, encoding='utf-8')
+        return old.get(path) if same and old.get(path) else datetime.date.today().isoformat()
     for lang in LANGS:
         d = OUT / lang; d.mkdir(parents=True, exist_ok=True)
         for slug, kind in PAGES[lang]:
-            (d / ('index.html' if slug == 'home' else f'{slug}.html')).write_text(page_html(lang, slug, kind), encoding='utf-8')
-            paths.append((url(lang, slug), alternates(lang, slug)))
+            day = write(d / ('index.html' if slug == 'home' else f'{slug}.html'), page_html(lang, slug, kind), url(lang, slug))
+            paths.append((url(lang, slug), alternates(lang, slug), day))
     for lang in LEGAL:
         for key in ('imprint', 'privacy')[not IMPRINT:]:
             p = LEGAL[lang][key]; title, main = legal_main(lang, key)
             draft = any(DRAFT.search(x) for x in p['text'])
-            (OUT / lang / f'{p["slug"]}.html').write_text(page_html(lang, p['slug'], 'doc', title, main, p['description'], not draft), encoding='utf-8')
-            if not draft: paths.append((url(lang, p['slug']), ()))
+            day = write(OUT / lang / f'{p["slug"]}.html', page_html(lang, p['slug'], 'doc', title, main, p['description'], not draft), url(lang, p['slug']))
+            if not draft: paths.append((url(lang, p['slug']), (), day))
     (OUT / 'index.html').write_text(root_page(), encoding='utf-8')
     (OUT / '404.html').write_text(not_found(), encoding='utf-8')
     (OUT / 'sitemap.xml').write_text(sitemap(paths), encoding='utf-8')
@@ -1298,11 +1915,17 @@ def build():
     hosting()
     print('built', len(paths), 'pages into site/')
 
+def sitemap_dates():
+    """{path: lastmod} from the sitemap of the previous build."""
+    f = OUT / 'sitemap.xml'
+    if not f.exists(): return {}
+    return {loc[len(SITE_URL):]: day for loc, day in re.findall(r'<loc>([^<]+)</loc><lastmod>([^<]+)</lastmod>', f.read_text(encoding='utf-8'))}
+
 def sitemap(paths):
     rows = []
-    for p, alts in paths:
+    for p, alts, day in paths:
         alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{SITE_URL}{a}"/>' for h, a in alts)
-        rows.append(f'<url><loc>{SITE_URL}{p}</loc>{alt}</url>')
+        rows.append(f'<url><loc>{SITE_URL}{p}</loc><lastmod>{day}</lastmod>{alt}</url>')
     return ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
             + '\n'.join(rows) + '\n</urlset>\n')
 
@@ -1336,21 +1959,34 @@ def not_found():
 {head('en', '/404', 'Page not found | Pro Extinction', 'This page does not exist.', index=False)}
 </head>
 <body class="page">
-<main id="main" class="shell"><article class="doc"><header class="doc-head"><p class="mono kicker">404</p><h1>Page not found</h1><p class="lede">This page does not exist (any more). Pick your language to go to the start page.</p><hr class="slash"></header>
-<ul class="lang-list">{items}</ul></article></main>
+<main id="main" class="shell nf">
+<a class="nf-home" href="{url('en', 'home')}">{HERO_LOGO}<span class="wordmark">PRO EXTINCTION</span></a>
+<p class="mono kicker">404 · Page not found</p>
+<h1>This page does not exist</h1>
+<p class="lede">Non-existence is not a problem. Suffering is. Read why we want to end it.</p>
+<p class="hero-cta"><a class="btn primary" href="{url('en', 'manifesto')}">Read the manifesto</a><a class="btn" href="{url('en', 'home')}">Start page</a></p>
+<hr class="slash">
+<p class="mono kicker">Choose your language</p>
+<ul class="lang-list">{items}</ul>
+<p class="hero-tag">{T['en']['tagline']}</p>
+</main>
 </body>
 </html>
 '''
+
+# Cloudflare Web Analytics (owners' decision, October 2026): cookieless visitor counts. Cloudflare adds its script to every page;
+# the CSP allows only that script and the address it reports to. Nothing else may load from other servers (see the privacy policy).
+ANALYTICS = ('https://static.cloudflareinsights.com', 'https://cloudflareinsights.com')
 
 HEADERS = {
     'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'X-Frame-Options': 'DENY', 'Cross-Origin-Opener-Policy': 'same-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
     'Strict-Transport-Security': 'max-age=31536000',   # HTTPS only; no includeSubDomains, so other subdomains stay untouched
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; "
-                               "img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'"}
+    'Content-Security-Policy': f"default-src 'self'; script-src 'self' 'unsafe-inline' {ANALYTICS[0]}; style-src 'self' 'unsafe-inline'; font-src 'self'; "
+                               f"img-src 'self' data:; connect-src 'self' {ANALYTICS[1]}; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; form-action 'none'"}
 
 def hosting():
-    """Cloudflare Pages reads site/_headers and site/_redirects (neither is served as a page). Both follow INDEXABLE."""
+    """Cloudflare reads site/_headers and site/_redirects (neither is served as a page). Both follow INDEXABLE."""
     hdr = ({} if INDEXABLE else {'X-Robots-Tag': 'noindex, nofollow'}) | HEADERS
     (OUT / '_headers').write_text('/*\n' + ''.join(f'  {k}: {v}\n' for k, v in hdr.items())
                                   + '\n/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n', encoding='utf-8')

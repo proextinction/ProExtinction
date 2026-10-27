@@ -256,7 +256,7 @@
   "page": "history",
   "where": [
    "after",
-   15
+   5
   ],
   "file": "bild-22.webp",
   "w": 1280,
@@ -268,7 +268,7 @@
   "page": "history",
   "where": [
    "after",
-   16
+   6
   ],
   "file": "bild-23.webp",
   "w": 840,
@@ -280,7 +280,7 @@
   "page": "history",
   "where": [
    "after",
-   17
+   7
   ],
   "file": "bild-24.webp",
   "w": 992,
@@ -358,5 +358,17 @@
   "w": 900,
   "h": 900,
   "source": "https://yt3.googleusercontent.com/gnAfbNc0EJwf1dqoSbN5nnTZmMFB-qYDKulVMIYeLqul_eXXWa4r1MfmejFW3pYhHSFpSexB=s900-c-k-c0x00ffffff-no-rj"
+ },
+ {
+  "n": 31,
+  "page": "full-faq",
+  "where": [
+   "answer",
+   14
+  ],
+  "file": "bild-31.webp",
+  "w": 1000,
+  "h": 1000,
+  "source": "Pro Extinction (owners), 2026-10"
  }
 ]

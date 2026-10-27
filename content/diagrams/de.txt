@@ -4,31 +4,3 @@ Räuber und Beute|Löwe tötet Zebra|Brutaler, qualvoller Tod|Zebra entkommt|Lö
 Der Kreislauf des Leidens: Geburt führt zu Leid, leidende Lebewesen pflanzen sich fort, und Fortpflanzung führt zu neuen Geburten.
 Kreislauf des|Leidens
 Geburt|Leid|Fortpflanzung
-Neues Beispiel erzeugen
-Dürrezeit|Herde bleibt|Verdurstet|Herde zieht weiter|Krokodile warten|Im Fluss zerrissen|
-Der Winter kommt|Vogel bleibt|Erfriert|Vogel zieht fort|Sturm über dem Meer|Ertrinkt erschöpft|
-Schlupfwespe|Wespe findet Wirt|Wirt von innen gefressen|Kein Wirt gefunden|Larven wachsen nicht|Nachwuchs verhungert|
-Schildkröten schlüpfen|Rennen zum Meer|Von Vögeln gefressen|Erreichen das Wasser|Haie und Netze|Die meisten sterben jung|
-Ein Kind wird geboren|In Armut geboren|Hunger und Krankheit|In Reichtum geboren|Wird trotzdem alt|Krankheit und Tod|Jede Geburt endet im Tod.
-Eierindustrie|Küken ist weiblich|Ausgelaugt, dann getötet|Küken ist männlich|Nutzlos für die Industrie|Am ersten Tag geschreddert|
-Milchindustrie|Kalb ist weiblich|Gemolken, dann getötet|Kalb ist männlich|Der Mutter weggenommen|Für Kalbfleisch getötet|
-Bevölkerungsboom|Kaninchen vermehren sich|Massenhaftes Verhungern|Füchse vermehren sich|Kaninchen werden gejagt|Dann verhungern Füchse|
-Hohes Alter|Körper macht weiter|Schmerz und Demenz|Körper gibt auf|Organe versagen|Stirbt im Krankenhaus|
-Krieg bricht aus|Soldat kämpft|Getötet oder verstümmelt|Soldat verweigert|Gefängnis oder Exil|Familie wird bestraft|
-Die Flut kommt|Vor der Flut fliehen|Haus und Land verloren|Bleiben und ausharren|Wasser steigt weiter|Ertrinkt mit dem Haus|
-Gepardenmutter|Geht jagen|Hyänen holen die Jungen|Bleibt bei den Jungen|Kein Futter kommt|Junge verhungern|
-Spinnennetz|Fliege wird gefangen|Langsam lebendig gefressen|Fliege entkommt|Netz bleibt leer|Spinne verhungert|
-Fischerboot|Fisch wird gefangen|Erstickt an Deck|Fisch entkommt|Größerer Fisch wartet|Lebendig gefressen|
-Chronische Schmerzen|Damit leben|Jahre voller Qual|Schmerzmittel nehmen|Sucht wächst|Entzug oder Überdosis|
-Streunender Hund|Bleibt auf der Straße|Hunger und Autos|Kommt ins Tierheim|Tierheim ist voll|Jahrelang im Käfig|
-Jemanden lieben|Du stirbst zuerst|Dein Mensch trauert|Dein Mensch stirbt zuerst|Du bleibst zurück|Du trauerst|Jede Bindung endet in Trauer.
-Waldbrand|Reh rennt|Erstickt im Rauch|Reh versteckt sich|Feuer erreicht es|Lebendig verbrannt|
-Rangordnung im Rudel|Wolf fordert Anführer|Verletzt oder getötet|Wolf unterwirft sich|Frisst als Letzter|Verhungert im Winter|
-Seuche breitet sich aus|Krankes Reh bleibt|Herde steckt sich an|Reh wird verstoßen|Allein und schwach|Wölfe finden es|
-Montagmorgen|Zur Arbeit aufstehen|Den ganzen Tag müde|Weiterschlafen|Chef ruft an|Gefeuert und noch müde|
-Letztes Stück Pizza|Aufessen|Bauchweh|Liegen lassen|Mitbewohner isst es|Ewige Reue|
-Handy bei 1 %|Ladegerät suchen|Jede Steckdose besetzt|Weiterscrollen|Bildschirm wird schwarz|Allein mit den Gedanken|
-Gruppenarbeit|Alles selbst machen|Andere kriegen das Lob|Nichts tun|Sonst tut auch niemand was|Alle fallen durch|Gewinnen kann man nicht.
-Heiße Sommernacht|Fenster öffnen|Mücken schlemmen|Fenster zu lassen|Zimmer wird zur Sauna|Gar kein Schlaf|
-Software-Update|Jetzt installieren|Alles geht kaputt|Später erinnern|Es fragt wieder|Neustart mitten in der Arbeit|
-Fitnessabo|Ins Fitnessstudio gehen|Eine Woche Muskelkater|Auf dem Sofa bleiben|Zahlt trotzdem weiter|Schuldgefühle und Rückenweh|

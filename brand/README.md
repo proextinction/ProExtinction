@@ -1,10 +1,10 @@
 # brand/
 
-Brand Kit von Pro Extinction, Design B (Poster): eckig, zentriert, Navbar oben, Rot/Schwarz/Silber, Sans.
-Design A (Ember) ist entfernt (siehe `../DECISIONS.md`).
+Brand kit of Pro Extinction, design B (Poster): square, centred, navbar at the top, red/black/silver, sans.
+Design A (Ember) is removed (see `../DECISIONS.md`).
 
-Gemeinsam: `REFERENCE.md` (Rohfassung des Markeninterviews, mit Begründungen).
-`b-poster/` hat `BRAND.md`, `CLAUDE.md`, `README.md`, `tokens.css`, `brand-helmet.html`,
-`brand-props.json`, `wordmark.svg`, `mark.svg` und `beispiel/` mit allen Bausteinen (Desktop und mobil).
+Shared: `REFERENCE.md` (raw notes from the brand interview, with reasons).
+`b-poster/` has `BRAND.md`, `CLAUDE.md`, `README.md`, `tokens.css`, `brand-helmet.html`,
+`brand-props.json`, `wordmark.svg`, `mark.svg` and `beispiel/` with all building blocks (desktop and mobile).
 
-Neu erzeugen nach Änderungen an `tokens.css`: `python3 tools/build_all.py`.
+Generate again after changes to `tokens.css`: `python3 tools/build_all.py`.

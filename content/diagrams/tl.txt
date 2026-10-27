@@ -4,31 +4,3 @@ Pangangaso|Pinatay ng leon ang zebra|Marahas, masakit na kamatayan|Nakatakas ang
 Ang siklo ng pagdurusa: ang pagsilang ay humahantong sa pagdurusa, ang mga nagdurusang nilalang ay nagpaparami, at ang pagpaparami ay humahantong sa mga bagong pagsilang.
 Siklo ng|pagdurusa
 Pagsilang|Pagdurusa|Pagpaparami
-Bagong halimbawa
-Tagtuyot|Nananatili ang kawan|Namatay sa uhaw|Lumipat ang kawan|Naghihintay ang buwaya|Nilapa sa ilog|
-Dumating ang taglamig|Nanatili ang ibon|Namatay sa lamig|Lumipad palayo|Bagyo sa dagat|Nalunod sa pagod|
-Parasitikong putakti|May nakitang host|Kinain mula sa loob|Walang host|Hindi lumaki ang larva|Nagutom ang mga anak|
-Pagpisa ng pawikan|Takbo sa dagat|Kinain ng ibon|Umabot sa tubig|Pating at lambat|Karamihan ay namamatay nang bata|
-Isang batang isinilang|Isinilang na mahirap|Gutom at sakit|Isinilang na mayaman|Tumanda pa rin|Sakit at kamatayan|Bawat pagsilang ay nauuwi sa kamatayan.
-Industriya ng itlog|Babae ang sisiw|Inubos, saka pinatay|Lalaki ang sisiw|Walang silbi sa industriya|Giniling sa unang araw|
-Industriya ng gatas|Babae ang guya|Ginatasan, saka pinatay|Lalaki ang guya|Kinuha sa ina|Pinatay para sa karne|
-Pagdami ng populasyon|Dumami ang kuneho|Malawakang gutom|Dumami ang soro|Hinuli ang kuneho|Nagutom ang soro|
-Katandaan|Tuloy ang katawan|Sakit at demensya|Sumuko ang katawan|Bumigay ang organo|Namatay sa ospital|
-Sumiklab ang digmaan|Lumaban ang sundalo|Napatay o napilay|Tumanggi ang sundalo|Kulungan o pagkatapon|Pinarusahan ang pamilya|
-Dumating ang baha|Tumakas sa baha|Nawala ang bahay at lupa|Nanatili at kumapit|Patuloy ang pagtaas|Nalunod kasama ng bahay|
-Inang cheetah|Umalis para mangaso|Kinuha ng hyena ang anak|Nanatili sa mga anak|Walang dumating na pagkain|Nagutom ang mga anak|
-Sapot ng gagamba|Nahuli ang langaw|Dahan-dahang kinain|Nakatakas ang langaw|Walang laman ang sapot|Nagutom ang gagamba|
-Bangkang pangisda|Nahuli ang isda|Hindi makahinga sa deck|Nakatakas ang isda|Naghihintay ang malaki|Kinain nang buhay|
-Malalang sakit|Tiisin na lang|Taon ng paghihirap|Uminom ng painkiller|Lumalala ang adiksyon|Withdrawal o overdose|
-Asong gala|Iniwan sa kalye|Gutom at sasakyan|Dinala sa shelter|Puno ang shelter|Taon sa hawla|
-Magmahal ng tao|Nauna kang mamatay|Nagluluksa siya|Nauna siyang mamatay|Naiwan ka|Nagluluksa ka|Bawat ugnayan ay nauuwi sa pagluluksa.
-Sunog sa gubat|Tumakbo ang usa|Nasunog sa usok|Nagtago ang usa|Inabot ng apoy|Nasunog nang buhay|
-Hirarkiya ng grupo|Hinamon ng lobo ang lider|Nasugatan o napatay|Sumuko ang lobo|Huling kumain|Nagutom sa taglamig|
-Kumalat ang impeksyon|Nanatili ang may sakit|Nahawa ang kawan|Pinalayas ang usa|Mag-isa at mahina|Nakita ng mga lobo|
-Lunes ng umaga|Bumangon para sa trabaho|Pagod buong araw|Matulog pa|Tumawag ang boss|Sinesante, pagod pa rin|
-Huling hiwa ng pizza|Kainin|Sakit ng tiyan|Iwan|Kinain ng kasama|Panghabambuhay na pagsisisi|
-Cellphone sa 1%|Maghanap ng charger|Puno ang lahat ng saksakan|Mag-scroll pa|Namatay ang screen|Mag-isa sa isip|
-Group project|Gawin lahat|Iba ang pinuri|Walang gawin|Walang gumawa|Bagsak lahat|Walang paraan para manalo.
-Mainit na gabi|Buksan ang bintana|Piyesta ng lamok|Isara|Parang sauna ang kuwarto|Walang tulog|
-Software update|I-install ngayon|Nasira lahat|Paalalahanan mamaya|Nagtanong ulit|Nag-restart habang nagtatrabaho|
-Gym membership|Pumunta sa gym|Masakit ng isang linggo|Manatili sa sofa|Bayad pa rin|Konsensya at sakit ng likod|

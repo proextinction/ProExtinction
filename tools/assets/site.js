@@ -11,43 +11,71 @@
   document.addEventListener('pointerdown', function () { delete d.dataset.kb; }, true);
   var langSel = document.querySelector('.lang-select');
   if (langSel) langSel.addEventListener('change', function () { location.href = langSel.value; });
-  // The OS setting "reduce motion" switches the logo effect off. For testing it can be overridden: add ?motion=on (or ?motion=off to undo).
+  // The OS setting "reduce motion" switches animations off. For testing it can be overridden: add ?motion=on (or ?motion=off to undo).
   try {
     var mp = new URLSearchParams(location.search).get('motion');
     if (mp === 'on') localStorage.setItem('pe-motion', 'on');
     if (mp === 'off') localStorage.removeItem('pe-motion');
     if (localStorage.getItem('pe-motion') === 'on') d.dataset.motion = 'on';
   } catch (e) {}
-  var logo = document.querySelector('.hero-logo');
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches && d.dataset.motion !== 'on';
-  // The effect fires on the 1st hover and then on every 10th one (10, 20, 30 ...). The count survives page loads; ?scare=reset starts over.
-  var hovers = 0;
-  try {
-    if (new URLSearchParams(location.search).get('scare') === 'reset') localStorage.removeItem('pe-hovers');
-    hovers = parseInt(localStorage.getItem('pe-hovers'), 10) || 0;
-  } catch (e) {}
-  var armed = true;
-  function scare(e) {
-    if (!logo || reduce || !armed) return;
-    armed = false;
-    hovers++;
-    try { localStorage.setItem('pe-hovers', String(hovers)); } catch (err) {}
-    var isClick = e && e.type === 'click';
-    if (hovers !== 1 && hovers % 10 !== 0) { if (isClick) armed = true; return; }
-    logo.classList.add('scare'); d.classList.add('scaring');
-    setTimeout(function () {
-      logo.classList.remove('scare'); d.classList.remove('scaring');
-      if (isClick) armed = true; // touch has no mouseleave
-    }, 4000);
+  // ---- WhatsApp: yes/no questions first (dialog from gate_html in build.py). Without JavaScript the button stays a plain link.
+  var gate = document.getElementById('join-gate');
+  if (gate && gate.showModal) {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-gate]');
+      if (!a) return;
+      e.preventDefault();
+      [].forEach.call(gate.querySelectorAll('input'), function (i) { i.checked = false; });
+      gate.dataset.step = 'ask'; gate.showModal();
+    });
+    gate.querySelector('.gate-x').addEventListener('click', function () { gate.close(); });
+    gate.addEventListener('click', function (e) { if (e.target === gate) gate.close(); });   // click on the backdrop
+    gate.querySelector('.gate-go').addEventListener('click', function () {
+      var sets = [].slice.call(gate.querySelectorAll('fieldset'));
+      if (sets.some(function (f) { return !f.querySelector('input:checked'); })) { gate.dataset.step = 'missing'; return; }
+      gate.dataset.step = sets.every(function (f) { return f.querySelector('input:checked').value === f.dataset.a; }) ? 'ok' : 'fail';
+      gate.scrollTop = 0;
+    });
   }
-  if (logo) {
-    logo.addEventListener('mouseenter', scare);
-    logo.addEventListener('click', scare);
-    // re-arm only after the pointer has left, so resting on the logo does not loop the effect
-    logo.addEventListener('mouseleave', function () { if (!logo.classList.contains('scare')) armed = true; });
-    document.addEventListener('mousemove', function (e) {
-      if (!armed && !logo.classList.contains('scare') && !logo.contains(e.target)) armed = true;
-    }, { passive: true });
+
+  // ---- WhatsApp closed (WHATSAPP_OPEN in build.py): the buttons open a note pointing to Discord.
+  var waClosed = document.getElementById('wa-closed');
+  if (waClosed && waClosed.showModal) {
+    document.addEventListener('click', function (e) {
+      if (!(e.target.closest && e.target.closest('a[data-wa-closed]'))) return;
+      e.preventDefault(); waClosed.showModal();
+    });
+    waClosed.querySelector('.gate-x').addEventListener('click', function () { waClosed.close(); });
+    waClosed.addEventListener('click', function (e) { if (e.target === waClosed) waClosed.close(); });
+  }
+  // ---- Share: the system's share sheet on touch screens, otherwise the dialog from share_html in build.py with links and the address.
+  var box = document.getElementById('share-box');
+  if (box && box.showModal) {
+    [].forEach.call(document.querySelectorAll('[data-share][hidden]'), function (x) { x.hidden = false; });
+    var NETS = { whatsapp: 'https://wa.me/?text={t}%20{u}', x: 'https://x.com/intent/post?text={t}&url={u}',
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u={u}', telegram: 'https://t.me/share/url?url={u}&text={t}',
+      reddit: 'https://www.reddit.com/submit?url={u}&title={t}', mail: 'mailto:?subject={t}&body={u}' };
+    var field = box.querySelector('.share-url'), done = box.querySelector('.share-done');
+    document.addEventListener('click', function (e) {
+      if (!(e.target.closest && e.target.closest('.share'))) return;
+      var u = location.origin + location.pathname, t = box.dataset.text;
+      if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+        navigator.share({ title: 'Pro Extinction', text: t, url: u }).catch(function () {});
+        return;
+      }
+      [].forEach.call(box.querySelectorAll('[data-net]'), function (a) {
+        a.href = NETS[a.dataset.net].replace('{u}', encodeURIComponent(u)).replace('{t}', encodeURIComponent('Pro Extinction: ' + t));
+      });
+      field.value = u; done.hidden = true; box.showModal();
+    });
+    box.querySelector('.share-copy button').addEventListener('click', function () {
+      field.select();
+      var ok = function () { done.hidden = false; };
+      if (navigator.clipboard) navigator.clipboard.writeText(field.value).then(ok, function () { if (document.execCommand('copy')) ok(); });
+      else if (document.execCommand('copy')) ok();
+    });
+    box.querySelector('.gate-x').addEventListener('click', function () { box.close(); });
+    box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
   }
 
   // ---- expandable menu below 1000px

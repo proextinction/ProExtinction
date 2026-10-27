@@ -128,15 +128,6 @@ p{margin:0 0 1.15em}
   61%{clip-path:polygon(190% 310%,-210% -90%,300% -200%);opacity:1}
   88%{clip-path:polygon(190% 310%,-210% -90%,300% -200%);opacity:1}
   95%,100%{clip-path:polygon(190% 310%,-210% -90%,300% -200%);opacity:0}}
-/* logo jumpscare: grows fast, shakes, spins back down. Uses individual transform properties so they can run in parallel. */
-.hero-logo.scare{z-index:55;pointer-events:none;color:var(--scare,var(--accent));filter:drop-shadow(0 0 22px var(--scare,var(--accent)));
-  animation:scare-scale 4s cubic-bezier(.2,.8,.2,1) both,scare-spin 4s ease-in-out both,scare-shake .045s steps(1) .2s 44 alternate both}
-/* the logo is a ring (hollow centre), so the page is dimmed behind it for the duration */
-html.scaring body::after{content:"";position:fixed;inset:0;z-index:54;pointer-events:none;background:var(--bg);opacity:0;animation:scare-dim 4s ease both}
-@keyframes scare-dim{0%{opacity:0}4%{opacity:.9}82%{opacity:.9}100%{opacity:0}}
-@keyframes scare-scale{0%{scale:1}4%{scale:1.5}62%{scale:1.5}100%{scale:1}}
-@keyframes scare-spin{0%,60%{rotate:0deg}100%{rotate:720deg}}
-@keyframes scare-shake{0%{translate:0 0}25%{translate:-6px 4px}50%{translate:5px -5px}75%{translate:-4px -4px}100%{translate:6px 4px}}
 html,body{overflow-x:clip}
 .hero .wordmark{font-size:clamp(2.6rem,11vw,8rem);margin:0 0 1rem;min-width:0;overflow-wrap:anywhere;padding-bottom:.08em}
 .hero-tag{font-family:var(--display);text-transform:uppercase;letter-spacing:.3em;font-size:clamp(.9rem,2.4vw,1.25rem);color:var(--text);margin:0 0 .5rem}
@@ -229,12 +220,13 @@ html,body{overflow-x:clip}
 html.nav-open .menu-toggle .bars{background:transparent}
 html.nav-open .menu-toggle .bars::before{transform:rotate(45deg)}
 html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
+/* 100dvh: the visible height; 100vh on phones counts the hidden address bar, which cut off the end of the menu */
 @media (max-width:999.98px){
   .menu-toggle{display:inline-flex}
   html:not(.nav-open) .sitenav{display:none}
   html .sitenav{position:fixed;inset-inline-start:0;inset-inline-end:0;top:var(--top-h,4.3rem);z-index:45;width:auto;margin:0;
-    max-height:calc(100vh - var(--top-h,4.3rem));overflow-y:auto;background:var(--bg);border:0;border-bottom:1px solid var(--line);
-    border-radius:0;padding:.4rem var(--gutter) 1.4rem;-webkit-mask-image:none;mask-image:none}
+    max-height:calc(100vh - var(--top-h,4.3rem));max-height:calc(100dvh - var(--top-h,4.3rem));overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border:0;border-bottom:1px solid var(--line);
+    border-radius:0;padding:.4rem var(--gutter) calc(1.4rem + env(safe-area-inset-bottom));-webkit-mask-image:none;mask-image:none}
   html .sitenav ul{flex-direction:column;overflow:visible;gap:0;max-height:none;padding:0;-webkit-mask-image:none;mask-image:none}
   html .sitenav li{border-bottom:1px solid var(--line)}
   html .sitenav a{white-space:normal;padding:.95rem .2rem;font-size:1.15rem;border:0;border-radius:0;background:none;color:var(--text)}
@@ -268,10 +260,23 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
 /* social channel list */
 .prose h3.plat{display:flex;align-items:center;gap:.5em;margin:2rem 0 .6rem;font-size:1.15rem}
 .plat .ic{width:1.1em;height:1.1em;color:var(--link);flex:none}
+.plat .count{font:400 .75rem var(--mono);color:var(--muted);margin-inline-start:.2em}
 .plat-note{color:var(--muted);font-size:.95rem}
-.prose ul.channels{columns:2 16rem;column-gap:2rem}
-.channels li{break-inside:avoid;overflow-wrap:anywhere}
-.channels .bio{display:block;color:var(--muted);font-size:.9rem;margin-top:.15rem}
+.prose ul.channels{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr));gap:.6rem}
+.prose ul.channels.wide{grid-template-columns:1fr}
+.prose .channels li{position:relative;margin:0;padding:.7rem .9rem;background:var(--surface);border:1px solid var(--line);
+  border-inline-start:2px solid var(--line);overflow-wrap:anywhere;transition:border-color .2s;
+  display:flex;flex-direction:column;justify-content:center}
+@media (max-width:40rem){.prose ul.channels{gap:.4rem}.prose .channels li{padding:.5rem .8rem}}
+.prose .channels li:hover,.prose .channels li:focus-within{border-color:var(--accent)}
+.channels a{display:flex;flex-direction:column;gap:.1rem;color:var(--text);text-decoration:none}
+.channels a::after{content:"";position:absolute;inset:0}   /* the whole card is the link */
+.channels a:focus-visible{outline:none}
+.channels li:has(a:focus-visible){outline:2px solid var(--link);outline-offset:2px}
+.channels .nm{font-weight:600;line-height:1.3}
+.channels .hd{font:400 .8rem/1.4 var(--mono);color:var(--link)}
+[dir=rtl] .channels .hd{text-align:end}
+.channels .bio{display:block;color:var(--muted);font-size:.9rem;margin-top:.35rem}
 /* pictures from the original site, numbered (#n) so they can be picked out later */
 .pic{margin:1.6rem 0 2rem}
 .pic img{display:block;width:100%;height:auto;max-height:80vh;object-fit:contain;background:var(--surface)}
@@ -326,16 +331,12 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
 .dg-tree .side:hover .flow{animation:none;stroke-dashoffset:0;opacity:1}
 .dg-tree:has(.side:hover) .side:not(:hover) .flow{animation:none;opacity:0}
 .dg-tree:has(.side:hover) .side:not(:hover) .node rect{animation:none;stroke:var(--line)}
-.diagram .dg-new{display:flex;margin:1.2rem auto 0;width:max-content}
-.dg-swap{animation:dg-swap .45s ease-out}
-@keyframes dg-swap{from{opacity:.15}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.dg-swap{animation:none}}
 .eff-pic{margin:0 0 1rem}
 .eff-pic .zoom{display:block;overflow:hidden}
 .eff-pic img{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .efforts li:hover .eff-pic img,.efforts li:focus-within .eff-pic img{transform:scale(1.08)}
 @media (prefers-reduced-motion:reduce){html:not([data-motion=on]) .efforts li .eff-pic img{transform:none}}
-.channels li:has(.avatar){display:grid;grid-template-columns:3rem 1fr;column-gap:.8rem;align-items:start}
+.prose .channels li:has(.avatar){display:grid;grid-template-columns:3rem 1fr;column-gap:.9rem;align-items:center}
 .avatar{margin:0;grid-row:span 2}
 .avatar img{width:3rem;height:3rem;border-radius:50%;object-fit:cover;display:block}
 
@@ -392,11 +393,22 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
 .foot .born b{font-weight:600;color:var(--text)}
 .foot .born .bn{white-space:nowrap}
 .foot .born [dir=ltr]{direction:ltr;unicode-bidi:isolate}
-.foot a.legal{color:inherit;text-decoration:underline;text-underline-offset:.2em;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
-.foot a.legal:hover{color:var(--text)}
+.foot .legal{color:inherit;text-decoration:underline;text-underline-offset:.2em;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}
+.foot .legal:hover{color:var(--text)}
 .lang-list{list-style:none;padding:0;margin:1.5rem 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr));gap:.4rem 1.2rem}   /* / and 404: language list */
 .lang-list a{display:block;padding:.45rem 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
 .lang-list a:hover{color:var(--link)}
+/* 404: logo and wordmark lead home, the message plays on the movement's view of existence */
+.nf{max-width:52rem;margin:0 auto;padding:clamp(2.5rem,8vw,5rem) var(--gutter) 4rem;text-align:center}
+.nf-home{display:inline-flex;flex-direction:column;align-items:center;text-decoration:none;margin-bottom:2rem}
+.nf .hero-logo{width:clamp(5.5rem,16vw,8rem);margin-bottom:1rem}
+.nf-home .wordmark{font-size:clamp(1.4rem,4vw,2rem)}
+.nf h1{font-family:var(--display);font-weight:var(--display-weight,600);text-transform:uppercase;font-size:clamp(2.2rem,8vw,4.5rem);line-height:1.02;margin:.4rem 0 1rem}
+.nf .lede{font-size:clamp(1.05rem,2.6vw,1.3rem);color:var(--muted);margin:0 auto 1.8rem;max-width:34rem}
+.nf .hero-cta{justify-content:center}
+.nf .slash{margin:3rem auto 2rem}
+.nf .lang-list{text-align:start;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))}
+.nf .hero-tag{margin-top:3rem}
 .stars{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
 .stars i{position:absolute;border-radius:50%;background:var(--text);opacity:.55;animation:pe-twinkle 4s ease-in-out infinite;transition:opacity 1.6s ease,transform 1.6s ease}
 .stars i.out{opacity:0!important;transform:scale(.2);animation:none}
@@ -406,6 +418,28 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
 [data-theme=light] .stars i.big{box-shadow:none}
 @media (prefers-reduced-motion:reduce){.stars i{animation:none}}
 .void-line{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:0 var(--gutter);text-align:center;pointer-events:none;z-index:2147483001;opacity:0;font-family:var(--display);font-weight:var(--display-weight,600);text-transform:uppercase;font-size:clamp(1.6rem,5vw,3.4rem);line-height:1.15;color:var(--text)}
+/* WhatsApp questions (gate_html in build.py): one step visible at a time */
+.gate{width:min(36rem,calc(100% - 2rem));max-height:calc(100% - 2rem);padding:1.6rem 1.4rem;border:1px solid var(--line);border-radius:var(--r-ui);background:var(--surface);color:var(--text);position:fixed}
+.gate::backdrop{background:rgb(0 0 0/.7)}
+.gate h2{margin:0 2rem .6rem 0;font-size:clamp(1.5rem,4vw,2rem)}
+.gate [data-show]{display:none}
+.gate[data-step=ask] [data-show~=ask],.gate[data-step=missing] [data-show~=missing],.gate[data-step=ok] [data-show~=ok],.gate[data-step=fail] [data-show~=fail]{display:block}
+.gate fieldset{border:0;border-top:1px solid var(--line);margin:0;padding:.9rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
+.gate legend{float:left;width:100%;margin-bottom:.5rem;padding:0}
+.gate fieldset label{position:relative}
+.gate fieldset input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.gate fieldset span{display:inline-block;min-width:4.5rem;padding:.4rem 1rem;border:1px solid var(--line);border-radius:var(--r-ui);text-align:center;font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.gate fieldset input:checked+span{background:var(--text);color:var(--bg);border-color:var(--text)}
+.gate fieldset input:focus-visible+span{outline:2px solid var(--link);outline-offset:2px}
+.gate-missing{color:var(--link)}
+.gate .cta-links{margin-bottom:0}
+.gate-x{position:absolute;top:.6rem;inset-inline-end:.8rem;background:none;border:0;color:var(--text);font-size:1.8rem;line-height:1;cursor:pointer;padding:.2rem .5rem}
+/* Share dialog (share_html in build.py) and the footer's share link */
+.share-copy{display:flex;gap:.5rem;margin:1rem 0 0}
+.share-url{flex:1;min-width:0;padding:.4rem .6rem;border:1px solid var(--line);border-radius:var(--r-ui);background:var(--bg);color:var(--text);font:inherit}
+.share-done{margin:.6rem 0 0;color:var(--muted)}
+.foot button.legal{background:none;border:0;padding:0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.gate-share{margin:1.6rem 0 .8rem}
 
 /* Pro Extinction · Konzept Poster · ausführbare Tokens (einzige Quelle der Wahrheit).
    Werte sind VORLÄUFIG, bis ein Konzept gewählt ist (siehe /DECISIONS.md).
@@ -421,31 +455,29 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
   --r-card:0;
 }
 :root[data-theme=dark]{
-  --bg:#0b0708;  /* Grundfläche */
-  --surface:#150f10;  /* Karten, Panels, Navigationsleiste */
-  --text:#e2dfdf;  /* Haupttext */
-  --muted:#9d9595;  /* Beschreibungen, Labels, Metadaten */
-  --line:#2f2426;  /* Rahmen, Trenner, 1px */
-  --accent:#c4161c;  /* Akzent: Flächen, Linien, Buttons, große Zahlen (nicht für kleinen Text) */
-  --link:#e8484d;  /* Akzent für Text: Links, aktive Navigation, kleine Nummern */
-  --on-accent:#fff;  /* Text auf Akzentfläche */
-  --scare:#e01a20;  /* nur Logo-Effekt (Jumpscare) */
-  --accent-deep:#7e0e12;  /* dunklere Akzentvariante (Reserve) */
-  --grain:.08;  /* Deckkraft der Körnung */
+  --bg:#0b0708;  /* Base surface */
+  --surface:#150f10;  /* Cards, panels, navigation bar */
+  --text:#e2dfdf;  /* Main text */
+  --muted:#9d9595;  /* Descriptions, labels, metadata */
+  --line:#2f2426;  /* Borders, dividers, 1px */
+  --accent:#c4161c;  /* Accent: areas, lines, buttons, large numbers (not for small text) */
+  --link:#e8484d;  /* Accent for text: links, active navigation, small numbers */
+  --on-accent:#fff;  /* Text on the accent colour */
+  --accent-deep:#7e0e12;  /* darker accent variant (reserve) */
+  --grain:.08;  /* Grain opacity */
   --metal:linear-gradient(180deg,#fff 0%,#b5b5b5 40%,#f0f0f0 52%,#7d7d7d 100%);
 }
 :root[data-theme=light]{
-  --bg:#f3efe9;  /* Grundfläche */
-  --surface:#e9e3da;  /* Karten, Panels, Navigationsleiste */
-  --text:#130d0e;  /* Haupttext */
-  --muted:#5a5253;  /* Beschreibungen, Labels, Metadaten */
-  --line:#cdc4b8;  /* Rahmen, Trenner, 1px */
-  --accent:#a30f14;  /* Akzent: Flächen, Linien, Buttons, große Zahlen (nicht für kleinen Text) */
-  --link:#a30f14;  /* Akzent für Text: Links, aktive Navigation, kleine Nummern */
-  --on-accent:#fff;  /* Text auf Akzentfläche */
-  --scare:#c4121a;  /* nur Logo-Effekt (Jumpscare) */
-  --accent-deep:#6d0a0d;  /* dunklere Akzentvariante (Reserve) */
-  --grain:.05;  /* Deckkraft der Körnung */
+  --bg:#f3efe9;  /* Base surface */
+  --surface:#e9e3da;  /* Cards, panels, navigation bar */
+  --text:#130d0e;  /* Main text */
+  --muted:#5a5253;  /* Descriptions, labels, metadata */
+  --line:#cdc4b8;  /* Borders, dividers, 1px */
+  --accent:#a30f14;  /* Accent: areas, lines, buttons, large numbers (not for small text) */
+  --link:#a30f14;  /* Accent for text: links, active navigation, small numbers */
+  --on-accent:#fff;  /* Text on the accent colour */
+  --accent-deep:#6d0a0d;  /* darker accent variant (reserve) */
+  --grain:.05;  /* Grain opacity */
   --grain-blend:multiply;
   --metal:linear-gradient(180deg,#0f0a0b 0%,#4f484a 45%,#120c0d 55%,#6a6263 100%);
 }
@@ -494,6 +526,7 @@ body{font-size:1.125rem}
 .cta{text-align:center}
 .cta .slash::after{left:50%;transform:translateX(-50%)}
 .cta-links{justify-content:center}
+.prose .debate{text-align:center}   /* contact page: debate text and the social media link centred like its heading and button */
 .btn{font-size:1.1rem;padding:.8rem 1.8rem}
 
 @media (min-width:1000px){
@@ -545,10 +578,10 @@ body{font-size:1.125rem}
 <main id="main">
 <section class="ex-block"><p class="mono ex-flag">BEISPIELDATEN · Referenz für Konzept Poster · alle Texte hier sind Platzhalter</p>
 <h1>Bausteine</h1><hr class="slash"></section>
-<section class="ex-block"><h2>Farben (Tokens)</h2><p class="mono ex-flag">Dunkel</p><ul class="sw-list"><li><span class="sw" style="background:#0b0708"></span><b class="mono">--bg</b><code>#0b0708</code></li><li><span class="sw" style="background:#150f10"></span><b class="mono">--surface</b><code>#150f10</code></li><li><span class="sw" style="background:#e2dfdf"></span><b class="mono">--text</b><code>#e2dfdf</code></li><li><span class="sw" style="background:#9d9595"></span><b class="mono">--muted</b><code>#9d9595</code></li><li><span class="sw" style="background:#2f2426"></span><b class="mono">--line</b><code>#2f2426</code></li><li><span class="sw" style="background:#c4161c"></span><b class="mono">--accent</b><code>#c4161c</code></li><li><span class="sw" style="background:#e8484d"></span><b class="mono">--link</b><code>#e8484d</code></li><li><span class="sw" style="background:#fff"></span><b class="mono">--on-accent</b><code>#fff</code></li><li><span class="sw" style="background:#e01a20"></span><b class="mono">--scare</b><code>#e01a20</code></li></ul><p class="mono ex-flag" style="margin-top:1.2rem">Hell</p><ul class="sw-list"><li><span class="sw" style="background:#f3efe9"></span><b class="mono">--bg</b><code>#f3efe9</code></li><li><span class="sw" style="background:#e9e3da"></span><b class="mono">--surface</b><code>#e9e3da</code></li><li><span class="sw" style="background:#130d0e"></span><b class="mono">--text</b><code>#130d0e</code></li><li><span class="sw" style="background:#5a5253"></span><b class="mono">--muted</b><code>#5a5253</code></li><li><span class="sw" style="background:#cdc4b8"></span><b class="mono">--line</b><code>#cdc4b8</code></li><li><span class="sw" style="background:#a30f14"></span><b class="mono">--accent</b><code>#a30f14</code></li><li><span class="sw" style="background:#a30f14"></span><b class="mono">--link</b><code>#a30f14</code></li><li><span class="sw" style="background:#fff"></span><b class="mono">--on-accent</b><code>#fff</code></li><li><span class="sw" style="background:#c4121a"></span><b class="mono">--scare</b><code>#c4121a</code></li></ul></section>
+<section class="ex-block"><h2>Farben (Tokens)</h2><p class="mono ex-flag">Dunkel</p><ul class="sw-list"><li><span class="sw" style="background:#0b0708"></span><b class="mono">--bg</b><code>#0b0708</code></li><li><span class="sw" style="background:#150f10"></span><b class="mono">--surface</b><code>#150f10</code></li><li><span class="sw" style="background:#e2dfdf"></span><b class="mono">--text</b><code>#e2dfdf</code></li><li><span class="sw" style="background:#9d9595"></span><b class="mono">--muted</b><code>#9d9595</code></li><li><span class="sw" style="background:#2f2426"></span><b class="mono">--line</b><code>#2f2426</code></li><li><span class="sw" style="background:#c4161c"></span><b class="mono">--accent</b><code>#c4161c</code></li><li><span class="sw" style="background:#e8484d"></span><b class="mono">--link</b><code>#e8484d</code></li><li><span class="sw" style="background:#fff"></span><b class="mono">--on-accent</b><code>#fff</code></li></ul><p class="mono ex-flag" style="margin-top:1.2rem">Hell</p><ul class="sw-list"><li><span class="sw" style="background:#f3efe9"></span><b class="mono">--bg</b><code>#f3efe9</code></li><li><span class="sw" style="background:#e9e3da"></span><b class="mono">--surface</b><code>#e9e3da</code></li><li><span class="sw" style="background:#130d0e"></span><b class="mono">--text</b><code>#130d0e</code></li><li><span class="sw" style="background:#5a5253"></span><b class="mono">--muted</b><code>#5a5253</code></li><li><span class="sw" style="background:#cdc4b8"></span><b class="mono">--line</b><code>#cdc4b8</code></li><li><span class="sw" style="background:#a30f14"></span><b class="mono">--accent</b><code>#a30f14</code></li><li><span class="sw" style="background:#a30f14"></span><b class="mono">--link</b><code>#a30f14</code></li><li><span class="sw" style="background:#fff"></span><b class="mono">--on-accent</b><code>#fff</code></li></ul></section>
 <section class="ex-block"><h2>Typografie</h2><h1 style="font-size:clamp(2.6rem.9vw.6rem)">Überschrift H1</h1><h2 style="margin:1rem 0">Überschrift H2</h2><p class="lede">Lede-Zeile in Kursiv.</p><p style="max-width:68ch">Fließtext: Barlow. Die Zeilenlänge bleibt bei etwa 68 Zeichen, damit lange Texte lesbar sind. <a href="#">Ein Link</a> steht in <code>--link</code>.</p><p class="mono">Mono-Label · 01 · Quelle</p></section>
 <section class="ex-block"><h2>Buttons und Trenner</h2><div class="ex-row"><a class="btn primary" href="#">Aktiv werden</a><a class="btn" href="#">Manifest lesen</a></div><hr class="slash"></section>
-<section class="hero" aria-label="Hero und Logo-Effekt"><span class="hero-logo" role="img" aria-label="Logo (Hover testen)"><span class="lg lg-snake"></span><span class="lg lg-cut"></span><span class="lg lg-slash"></span></span><h1 class="wordmark">PRO EXTINCTION</h1><p class="hero-tag">Together, we end suffering.</p><p class="hero-sub">Hover über das Logo: Effekt beim 1. und jedem 10. Mal. Zurücksetzen mit ?scare=reset.</p></section>
+<section class="hero" aria-label="Hero und Logo-Animation"><span class="hero-logo" role="img" aria-label="Logo"><span class="lg lg-snake"></span><span class="lg lg-cut"></span><span class="lg lg-slash"></span></span><h1 class="wordmark">PRO EXTINCTION</h1><p class="hero-tag">Together, we end suffering.</p><p class="hero-sub">Das große Logo dreht sich in Schleife.</p></section>
 <section class="mission"><hr class="slash"><p class="mono kicker">Unsere Mission</p><blockquote>Beispielzitat in der Zitat-Schrift des Konzepts.</blockquote></section>
 <section class="efforts"><ol><li><span class="num mono">01</span><p class="eff-label mono">Einsatz 1</p><p>Beispieltext für einen Einsatz. Länge und Umbruch wie im Original.</p></li><li><span class="num mono">02</span><p class="eff-label mono">Einsatz 2</p><p>Beispieltext für einen Einsatz. Länge und Umbruch wie im Original.</p></li><li><span class="num mono">03</span><p class="eff-label mono">Einsatz 3</p><p>Beispieltext für einen Einsatz. Länge und Umbruch wie im Original.</p></li><li><span class="num mono">04</span><p class="eff-label mono">Einsatz 4</p><p>Beispieltext für einen Einsatz. Länge und Umbruch wie im Original.</p></li></ol></section>
 <section class="ex-block"><h2>Kapitelübersicht und Langtext</h2><nav class="toc" aria-label="Auf dieser Seite"><p class="mono">Auf dieser Seite</p><ol><li><a href="#b1">Beispielkapitel 1</a></li><li><a href="#b2">Beispielkapitel 2</a></li><li><a href="#b3">Beispielkapitel 3</a></li><li><a href="#b4">Beispielkapitel 4</a></li><li><a href="#b5">Beispielkapitel 5</a></li></ol></nav><div class="prose"><h2 id="b1">Beispielkapitel 1</h2><p>Absatz mit Beispieltext. Das mitlaufende aktive Kapitel wird per Script markiert.</p><ul><li>Listenpunkt mit Akzent-Marker</li><li>Zweiter Punkt</li></ul><h2 id="b2">Beispielkapitel 2</h2><p>Zweiter Absatz.</p></div></section>
@@ -570,43 +603,71 @@ body{font-size:1.125rem}
   document.addEventListener('pointerdown', function () { delete d.dataset.kb; }, true);
   var langSel = document.querySelector('.lang-select');
   if (langSel) langSel.addEventListener('change', function () { location.href = langSel.value; });
-  // The OS setting "reduce motion" switches the logo effect off. For testing it can be overridden: add ?motion=on (or ?motion=off to undo).
+  // The OS setting "reduce motion" switches animations off. For testing it can be overridden: add ?motion=on (or ?motion=off to undo).
   try {
     var mp = new URLSearchParams(location.search).get('motion');
     if (mp === 'on') localStorage.setItem('pe-motion', 'on');
     if (mp === 'off') localStorage.removeItem('pe-motion');
     if (localStorage.getItem('pe-motion') === 'on') d.dataset.motion = 'on';
   } catch (e) {}
-  var logo = document.querySelector('.hero-logo');
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches && d.dataset.motion !== 'on';
-  // The effect fires on the 1st hover and then on every 10th one (10, 20, 30 ...). The count survives page loads; ?scare=reset starts over.
-  var hovers = 0;
-  try {
-    if (new URLSearchParams(location.search).get('scare') === 'reset') localStorage.removeItem('pe-hovers');
-    hovers = parseInt(localStorage.getItem('pe-hovers'), 10) || 0;
-  } catch (e) {}
-  var armed = true;
-  function scare(e) {
-    if (!logo || reduce || !armed) return;
-    armed = false;
-    hovers++;
-    try { localStorage.setItem('pe-hovers', String(hovers)); } catch (err) {}
-    var isClick = e && e.type === 'click';
-    if (hovers !== 1 && hovers % 10 !== 0) { if (isClick) armed = true; return; }
-    logo.classList.add('scare'); d.classList.add('scaring');
-    setTimeout(function () {
-      logo.classList.remove('scare'); d.classList.remove('scaring');
-      if (isClick) armed = true; // touch has no mouseleave
-    }, 4000);
+  // ---- WhatsApp: yes/no questions first (dialog from gate_html in build.py). Without JavaScript the button stays a plain link.
+  var gate = document.getElementById('join-gate');
+  if (gate && gate.showModal) {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-gate]');
+      if (!a) return;
+      e.preventDefault();
+      [].forEach.call(gate.querySelectorAll('input'), function (i) { i.checked = false; });
+      gate.dataset.step = 'ask'; gate.showModal();
+    });
+    gate.querySelector('.gate-x').addEventListener('click', function () { gate.close(); });
+    gate.addEventListener('click', function (e) { if (e.target === gate) gate.close(); });   // click on the backdrop
+    gate.querySelector('.gate-go').addEventListener('click', function () {
+      var sets = [].slice.call(gate.querySelectorAll('fieldset'));
+      if (sets.some(function (f) { return !f.querySelector('input:checked'); })) { gate.dataset.step = 'missing'; return; }
+      gate.dataset.step = sets.every(function (f) { return f.querySelector('input:checked').value === f.dataset.a; }) ? 'ok' : 'fail';
+      gate.scrollTop = 0;
+    });
   }
-  if (logo) {
-    logo.addEventListener('mouseenter', scare);
-    logo.addEventListener('click', scare);
-    // re-arm only after the pointer has left, so resting on the logo does not loop the effect
-    logo.addEventListener('mouseleave', function () { if (!logo.classList.contains('scare')) armed = true; });
-    document.addEventListener('mousemove', function (e) {
-      if (!armed && !logo.classList.contains('scare') && !logo.contains(e.target)) armed = true;
-    }, { passive: true });
+
+  // ---- WhatsApp closed (WHATSAPP_OPEN in build.py): the buttons open a note pointing to Discord.
+  var waClosed = document.getElementById('wa-closed');
+  if (waClosed && waClosed.showModal) {
+    document.addEventListener('click', function (e) {
+      if (!(e.target.closest && e.target.closest('a[data-wa-closed]'))) return;
+      e.preventDefault(); waClosed.showModal();
+    });
+    waClosed.querySelector('.gate-x').addEventListener('click', function () { waClosed.close(); });
+    waClosed.addEventListener('click', function (e) { if (e.target === waClosed) waClosed.close(); });
+  }
+  // ---- Share: the system's share sheet on touch screens, otherwise the dialog from share_html in build.py with links and the address.
+  var box = document.getElementById('share-box');
+  if (box && box.showModal) {
+    [].forEach.call(document.querySelectorAll('[data-share][hidden]'), function (x) { x.hidden = false; });
+    var NETS = { whatsapp: 'https://wa.me/?text={t}%20{u}', x: 'https://x.com/intent/post?text={t}&url={u}',
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u={u}', telegram: 'https://t.me/share/url?url={u}&text={t}',
+      reddit: 'https://www.reddit.com/submit?url={u}&title={t}', mail: 'mailto:?subject={t}&body={u}' };
+    var field = box.querySelector('.share-url'), done = box.querySelector('.share-done');
+    document.addEventListener('click', function (e) {
+      if (!(e.target.closest && e.target.closest('.share'))) return;
+      var u = location.origin + location.pathname, t = box.dataset.text;
+      if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+        navigator.share({ title: 'Pro Extinction', text: t, url: u }).catch(function () {});
+        return;
+      }
+      [].forEach.call(box.querySelectorAll('[data-net]'), function (a) {
+        a.href = NETS[a.dataset.net].replace('{u}', encodeURIComponent(u)).replace('{t}', encodeURIComponent('Pro Extinction: ' + t));
+      });
+      field.value = u; done.hidden = true; box.showModal();
+    });
+    box.querySelector('.share-copy button').addEventListener('click', function () {
+      field.select();
+      var ok = function () { done.hidden = false; };
+      if (navigator.clipboard) navigator.clipboard.writeText(field.value).then(ok, function () { if (document.execCommand('copy')) ok(); });
+      else if (document.execCommand('copy')) ok();
+    });
+    box.querySelector('.gate-x').addEventListener('click', function () { box.close(); });
+    box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
   }
 
   // ---- expandable menu below 1000px

@@ -10,30 +10,19 @@ from pathlib import Path
 DIR = Path(__file__).resolve().parent.parent / 'content' / 'diagrams'
 
 def _load(lang):
-    """content/diagrams/<lang>.txt: heading, lion title, lion example, cycle title, cycle centre, cycle nodes, button, examples."""
+    """content/diagrams/<lang>.txt: heading, lion title, lion example, cycle title, cycle centre, cycle nodes."""
     rows = [x for x in (DIR / f'{lang}.txt').read_text(encoding='utf-8').splitlines() if x.strip() and not x.startswith('#')]
-    heading, title6, main, title5, center, nodes, button, *ex = rows
-    def example(line):
-        f = line.split('|')
-        assert len(f) == 7, (lang, line)
-        return f[0], tuple(f[1:3]), tuple(f[3:6]), f[6]
-    first = example(main)
-    examples = [(r, l, rt, v or first[3]) for r, l, rt, v in map(example, ex)]
-    assert len(examples) == 27, (lang, len(examples))
-    for x in (first, *examples):
-        assert '\u2014' not in ''.join((x[0], *x[1], *x[2], x[3])), (lang, x)
-    return dict(button=button, examples=examples,
-                t={5: dict(title=title5, center=tuple(center.split('|')), nodes=tuple(nodes.split('|'))),
-                   6: dict(heading=heading, title=title6, root=first[0], left=first[1], right=first[2], end=first[3])})
+    heading, title6, main, title5, center, nodes = rows
+    f = main.split('|')
+    assert len(f) == 7, (lang, main)
+    assert '\u2014' not in main, (lang, main)
+    return {5: dict(title=title5, center=tuple(center.split('|')), nodes=tuple(nodes.split('|'))),
+            6: dict(heading=heading, title=title6, root=f[0], left=tuple(f[1:3]), right=tuple(f[3:6]), end=f[6])}
 
 # English is the source; every other language has the same lines in the same order.
 TEXT = {p.stem: _load(p.stem) for p in sorted(DIR.glob('*.txt'))}
 for _l, _t in TEXT.items():
-    assert len(_t['t'][5]['center']) == 2 and len(_t['t'][5]['nodes']) == 3, _l
-# More "two paths, both end in suffering" examples for diagram 6; a button cycles through them.
-# English labels stay short (the boxes also shrink the font in the browser when a label is long).
-for _r, _l, _rt, _v in TEXT['en']['examples']:
-    assert all(len(x) <= 22 for x in (*_l, *_rt)) and len(_r) <= 28 and len(_v) <= 32, _r
+    assert len(_t[5]['center']) == 2 and len(_t[5]['nodes']) == 3, _l
 
 _uid = [0]
 
@@ -92,13 +81,7 @@ def tree(t):
 _JS = (Path(__file__).resolve().parent / 'dg.js').read_text(encoding='utf-8')
 
 def diagram(n, lang='en'):
-    d = TEXT.get(lang, TEXT['en'])
-    t = d['t'][n]
-    if n == 5: return cycle(t) + f'<script>{_JS}</script>'
-    import json
-    first = (t['root'], t['left'], t['right'], t['end'])
-    data = esc(json.dumps([first] + d['examples'], ensure_ascii=False))
-    return (tree(t) + f'<button class="btn dg-new" type="button" data-examples="{data}">{esc(d["button"])}</button>'
-            f'<script>{_JS}</script>')
+    t = TEXT.get(lang, TEXT['en'])[n]
+    return (cycle(t) if n == 5 else tree(t)) + f'<script>{_JS}</script>'
 
 NUMBERS = {5, 6}

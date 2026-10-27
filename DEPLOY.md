@@ -1,38 +1,38 @@
-# Livegang auf Cloudflare Pages
+# Going live on Cloudflare Workers
 
-**Was live geht:** der Ordner `site/`: eine Datei pro Seite, dazu Sprachwahl, 404-Seite, Sitemap, `robots.txt`, Schriften und Bilder.
-Es gibt keinen Build-Schritt bei Cloudflare: Die Seiten werden hier mit `python tools/build_all.py` gebaut und fertig committet.
-Cloudflare liest zwei Steuerdateien in `site/` (beide werden nicht als Seite ausgeliefert, beide schreibt `tools/build.py`):
-- `_headers`: Sicherheits-Header, Cache für Schriften, solange gesperrt auch `X-Robots-Tag: noindex`
-- `_redirects`: alte englische Adressen der Google Site (`/manifesto`, `/home` …) auf die neuen (`/en/manifesto`, `/en/`)
+**What goes live:** the folder `site/`: one file per page, plus the language choice, 404 page, sitemap, `robots.txt`, fonts and pictures.
+There is no build step at Cloudflare: the pages are built here with `python tools/build_all.py` and committed finished.
+Cloudflare reads two control files in `site/` (neither is served as a page, both are written by `tools/build.py`):
+- `_headers`: security headers, cache for fonts, and `X-Robots-Tag: noindex` while search engines are closed out
+- `_redirects`: old English addresses of the Google Site (`/manifesto`, `/home` …) to the new ones (`/en/manifesto`, `/en/`)
 
-Die Domain `proextinction.com` liegt schon im Cloudflare-Konto von James. Die Website kommt in **dasselbe Konto**, damit nichts an einer Einzelperson hängt.
-Schritt-für-Schritt-Anleitung für James (Englisch): `HOSTING.md`.
+The domain `proextinction.com` is already in James's Cloudflare account. The website goes into **the same account**, so nothing depends on a single person.
+Step-by-step guide for James: `HOSTING.md`.
 
-## Adressen
-- Startseite einer Sprache: `/en/`, `/de/` (mit Schrägstrich; Cloudflare leitet `/en` dorthin um)
-- Seiten: `/en/manifesto`, `/de/manifest` (Cloudflare leitet `…/manifest.html` dorthin um)
-- `/` wählt die Sprache nach dem Browser und leitet alte Links der Ein-Datei-Version (`#/de/manifest`) weiter
-- Jede Änderung auf einem anderen Branch bekommt bei Cloudflare automatisch eine eigene Vorschau-Adresse (`<branch>.<projekt>.pages.dev`)
+## Addresses
+- Home of a language: `/en/`, `/de/` (with slash; Cloudflare redirects `/en` there)
+- Pages: `/en/manifesto`, `/de/manifest` (Cloudflare redirects `…/manifest.html` there)
+- `/` picks the language from the browser and forwards old links of the single-file version (`#/de/manifest`)
+- Every other branch is uploaded to Cloudflare as a preview version, with its own address when *Preview URLs* are on
 
-## Vor dem Teilen prüfen
-| Punkt | Stand |
+## Check before sharing
+| Item | Status |
 |---|---|
-| Suchmaschinen | gesperrt. Freischalten: in `tools/build.py` `INDEXABLE = True` setzen, `python tools/build_all.py`, committen. Das ändert Meta-Tag, `X-Robots-Tag` (`site/_headers`) und `robots.txt` zusammen. Danach `https://proextinction.com/sitemap.xml` in der Google Search Console einreichen |
-| Domain | `SITE_URL` in `tools/build.py` (`https://proextinction.com`, ohne www). www leitet per Cloudflare-Regel auf die Domain ohne www (siehe `HOSTING.md`) |
-| Datenschutz | fertig (`content/legal/<de|en>.json`, `privacy`), im Footer jeder Seite verlinkt; Verantwortliche: Pro Extinction als Gruppe von Privatpersonen, info@proextinction.com. Keine Rechtsberatung |
-| Impressum | bewusst **nicht veröffentlicht** (Betreiber nicht in Deutschland/Österreich). Liegt als Entwurf bereit (`imprint` in denselben Dateien); `IMPRINT = True` in `tools/build.py` baut und verlinkt es, vorher die Platzhalter in eckigen Klammern ausfüllen |
-| Schriften | lokal gehostet, kein Google-Abruf (Lizenz OFL, `site/fonts/licenses/`) |
-| Inhalte | Texte, Name, Logo und Spenden-IBAN stammen unverändert von der Original-Seite. Vorher sicherstellen, dass der Auftraggeber der Veröffentlichung zustimmt |
-| Telefonnummer | steht auf der deutschen Startseite (Wunsch), vor Livegang bestätigen lassen |
+| Search engines | open (`INDEXABLE = True` in `tools/build.py`). The switch changes the meta tag, `X-Robots-Tag` (`site/_headers`) and `robots.txt` together. Then submit `https://proextinction.com/sitemap.xml` in Google Search Console |
+| Domain | `SITE_URL` in `tools/build.py` (`https://proextinction.com`, without www). www redirects to the domain without www by a Cloudflare rule (see `HOSTING.md`) |
+| Privacy | done (`content/legal/<de|en>.json`, `privacy`), linked in the footer of every page; controller: Pro Extinction as a group of private persons, info@proextinction.com. Not legal advice |
+| Legal notice | **not published** on purpose (operators not in Germany/Austria). Ready as a draft (`imprint` in the same files); `IMPRINT = True` in `tools/build.py` builds and links it, fill in the placeholders in square brackets first |
+| Fonts | self-hosted, nothing fetched from Google (licence OFL, `site/fonts/licenses/`) |
+| Content | Texts, name, logo and donation IBAN come unchanged from the original site. Make sure beforehand that the owners agree to publishing |
+| Phone number | is on the German home page (as requested), confirm before going live |
 
-## Aktualisieren
-Nach Änderungen: `python tools/build_all.py`, Ergebnis committen und pushen. Cloudflare veröffentlicht automatisch neu.
-Lokal ansehen: `python tools/serve.py`. Genau wie Cloudflare (mit `_headers` und `_redirects`): `npx wrangler pages dev site`.
+## Updating
+After changes: `python tools/build_all.py`, commit and push the result. Cloudflare publishes again automatically.
+Preview locally: `python tools/serve.py`. Exactly like Cloudflare (with `_headers` and `_redirects`, reads `wrangler.jsonc`): `npx wrangler dev`.
 
-## Vercel (Übergang)
-`vercel.json` zeigt nur noch Vorschauen von `site/` (immer `noindex`), bis die Seite auf Cloudflare läuft. Danach kann das Vercel-Projekt gelöscht werden.
+## Vercel (transition)
+`vercel.json` only shows previews of `site/` (always `noindex`) until the site runs on Cloudflare. After that the Vercel project can be deleted.
 
-## Schriften neu beziehen
-Quelle: npm-Pakete `@fontsource/*` (Oswald, Anton, Barlow, JetBrains Mono).
-Verwendet werden nur `latin` und `latin-ext`, `woff2`. Die `@font-face`-Regeln stehen in `tools/fonts.css`.
+## Getting the fonts again
+Source: npm packages `@fontsource/*` (Oswald, Anton, Barlow, JetBrains Mono).
+Only `latin` and `latin-ext`, `woff2` are used. The `@font-face` rules are in `tools/fonts.css`.

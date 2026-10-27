@@ -1,103 +1,103 @@
-# Pro Extinction – Marken-Rohfassung
+# Pro Extinction – raw brand notes
 
-Ergebnis des Markeninterviews (Schritt 2 des Brand-Kit-Ablaufs). Alle Festlegungen
-stammen vom Auftraggeber. Wo etwas offen ist, steht es ausdrücklich dabei.
+Result of the brand interview (step 2 of the brand kit process). All decisions
+come from the client. Where something is open, it says so.
 
-## 1. Kern
-- **Markenname:** Pro Extinction. "AbolishSuffering" bleibt nur der Discord-Name.
-- **Tagline:** "Together, we end suffering." (vom Flyer, Wahl des Auftraggebers)
-- **Mission (Originaltext):** "Preventing as much suffering as physically possible, without tradeoffs."
-- **Zielgruppe:** Neulinge überzeugen, nicht die bestehende Community mobilisieren.
-- **Abgrenzung:** von Pro-Life-Ideologien. Die Seite hat dazu eine eigene Unterseite.
-- **Warum:** Die bestehende Google-Sites-Seite besteht fast nur aus Text. Sie soll
-  für Neulinge lesbarer und eindrücklicher werden, ohne Inhalte zu verfälschen.
+## 1. Core
+- **Brand name:** Pro Extinction. "AbolishSuffering" stays only as the Discord name.
+- **Tagline:** "Together, we end suffering." (from the flyer, the client's choice)
+- **Mission (original text):** "Preventing as much suffering as physically possible, without tradeoffs."
+- **Audience:** convince newcomers, not mobilise the existing community.
+- **Distinction:** from pro-life ideologies. The site has its own page on this.
+- **Why:** The existing Google Sites page is almost only text. It should become
+  easier to read and more striking for newcomers, without distorting the content.
 
-## 2. Persönlichkeit
-- **Ja:** ernst, rational, empathisch, entschlossen, ruhig-düster.
-- **Nein:** reißerisch, schockierend, esoterisch, verspielt, hoffnungslos.
-- **Warum:** Die Ideologie hat etwas Melancholisches und Morbides, das die
-  bestehende Marke (Flyer) schon aufgreift. Für Neulinge darf die Düsternis
-  Ernsthaftigkeit zeigen, aber nicht Hoffnungslosigkeit. Die Tagline ist ein
-  Handlungsversprechen.
+## 2. Personality
+- **Yes:** serious, rational, empathetic, determined, calm and dark.
+- **No:** sensational, shocking, esoteric, playful, hopeless.
+- **Why:** The ideology has something melancholic and morbid that the
+  existing brand (flyer) already picks up. For newcomers the darkness may
+  show seriousness, but not hopelessness. The tagline is a
+  promise to act.
 
-## 3. Struktur
-- Eine Dachmarke. Keine Untermarken. Keine Einzelpersonen im Vordergrund.
-- Sprachen der Konzepte: Englisch und Deutsch.
-- Fehlende deutsche Seiten (Criticism of different pro-life ideologies, Cosmic
-  Extinction, Social Media Channels, Donate) werden per KI aus dem Englischen
-  übersetzt und **sichtbar gekennzeichnet**.
-- Tippfehler der deutschen Originalseite werden korrigiert (z. B. "WIr", "Resourcen").
-- Die Telefonnummer von der deutschen Startseite bleibt auf der deutschen Seite.
-  Auf der englischen Seite steht sie nicht.
+## 3. Structure
+- One umbrella brand. No sub-brands. No individuals in the foreground.
+- Languages of the concepts: English and German.
+- Missing German pages (Criticism of different pro-life ideologies, Cosmic
+  Extinction, Social Media Channels, Donate) are AI-translated from English
+  and **visibly marked**.
+- Typos of the original German page are corrected (e.g. "WIr", "Resourcen").
+- The phone number from the German home page stays on the German site.
+  It is not on the English site.
 
-## 4. Vorbilder und Gegenbilder
-- **Gegenbild:** animal-ethics.org.
-- **Vorbilder:** keine genannt. Stil wird aus Flyer, Logo und Animationswünschen
-  abgeleitet. **Offen:** konkrete "Wow"-Referenzen.
-- **Später gewünscht:** animiertes Logo bei Hover, animierter Staub am Seitenende.
+## 4. Models and counter-models
+- **Counter-model:** animal-ethics.org.
+- **Models:** none named. The style is derived from the flyer, the logo and the wishes for animation.
+  **Open:** concrete "wow" references.
+- **Wanted later:** animated logo on hover, animated dust at the end of the page.
 
-## 5. Farbe
-- Rot nur als Akzent, höchstens etwa 5 % einer Fläche.
-- **Dunkelmodus:** fast schwarz mit leichtem Rotstich, silbergrauer Text.
-- **Hellmodus:** warmes Papierweiß, fast schwarzer Text, dunkleres Rot.
-- Silber nur im Logo und in großen Überschriften.
-- Hell/Dunkel per Button umschaltbar. Das gilt für alle Konzepte.
-- **Konzept C** hat eine abweichende Farbwelt: Sepia und Tinte.
-- **Hex-Werte:** offen, werden in `brandkit-build` festgelegt und dort begründet.
+## 5. Colour
+- Red only as an accent, at most about 5 % of an area.
+- **Dark mode:** almost black with a slight red tint, silver-grey text.
+- **Light mode:** warm paper white, almost black text, darker red.
+- Silver only in the logo and in large headings.
+- Light/dark switchable by a button. This applies to all concepts.
+- **Concept C** has a different colour world: sepia and ink.
+- **Hex values:** open, set and explained in `brandkit-build`.
 
-## 6. Typografie
-- **Display:** schwere, enge Versalien-Grotesk (z. B. Oswald, Bebas Neue, Anton).
-- **Fließtext:** Konzept A und C mit Serifenschrift, Konzept B serifenlos
-  (nicht Inter oder Roboto).
-- **Mono:** sparsam für Labels, Kapitelnummern, Quellen.
-- **Wordmark:** als Schrift gesetzt, Metalloptik per CSS. Kein Bild aus dem Flyer.
-- **Verboten:** Inter und Roboto als Hauptschrift.
+## 6. Typography
+- **Display:** heavy, narrow uppercase grotesque (e.g. Oswald, Bebas Neue, Anton).
+- **Body text:** concepts A and C with a serif font, concept B sans-serif
+  (not Inter or Roboto).
+- **Mono:** sparingly for labels, chapter numbers, sources.
+- **Wordmark:** set as type, metal look by CSS. No picture from the flyer.
+- **Banned:** Inter and Roboto as the main font.
 
-## 7. Raster und Anmutung
-- Großzügiger Leerraum, Text in schmaler Spalte (etwa 65–70 Zeichen).
-- Keine Schatten, keine Glaseffekte. Verläufe und Glanz nur im Logo und der Wordmark.
-- Körnung im Hintergrund, im Dunkelmodus dezent.
-- Haarlinien in Rot oder Silber als Trenner.
-- **Konzept A "Ember":** eckig, redaktionell asymmetrisch, Kapitelnummern am Rand.
-- **Konzept B "Poster":** eckig, zentriert und plakativ.
-- **Konzept C "Ring":** rund (abgerundete Buttons und Karten, Ring als Gestaltungselement). *Später verworfen.*
+## 7. Grid and look
+- Generous white space, text in a narrow column (about 65–70 characters).
+- No shadows, no glass effects. Gradients and shine only in the logo and the wordmark.
+- Grain in the background, subtle in dark mode.
+- Hairlines in red or silver as dividers.
+- **Concept A "Ember":** square, editorially asymmetric, chapter numbers in the margin.
+- **Concept B "Poster":** square, centred and poster-like.
+- **Concept C "Ring":** round (rounded buttons and cards, a ring as a design element). *Dropped later.*
 
-## 8. Bausteine
-1. Langtext-Seite mit Kapiteln, mitlaufendes Inhaltsverzeichnis, Lesefortschritt.
-2. FAQ als aufklappbare Fragen.
-3. Zitatblock für zentrale Sätze.
-4. Die vier "Efforts" als nummerierte Karten.
-5. Call-to-Action-Band (Discord, WhatsApp, Join us) am Seitenende.
-6. Sprach- und Theme-Umschalter oben rechts.
-- **Signature:** der rote Schrägstrich aus dem Logo, als Trenner, Hover-Effekt
-  und Fortschrittsanzeige.
-- Keine weiteren Bausteine in der ersten Runde.
+## 8. Building blocks
+1. Long text page with chapters, a table of contents that follows the reader, reading progress.
+2. FAQ as expandable questions.
+3. Quote block for key sentences.
+4. The four "efforts" as numbered cards.
+5. Call-to-action band (Discord, WhatsApp, Join us) at the end of the page.
+6. Language and theme switchers at the top right.
+- **Signature:** the red slash from the logo, as a divider, hover effect
+  and progress indicator.
+- No further building blocks in the first round.
 
-## 9. Sprache
-- Deutsch mit "du". Ton sachlich und direkt.
-- Der Originaltext bleibt wörtlich, abgesehen von den Tippfehlerkorrekturen.
-- Neue Texte nur für Buttons, Zwischenüberschriften und den KI-Übersetzungshinweis.
-- **Verbotsliste (nur für neu geschriebene Texte):** "revolutionär", "bahnbrechend",
-  "Reise", "Community" im Marketing-Sinn, "Hoffnung" als Floskel, Ausrufezeichen, Emojis.
+## 9. Language
+- German with "du" (informal you). Tone factual and direct.
+- The original text stays word for word, apart from the typo corrections.
+- New texts only for buttons, subheadings and the AI translation note.
+- **Banned list (only for newly written texts):** "revolutionary", "groundbreaking",
+  "journey", "community" in the marketing sense, "hope" as a phrase, exclamation marks, emojis.
 
-## 10. Formate
-- Nur Website, responsiv (Handy, Tablet, Desktop). Keine Thumbnails, Slides, PDFs.
+## 10. Formats
+- Website only, responsive (phone, tablet, desktop). No thumbnails, slides, PDFs.
 
-## 11. Bilder
-- Hauptbildsprache: eigene Grafiken im Code (Linien, Ringe, Schrägstrich, Körnung).
-- Diagramme nur, wo der Originaltext Zahlen enthält. Keine erfundenen Zahlen.
-- Drastische Bilder der Originalseite liegen hinter einem Klick.
-- **Erste Runde ohne Fotos.** Die 16 Bilder von "Suffering in detail" kommen später.
-- KI-Bilder (Higgsfield) vorerst nicht.
-- **Verboten:** Stockfotos, Sonnenuntergangs-Silhouetten, Totenkopf- und Blut-Klischees,
-  Metal-Optik im Fließtext.
+## 11. Pictures
+- Main visual language: our own graphics in code (lines, rings, slash, grain).
+- Diagrams only where the original text contains numbers. No invented numbers.
+- Graphic pictures of the original site are behind a click.
+- **First round without photos.** The 16 pictures of "Suffering in detail" come later.
+- AI pictures (Higgsfield) not for now.
+- **Banned:** stock photos, sunset silhouettes, skull and blood clichés,
+  metal look in body text.
 
 ## Logo
-- Ouroboros mit rotem Schrägstrich. Als SVG nachgezeichnet aus einem 500-px-Bild
-  (`tools/assets/logo.svg`). **Offen:** Original-Vektordatei, falls auffindbar.
+- Ouroboros with a red slash. Redrawn as SVG from a 500 px picture
+  (`tools/assets/logo.svg`). **Open:** the original vector file, if it can be found.
 
-## Offene Punkte
-1. Konkrete Gestaltungsvorbilder.
-2. Hex-Werte der Farben.
-3. Original-Vektorlogo.
-4. Umgang mit den Bildern von "Suffering in detail".
+## Open points
+1. Concrete design models.
+2. Hex values of the colours.
+3. Original vector logo.
+4. How to handle the pictures of "Suffering in detail".

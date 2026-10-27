@@ -4,31 +4,3 @@ Predação|Leão mata a zebra|Morte violenta e dolorosa|A zebra foge|O leão pas
 O ciclo do sofrimento: o nascimento leva ao sofrimento, os seres que sofrem se reproduzem e a reprodução leva a novos nascimentos.
 Ciclo do|sofrimento
 Nascimento|Sofrimento|Reprodução
-Gerar novo exemplo
-Época de seca|A manada fica|Morre de sede|A manada migra|Crocodilos esperam|Despedaçada no rio|
-Chega o inverno|O pássaro fica|Morre congelado|O pássaro migra|Tempestade no mar|Afoga-se exausto|
-Vespa parasita|Acha um hospedeiro|Hospedeiro comido por dentro|Nenhum hospedeiro|As larvas não crescem|A prole morre de fome|
-Nascem tartarugas|Correm para o mar|Comidas por aves|Chegam à água|Tubarões e redes|A maioria morre jovem|
-Nasce uma criança|Nasce na pobreza|Fome e doença|Nasce na riqueza|Envelhece mesmo assim|Doença e morte|Todo nascimento termina em morte.
-Indústria de ovos|O pintinho é fêmea|Esgotada e morta|O pintinho é macho|Inútil para a indústria|Triturado no primeiro dia|
-Indústria do leite|O bezerro é fêmea|Ordenhada e morta|O bezerro é macho|Tirado da mãe|Morto pela carne|
-Explosão populacional|Coelhos se multiplicam|Fome em massa|Raposas se multiplicam|Coelhos são caçados|Depois as raposas passam fome|
-Velhice|O corpo continua|Dor e demência|O corpo desiste|Os órgãos falham|Morre num hospital|
-Começa a guerra|O soldado luta|Morto ou mutilado|O soldado se recusa|Prisão ou exílio|A família é punida|
-Chega a enchente|Fugir da água|Perder casa e terra|Ficar e resistir|A água continua subindo|Afoga-se com a casa|
-Mãe guepardo|Sai para caçar|Hienas levam os filhotes|Fica com os filhotes|Não vem comida|Os filhotes morrem de fome|
-Teia de aranha|A mosca é presa|Comida viva devagar|A mosca escapa|A teia fica vazia|A aranha passa fome|
-Barco de pesca|O peixe é pego|Sufoca no convés|O peixe escapa|Um peixe maior espera|Comido vivo|
-Dor crônica|Viver com ela|Anos de agonia|Tomar analgésicos|O vício cresce|Abstinência ou overdose|
-Cão de rua|Fica na rua|Fome e carros|Vai para um abrigo|O abrigo está cheio|Anos numa jaula|
-Amar alguém|Você morre primeiro|A outra pessoa sofre|A outra pessoa morre|Você fica sozinho|Você sofre o luto|Todo vínculo termina em luto.
-Incêndio florestal|O cervo corre|Sufocado pela fumaça|O cervo se esconde|O fogo o alcança|Queimado vivo|
-Hierarquia da matilha|O lobo desafia o líder|Ferido ou morto|O lobo se submete|Come por último|Morre de fome no inverno|
-Uma infecção se espalha|O cervo doente fica|A manada se contamina|O cervo é expulso|Sozinho e fraco|Os lobos o acham|
-Segunda de manhã|Levantar para trabalhar|Cansado o dia todo|Continuar dormindo|O chefe liga|Demitido e ainda cansado|
-Último pedaço de pizza|Comer|Dor de barriga|Deixar|O colega come|Arrependimento eterno|
-Celular com 1%|Procurar um carregador|Todas as tomadas ocupadas|Continuar rolando|A tela apaga|Sozinho com os pensamentos|
-Trabalho em grupo|Fazer tudo sozinho|Outros levam o crédito|Não fazer nada|Ninguém mais faz|Todos reprovam|Não tem como ganhar.
-Noite quente de verão|Abrir a janela|Banquete de mosquitos|Manter fechada|O quarto vira sauna|Nada de sono|
-Atualização|Instalar agora|Tudo quebra|Lembrar mais tarde|Pergunta de novo|Reinicia no meio do trabalho|
-Plano da academia|Ir à academia|Dor por uma semana|Ficar no sofá|Continua pagando|Culpa e dor nas costas|

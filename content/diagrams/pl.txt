@@ -4,31 +4,3 @@ Drapieżnictwo|Lew zabija zebrę|Gwałtowna, bolesna śmierć|Zebra ucieka|Lew g
 Cykl cierpienia: narodziny prowadzą do cierpienia, cierpiące istoty się rozmnażają, a rozmnażanie prowadzi do nowych narodzin.
 Cykl|cierpienia
 Narodziny|Cierpienie|Rozmnażanie
-Pokaż nowy przykład
-Pora suszy|Stado zostaje|Umiera z pragnienia|Stado wędruje|Krokodyle czekają|Rozszarpane w rzece|
-Nadchodzi zima|Ptak zostaje|Zamarza na śmierć|Ptak odlatuje|Burza nad morzem|Tonie wyczerpany|
-Osa pasożytnicza|Osa znajduje żywiciela|Żywiciel zjedzony od środka|Brak żywiciela|Larwy nie rosną|Potomstwo głoduje|
-Wylęg żółwi morskich|Bieg do morza|Zjedzone przez ptaki|Docierają do wody|Rekiny i sieci|Większość ginie młodo|
-Rodzi się dziecko|Urodzone w biedzie|Głód i choroby|Urodzone w bogactwie|I tak się starzeje|Choroba i śmierć|Każde narodziny kończą się śmiercią.
-Przemysł jajeczny|Pisklę jest samicą|Wyeksploatowana i zabita|Pisklę jest samcem|Bezużyteczny dla przemysłu|Zmielony pierwszego dnia|
-Przemysł mleczarski|Cielę jest samicą|Dojona, potem zabita|Cielę jest samcem|Zabrany matce|Zabity na cielęcinę|
-Wyż populacji|Króliki się mnożą|Masowy głód|Lisy się mnożą|Króliki są zjadane|Potem lisy głodują|
-Starość|Ciało wciąż działa|Ból i demencja|Ciało się poddaje|Narządy zawodzą|Umiera w szpitalu|
-Wybucha wojna|Żołnierz walczy|Zabity lub okaleczony|Żołnierz odmawia|Więzienie lub wygnanie|Rodzina jest karana|
-Nadchodzi powódź|Ucieczka przed wodą|Utrata domu i ziemi|Zostać i przetrwać|Woda wciąż rośnie|Tonie razem z domem|
-Matka gepardzica|Idzie polować|Hieny porywają młode|Zostaje z młodymi|Brak jedzenia|Młode głodują|
-Pajęczyna|Mucha złapana|Zjadana żywcem powoli|Mucha ucieka|Sieć zostaje pusta|Pająk głoduje|
-Łódź rybacka|Ryba złapana|Dusi się na pokładzie|Ryba ucieka|Czeka większa ryba|Zjedzona żywcem|
-Przewlekły ból|Żyć z tym|Lata męki|Brać leki przeciwbólowe|Rośnie uzależnienie|Odstawienie lub przedawkowanie|
-Bezdomny pies|Zostaje na ulicy|Głód i samochody|Trafia do schroniska|Schronisko pełne|Latami w klatce|
-Kochać kogoś|Umierasz pierwszy|Ta osoba rozpacza|Ta osoba umiera pierwsza|Zostajesz sam|Rozpaczasz|Każda więź kończy się żałobą.
-Pożar lasu|Jeleń ucieka|Dusi się w dymie|Jeleń się chowa|Ogień go dosięga|Spalony żywcem|
-Hierarchia w stadzie|Wilk walczy z przywódcą|Ranny lub zabity|Wilk się podporządkowuje|Je ostatni|Głoduje zimą|
-Szerzy się infekcja|Chory jeleń zostaje|Stado się zaraża|Jeleń wygnany|Sam i słaby|Wilki go znajdują|
-Poniedziałek rano|Wstać do pracy|Zmęczenie cały dzień|Spać dalej|Dzwoni szef|Zwolniony i dalej zmęczony|
-Ostatni kawałek pizzy|Zjeść go|Ból brzucha|Zostawić go|Współlokator go zjada|Wieczny żal|
-Telefon na 1%|Szukać ładowarki|Wszystkie gniazdka zajęte|Scrollować dalej|Ekran gaśnie|Sam na sam z myślami|
-Projekt grupowy|Zrobić wszystko samemu|Inni zbierają pochwały|Nic nie robić|Nikt inny też nie robi|Wszyscy oblewają|Nie da się wygrać.
-Upalna letnia noc|Otworzyć okno|Komary ucztują|Trzymać zamknięte|Pokój jak sauna|Zero snu|
-Aktualizacja systemu|Zainstaluj teraz|Wszystko się psuje|Przypomnij później|Pyta znowu|Restart w trakcie pracy|
-Karnet na siłownię|Iść na siłownię|Zakwasy przez tydzień|Zostać na kanapie|Opłaty lecą dalej|Wyrzuty i ból pleców|

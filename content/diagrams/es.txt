@@ -4,31 +4,3 @@ Depredación|León mata a la cebra|Muerte violenta y dolorosa|La cebra escapa|El
 El ciclo del sufrimiento: el nacimiento lleva al sufrimiento, los seres que sufren se reproducen y la reproducción lleva a nuevos nacimientos.
 Ciclo del|sufrimiento
 Nacimiento|Sufrimiento|Reproducción
-Generar otro ejemplo
-Temporada de sequía|La manada se queda|Muere de sed|La manada migra|Esperan cocodrilos|Despedazada en el río|
-Llega el invierno|El pájaro se queda|Muere congelado|El pájaro migra|Tormenta en el mar|Se ahoga agotado|
-Avispa parásita|Encuentra un huésped|Huésped comido por dentro|No encuentra huésped|Las larvas no crecen|Las crías mueren de hambre|
-Nacen tortugas marinas|Corren al mar|Comidas por aves|Llegan al agua|Tiburones y redes|Casi todas mueren jóvenes|
-Nace un niño|Nace en la pobreza|Hambre y enfermedad|Nace en la riqueza|Envejece igual|Enfermedad y muerte|Todo nacimiento termina en muerte.
-Industria del huevo|El pollito es hembra|Agotada y luego matada|El pollito es macho|Inútil para la industria|Triturado el primer día|
-Industria láctea|La cría es hembra|Ordeñada y luego matada|La cría es macho|Separado de su madre|Matado por su carne|
-Explosión de población|Los conejos se multiplican|Hambruna masiva|Los zorros se multiplican|Cazan a los conejos|Luego los zorros pasan hambre|
-Vejez|El cuerpo aguanta|Dolor y demencia|El cuerpo se rinde|Fallan los órganos|Muere en un hospital|
-Estalla la guerra|El soldado lucha|Muerto o mutilado|El soldado se niega|Cárcel o exilio|Castigan a su familia|
-Llega la inundación|Huir del agua|Perder casa y tierra|Quedarse y resistir|El agua sigue subiendo|Se ahoga con la casa|
-Madre guepardo|Sale a cazar|Las hienas se llevan las crías|Se queda con las crías|No llega comida|Las crías mueren de hambre|
-Telaraña|La mosca cae|Comida viva despacio|La mosca escapa|La red sigue vacía|La araña pasa hambre|
-Barco pesquero|El pez es atrapado|Se asfixia en cubierta|El pez escapa|Espera un pez mayor|Comido vivo|
-Dolor crónico|Vivir con él|Años de agonía|Tomar analgésicos|Crece la adicción|Abstinencia o sobredosis|
-Perro callejero|Se queda en la calle|Hambre y coches|Va a un refugio|El refugio está lleno|Años en una jaula|
-Amar a alguien|Mueres tú primero|Esa persona sufre el duelo|Muere esa persona|Te quedas solo|Sufres el duelo|Todo vínculo termina en duelo.
-Incendio forestal|El ciervo corre|Ahogado por el humo|El ciervo se esconde|El fuego lo alcanza|Quemado vivo|
-Jerarquía de la manada|El lobo reta al líder|Herido o muerto|El lobo se somete|Come el último|Muere de hambre en invierno|
-Se extiende una infección|El ciervo enfermo se queda|La manada se contagia|Expulsan al ciervo|Solo y débil|Lo encuentran los lobos|
-Lunes por la mañana|Levantarse a trabajar|Cansancio todo el día|Seguir durmiendo|Llama el jefe|Despedido y aún cansado|
-Último trozo de pizza|Comerlo|Dolor de barriga|Dejarlo|Se lo come el compañero|Arrepentimiento eterno|
-Móvil al 1%|Buscar un cargador|Todos los enchufes ocupados|Seguir mirando|La pantalla se apaga|A solas con tus ideas|
-Trabajo en grupo|Hacerlo todo tú|Otros se llevan el mérito|No hacer nada|Nadie más lo hace|Suspenden todos|No hay forma de ganar.
-Noche de verano|Abrir la ventana|Festín de mosquitos|Dejarla cerrada|El cuarto es una sauna|Nada de sueño|
-Actualización|Instalar ahora|Todo deja de funcionar|Recordar más tarde|Vuelve a preguntar|Reinicia en pleno trabajo|
-Cuota del gimnasio|Ir al gimnasio|Agujetas una semana|Quedarse en el sofá|Sigues pagando|Culpa y dolor de espalda|

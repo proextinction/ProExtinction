@@ -4,31 +4,3 @@ Predazione|Il leone uccide la zebra|Morte violenta e dolorosa|La zebra scappa|Il
 Il ciclo della sofferenza: la nascita porta alla sofferenza, gli esseri che soffrono si riproducono e la riproduzione porta a nuove nascite.
 Ciclo della|sofferenza
 Nascita|Sofferenza|Riproduzione
-Genera un nuovo esempio
-Stagione secca|La mandria resta|Muore di sete|La mandria migra|I coccodrilli aspettano|Sbranata nel fiume|
-Arriva l'inverno|L'uccello resta|Muore congelato|L'uccello migra|Tempesta sul mare|Annega sfinito|
-Vespa parassita|Trova un ospite|Ospite mangiato da dentro|Nessun ospite|Le larve non crescono|La prole muore di fame|
-Nascono le tartarughe|Corrono verso il mare|Mangiate dagli uccelli|Raggiungono l'acqua|Squali e reti|Quasi tutte muoiono giovani|
-Nasce un bambino|Nato in povertà|Fame e malattie|Nato nella ricchezza|Invecchia comunque|Malattia e morte|Ogni nascita finisce con la morte.
-Industria delle uova|Il pulcino è femmina|Sfruttata, poi uccisa|Il pulcino è maschio|Inutile all'industria|Tritato il primo giorno|
-Industria del latte|Il vitello è femmina|Munta, poi uccisa|Il vitello è maschio|Tolto alla madre|Ucciso per la carne|
-Boom demografico|I conigli si moltiplicano|Fame di massa|Le volpi si moltiplicano|I conigli sono cacciati|Poi le volpi muoiono di fame|
-Vecchiaia|Il corpo va avanti|Dolore e demenza|Il corpo cede|Gli organi falliscono|Muore in ospedale|
-Scoppia la guerra|Il soldato combatte|Ucciso o mutilato|Il soldato rifiuta|Carcere o esilio|La famiglia è punita|
-Arriva l'alluvione|Fuggire dall'acqua|Perdere casa e terra|Restare e resistere|L'acqua continua a salire|Annega con la casa|
-Madre ghepardo|Va a caccia|Le iene prendono i cuccioli|Resta con i cuccioli|Il cibo non arriva|I cuccioli muoiono di fame|
-Ragnatela|La mosca resta presa|Mangiata viva lentamente|La mosca scappa|La tela resta vuota|Il ragno muore di fame|
-Peschereccio|Il pesce è catturato|Soffoca sul ponte|Il pesce scappa|Aspetta un pesce grosso|Mangiato vivo|
-Dolore cronico|Conviverci|Anni di agonia|Prendere antidolorifici|Cresce la dipendenza|Astinenza o overdose|
-Cane randagio|Resta in strada|Fame e auto|Va in un canile|Il canile è pieno|Anni in gabbia|
-Amare qualcuno|Muori tu per primo|L'altra persona soffre|Muore l'altra persona|Resti da solo|Soffri tu|Ogni legame finisce nel lutto.
-Incendio|Il cervo corre|Soffocato dal fumo|Il cervo si nasconde|Il fuoco lo raggiunge|Bruciato vivo|
-Gerarchia del branco|Il lupo sfida il capo|Ferito o ucciso|Il lupo si sottomette|Mangia per ultimo|Muore di fame d'inverno|
-Si diffonde un'infezione|Il cervo malato resta|Il branco si ammala|Il cervo è cacciato via|Solo e debole|Lo trovano i lupi|
-Lunedì mattina|Alzarsi per lavoro|Stanco tutto il giorno|Continuare a dormire|Chiama il capo|Licenziato e ancora stanco|
-Ultima fetta di pizza|Mangiarla|Mal di pancia|Lasciarla|La mangia il coinquilino|Rimpianto eterno|
-Telefono all'1%|Cercare un caricatore|Prese tutte occupate|Continuare a scorrere|Lo schermo si spegne|Soli con i pensieri|
-Lavoro di gruppo|Fare tutto da solo|Il merito va agli altri|Non fare nulla|Nessuno fa nulla|Bocciati tutti|Non si vince mai.
-Notte d'estate|Aprire la finestra|Banchetto di zanzare|Tenerla chiusa|La stanza è una sauna|Niente sonno|
-Aggiornamento|Installa ora|Si rompe tutto|Ricordamelo dopo|Lo chiede di nuovo|Riavvio a metà lavoro|
-Abbonamento in palestra|Andare in palestra|Dolori per una settimana|Restare sul divano|Paghi comunque|Sensi di colpa e mal di schiena|

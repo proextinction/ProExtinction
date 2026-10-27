@@ -4,31 +4,3 @@ Pemangsaan|Singa membunuh zebra|Mati keras dan menyakitkan|Zebra lolos|Singa kel
 Lingkaran penderitaan: kelahiran membawa penderitaan, makhluk yang menderita berkembang biak, dan perkembangbiakan membawa kelahiran baru.
 Lingkaran|penderitaan
 Kelahiran|Penderitaan|Berkembang biak
-Buat contoh baru
-Musim kemarau|Kawanan tetap tinggal|Mati kehausan|Kawanan bermigrasi|Buaya menunggu|Dicabik di sungai|
-Musim dingin tiba|Burung tetap tinggal|Mati membeku|Burung bermigrasi|Badai di laut|Tenggelam kelelahan|
-Tawon parasit|Tawon dapat inang|Inang dimakan dari dalam|Tak ada inang|Larva tak bisa tumbuh|Anak-anaknya kelaparan|
-Tukik menetas|Lari ke laut|Dimakan burung|Sampai di air|Hiu dan jaring|Kebanyakan mati muda|
-Seorang anak lahir|Lahir dalam kemiskinan|Lapar dan penyakit|Lahir dalam kekayaan|Tetap menua|Sakit dan mati|Setiap kelahiran berakhir dengan kematian.
-Industri telur|Anak ayam betina|Diperas, lalu dibunuh|Anak ayam jantan|Tak berguna bagi industri|Digiling di hari pertama|
-Industri susu|Anak sapi betina|Diperah, lalu dibunuh|Anak sapi jantan|Dipisah dari induknya|Dibunuh untuk dagingnya|
-Ledakan populasi|Kelinci berlipat ganda|Kelaparan massal|Rubah berlipat ganda|Kelinci diburu|Lalu rubah kelaparan|
-Usia tua|Tubuh terus bertahan|Nyeri dan demensia|Tubuh menyerah|Organ gagal|Mati di rumah sakit|
-Perang pecah|Tentara bertempur|Tewas atau cacat|Tentara menolak|Penjara atau pengasingan|Keluarga dihukum|
-Banjir datang|Lari dari banjir|Kehilangan rumah dan tanah|Bertahan di tempat|Air terus naik|Tenggelam bersama rumah|
-Induk cheetah|Pergi berburu|Anak diambil hiena|Tinggal dengan anak|Tak ada makanan|Anak-anak kelaparan|
-Jaring laba-laba|Lalat tertangkap|Dimakan hidup pelan-pelan|Lalat lolos|Jaring tetap kosong|Laba-laba kelaparan|
-Kapal nelayan|Ikan tertangkap|Sesak napas di dek|Ikan lolos|Ikan besar menunggu|Dimakan hidup-hidup|
-Nyeri kronis|Hidup dengannya|Bertahun-tahun tersiksa|Minum obat nyeri|Kecanduan tumbuh|Sakau atau overdosis|
-Anjing liar|Dibiarkan di jalan|Lapar dan mobil|Dibawa ke penampungan|Penampungan penuh|Bertahun-tahun dikurung|
-Mencintai seseorang|Kamu mati duluan|Dia berduka|Dia mati duluan|Kamu ditinggal|Kamu berduka|Setiap ikatan berakhir dengan duka.
-Kebakaran hutan|Rusa berlari|Terbakar dalam asap|Rusa bersembunyi|Api menjangkaunya|Terbakar hidup-hidup|
-Hierarki kawanan|Serigala melawan pemimpin|Terluka atau tewas|Serigala tunduk|Makan paling akhir|Kelaparan di musim dingin|
-Infeksi menyebar|Rusa sakit tetap tinggal|Kawanan tertular|Rusa diusir|Sendirian dan lemah|Serigala menemukannya|
-Senin pagi|Bangun untuk kerja|Lelah seharian|Tidur lagi|Bos menelepon|Dipecat, tetap lelah|
-Potongan pizza terakhir|Makan|Sakit perut|Biarkan|Teman kos memakannya|Menyesal selamanya|
-Ponsel 1%|Cari pengisi daya|Semua colokan terpakai|Terus menggulir|Layar mati|Sendiri dengan pikiran|
-Tugas kelompok|Kerjakan semuanya|Orang lain dipuji|Tidak berbuat apa-apa|Tak ada yang kerja|Semua gagal|Tak ada cara untuk menang.
-Malam musim panas|Buka jendela|Pesta nyamuk|Tetap tutup|Kamar jadi sauna|Tak bisa tidur|
-Pembaruan perangkat|Pasang sekarang|Semuanya rusak|Ingatkan nanti|Bertanya lagi|Mulai ulang saat kerja|
-Langganan gym|Pergi ke gym|Pegal seminggu|Tetap di sofa|Tetap bayar|Rasa bersalah dan sakit punggung|

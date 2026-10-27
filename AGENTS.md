@@ -1,6 +1,6 @@
 # Rules for AI agents (and humans) working on this repository
 
-This is the website of Pro Extinction: a static site in 29 languages, built by a Python script and hosted on Cloudflare Pages.
+This is the website of Pro Extinction: a static site in 29 languages, built by a Python script and hosted on Cloudflare Workers (static files only).
 These rules apply to every contributor and every AI tool (Claude Code, Codex, Cursor, Copilot …). `CLAUDE.md` points here.
 
 ## How the repository works
@@ -13,9 +13,9 @@ These rules apply to every contributor and every AI tool (Claude Code, Codex, Cu
 - Where things are: `README.md`. Decisions and their reasons: `DECISIONS.md`. Going live: `DEPLOY.md`, `HOSTING.md`.
 
 ## Who can publish
-- `main` is the live website. Every merge into `main` goes online within two minutes.
-- Only the owners (see `.github/CODEOWNERS`) approve and merge pull requests. Everyone else, and every AI agent, works on a branch and opens a pull request.
-- Agents never push to `main`, never force-push, never delete branches, never merge their own pull requests and never change repository settings.
+- Only the owners (see `.github/CODEOWNERS`) decide what is merged. Everyone else, and every AI agent, works on a branch and opens a pull request.
+- An agent may merge a pull request into `main` only when an owner (Jonas, GitHub `AppsOfUse`, or James, GitHub `idoinejd`) asks for it in the conversation, for that pull request, and only when the `check` job is green and there is no merge conflict. A general "you may merge" does not cover later pull requests.
+- Agents never push to `main` directly, never force-push, never delete branches, never approve pull requests and never change repository settings.
 
 ## Content rules
 1. **English is the source.** `content/en/` is the reference. Other languages are original texts (from the old language sites) or AI translations. `SITE` in `tools/build.py` says which is which (`None` in the last field = AI translation).
@@ -33,7 +33,7 @@ These rules apply to every contributor and every AI tool (Claude Code, Codex, Cu
 - New pictures: WebP, under 300 KB, an entry in `content/images.json` and an alt text in every `content/alt/<lang>.json` (English first).
 
 ## Security and privacy
-- **Nothing from other servers:** no CDNs, Google Fonts, analytics, trackers, embeds (YouTube, maps), iframes or forms. Everything is self-hosted. The Content Security Policy in `site/_headers` (written by `hosting()` in `tools/build.py`) enforces this, and `DECISIONS.md` and the privacy policy promise it. Changing it needs an owner's decision and an update of the privacy policy (`content/legal/`).
+- **Nothing from other servers:** no CDNs, Google Fonts, analytics, trackers, embeds (YouTube, maps), iframes or forms. Everything is self-hosted. The one exception, decided by the owners: Cloudflare Web Analytics (cookieless visitor counts, `ANALYTICS` in `tools/build.py`). The Content Security Policy in `site/_headers` (written by `hosting()` in `tools/build.py`) enforces this, and `DECISIONS.md` and the privacy policy promise it. Changing it needs an owner's decision and an update of the privacy policy (`content/legal/`).
 - **No cookies, no personal data.** The browser storage keeps only settings (theme, motion, logo counter). Anything new that stores or sends data needs an owner's decision and an update of the privacy policy.
 - **No secrets in the repository.** No tokens, passwords, API keys or `.env` files, not even in examples. The site needs none.
 - **No new dependencies.** The build uses the Python standard library only. Node (Playwright) is used only for occasional tools (`tools/og.js`, screenshots) and is not committed. Adding a package needs an owner's decision.

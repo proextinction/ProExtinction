@@ -4,31 +4,3 @@ Prédation|Le lion tue le zèbre|Mort violente et douloureuse|Le zèbre s'échap
 Le cycle de la souffrance : la naissance mène à la souffrance, les êtres qui souffrent se reproduisent, et la reproduction mène à de nouvelles naissances.
 Cycle de la|souffrance
 Naissance|Souffrance|Reproduction
-Nouvel exemple
-Saison sèche|Le troupeau reste|Meurt de soif|Le troupeau migre|Les crocodiles attendent|Déchiré dans le fleuve|
-L'hiver arrive|L'oiseau reste|Meurt de froid|L'oiseau migre|Tempête en mer|Se noie épuisé|
-Guêpe parasite|Trouve un hôte|Hôte dévoré de l'intérieur|Aucun hôte trouvé|Les larves ne grandissent pas|La progéniture meurt de faim|
-Éclosion des tortues|Courir vers la mer|Mangées par les oiseaux|Atteindre l'eau|Requins et filets|La plupart meurent jeunes|
-Un enfant naît|Né dans la pauvreté|Faim et maladie|Né dans la richesse|Vieillit quand même|Maladie et mort|Toute naissance finit par la mort.
-Industrie des œufs|Le poussin est femelle|Épuisée, puis tuée|Le poussin est mâle|Inutile pour l'industrie|Broyé le premier jour|
-Industrie laitière|Le veau est femelle|Traite, puis tuée|Le veau est mâle|Enlevé à sa mère|Tué pour sa viande|
-Explosion démographique|Les lapins se multiplient|Famine de masse|Les renards se multiplient|Les lapins sont chassés|Puis les renards ont faim|
-Vieillesse|Le corps tient bon|Douleur et démence|Le corps lâche|Les organes cèdent|Meurt à l'hôpital|
-La guerre éclate|Le soldat combat|Tué ou mutilé|Le soldat refuse|Prison ou exil|Sa famille est punie|
-L'inondation arrive|Fuir l'eau|Perdre maison et terre|Rester et tenir|L'eau monte encore|Se noie avec la maison|
-Mère guépard|Part chasser|Les hyènes prennent les petits|Reste avec les petits|Pas de nourriture|Les petits meurent de faim|
-Toile d'araignée|La mouche est prise|Mangée vivante lentement|La mouche s'échappe|La toile reste vide|L'araignée meurt de faim|
-Bateau de pêche|Le poisson est pris|Étouffe sur le pont|Le poisson s'échappe|Un plus gros attend|Mangé vivant|
-Douleur chronique|Vivre avec|Des années de supplice|Prendre des antidouleurs|L'addiction grandit|Sevrage ou overdose|
-Chien errant|Reste dans la rue|Faim et voitures|Va au refuge|Le refuge est plein|Des années en cage|
-Aimer quelqu'un|Tu meurs en premier|L'autre est en deuil|L'autre meurt en premier|Tu restes seul|Tu es en deuil|Tout lien finit dans le deuil.
-Feu de forêt|Le cerf court|Asphyxié par la fumée|Le cerf se cache|Le feu l'atteint|Brûlé vif|
-Hiérarchie de la meute|Le loup défie le chef|Blessé ou tué|Le loup se soumet|Mange en dernier|Meurt de faim l'hiver|
-Une infection se répand|Le cerf malade reste|Le troupeau est contaminé|Le cerf est chassé|Seul et faible|Les loups le trouvent|
-Lundi matin|Se lever pour bosser|Fatigué toute la journée|Continuer à dormir|Le patron appelle|Viré et toujours fatigué|
-Dernière part de pizza|La manger|Mal au ventre|La laisser|Le coloc la mange|Regret éternel|
-Téléphone à 1 %|Chercher un chargeur|Toutes les prises occupées|Continuer à défiler|L'écran s'éteint|Seul avec ses pensées|
-Projet de groupe|Tout faire soi-même|Les autres ont le mérite|Ne rien faire|Personne ne fait rien|Tout le monde échoue|Impossible de gagner.
-Nuit d'été|Ouvrir la fenêtre|Festin de moustiques|Garder fermé|La chambre est un sauna|Pas une minute de sommeil|
-Mise à jour|Installer maintenant|Tout plante|Me le rappeler plus tard|Ça redemande|Redémarre en plein travail|
-Abonnement à la salle|Aller à la salle|Courbatures une semaine|Rester sur le canapé|On paie quand même|Culpabilité et mal de dos|
