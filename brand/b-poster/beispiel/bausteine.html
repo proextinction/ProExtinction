@@ -398,6 +398,17 @@ html.nav-open .menu-toggle .bars::after{transform:rotate(-45deg)}
 .lang-list{list-style:none;padding:0;margin:1.5rem 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr));gap:.4rem 1.2rem}   /* / and 404: language list */
 .lang-list a{display:block;padding:.45rem 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
 .lang-list a:hover{color:var(--link)}
+/* 404: logo and wordmark lead home, the message plays on the movement's view of existence */
+.nf{max-width:52rem;margin:0 auto;padding:clamp(2.5rem,8vw,5rem) var(--gutter) 4rem;text-align:center}
+.nf-home{display:inline-flex;flex-direction:column;align-items:center;text-decoration:none;margin-bottom:2rem}
+.nf .hero-logo{width:clamp(5.5rem,16vw,8rem);margin-bottom:1rem}
+.nf-home .wordmark{font-size:clamp(1.4rem,4vw,2rem)}
+.nf h1{font-family:var(--display);font-weight:var(--display-weight,600);text-transform:uppercase;font-size:clamp(2.2rem,8vw,4.5rem);line-height:1.02;margin:.4rem 0 1rem}
+.nf .lede{font-size:clamp(1.05rem,2.6vw,1.3rem);color:var(--muted);margin:0 auto 1.8rem;max-width:34rem}
+.nf .hero-cta{justify-content:center}
+.nf .slash{margin:3rem auto 2rem}
+.nf .lang-list{text-align:start;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))}
+.nf .hero-tag{margin-top:3rem}
 .stars{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
 .stars i{position:absolute;border-radius:50%;background:var(--text);opacity:.55;animation:pe-twinkle 4s ease-in-out infinite;transition:opacity 1.6s ease,transform 1.6s ease}
 .stars i.out{opacity:0!important;transform:scale(.2);animation:none}
