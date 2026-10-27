@@ -80,12 +80,11 @@ Best kept internal (Discord) rather than public on the website.
 ## 4. Search engines and domain
 
 - **Done:** website open to search engines (`INDEXABLE = True`, October 2026).
-- **Google still shows the old version** (old Google Sites page, "no information available"). It is read again on Google's next visit.
-- **Google Search Console:** verify the domain `proextinction.com` (TXT record in Cloudflare DNS), submit the sitemap `https://proextinction.com/sitemap.xml`,
-  `https://proextinction.com/en/` via *URL Inspection* → *Request indexing*. Optionally the same in Bing Webmaster Tools.
-- **Redirect www to the domain without www:** today www serves its own copy. Cloudflare → *Rules* → *Redirect Rules*: hostname `www.proextinction.com`
-  → `https://proextinction.com${http.request.uri.path}`, 301, keep the query string.
-- Responsible: James (Cloudflare account) or Jonas with access (see 5).
+- **Done by James (October 2026):** Google Search Console with the sitemap, www redirects to the domain without www (301), Always Use HTTPS, Crawler Hints.
+- **Next, in the code:** structured data (JSON-LD: Organization on the home page, FAQPage on the FAQ pages), `lastmod` in the sitemap,
+  a shorter German home page title (Google cuts after about 60 characters), optionally a preview picture per page and language.
+- **Later:** after 2 to 4 weeks, read the search terms in Search Console and adjust titles and descriptions to them.
+- **Links from outside:** every social media account and YouTube description links to `proextinction.com`.
 
 ## 5. Cloudflare access for Jonas
 
