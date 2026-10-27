@@ -33,7 +33,7 @@ These rules apply to every contributor and every AI tool (Claude Code, Codex, Cu
 - New pictures: WebP, under 300 KB, an entry in `content/images.json` and an alt text in every `content/alt/<lang>.json` (English first).
 
 ## Security and privacy
-- **Nothing from other servers:** no CDNs, Google Fonts, analytics, trackers, embeds (YouTube, maps), iframes or forms. Everything is self-hosted. The Content Security Policy in `site/_headers` (written by `hosting()` in `tools/build.py`) enforces this, and `DECISIONS.md` and the privacy policy promise it. Changing it needs an owner's decision and an update of the privacy policy (`content/legal/`).
+- **Nothing from other servers:** no CDNs, Google Fonts, analytics, trackers, embeds (YouTube, maps), iframes or forms. Everything is self-hosted. The one exception, decided by the owners: Cloudflare Web Analytics (cookieless visitor counts, `ANALYTICS` in `tools/build.py`). The Content Security Policy in `site/_headers` (written by `hosting()` in `tools/build.py`) enforces this, and `DECISIONS.md` and the privacy policy promise it. Changing it needs an owner's decision and an update of the privacy policy (`content/legal/`).
 - **No cookies, no personal data.** The browser storage keeps only settings (theme, motion, logo counter). Anything new that stores or sends data needs an owner's decision and an update of the privacy policy.
 - **No secrets in the repository.** No tokens, passwords, API keys or `.env` files, not even in examples. The site needs none.
 - **No new dependencies.** The build uses the Python standard library only. Node (Playwright) is used only for occasional tools (`tools/og.js`, screenshots) and is not committed. Adding a package needs an owner's decision.

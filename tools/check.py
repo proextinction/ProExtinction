@@ -146,7 +146,8 @@ for must in ("Content-Security-Policy: default-src 'self'", 'frame-ancestors', '
     if must not in headers:
         err(f'site/_headers lost "{must}"')
 csp = re.search(r'Content-Security-Policy: (.*)', headers).group(1)
-if re.search(r'https?:|\*', csp):
+# the one exception: Cloudflare Web Analytics (ANALYTICS in tools/build.py, named in the privacy policy)
+if re.search(r'https?:|\*', re.sub(r'https://(static\.)?cloudflareinsights\.com(?=[ ;])', '', csp)):
     err(f'site/_headers: the CSP allows another server ({csp}). Self-host the resource instead')
 
 # 5. Tracked files: no secrets, nothing huge.
