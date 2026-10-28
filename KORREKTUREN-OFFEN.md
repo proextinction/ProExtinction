@@ -24,7 +24,7 @@ If a change affects the content (e.g. no. 1), the AI translations of the same li
 
 | No. | Page / line | Original | Suggestion |
 |---|---|---|---|
-| 9 | manifesto 12 | "The Pro-Suffering or the Pro-Life, so the suffering imposing system." | "The Pro-Suffering, or Pro-Life, system that imposes suffering." |
+| 9 | manifesto 12 | "The Pro-Suffering or the Life-Imposers (formerly also called Pro-Life), so the suffering imposing system." | "The Pro-Suffering, or Life-Imposing (formerly also called Pro-Life), system that imposes suffering." |
 | 10 | full-faq 20 | "Any intelligent being doesn't have the necessity to do so!" | "No intelligent being would need to do so!" |
 | 11 | full-faq 58 | "…as an excuse for that. If you be like that even moral subjectivity is subjective" | "…for that? By that logic, even moral subjectivity is subjective" |
 | 12 | full-faq 106 | "Me the author writing this is not depressed" | First person stays, grammar only: "I, the author, am not depressed" |
